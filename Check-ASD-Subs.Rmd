@@ -1,0 +1,27 @@
+---
+title: "Check ASD Subs"
+author: "Stan West"
+date: "2025-03-18"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+library(ggplot2)
+library(tidyverse)
+
+load("data/ASD_all_GM.Rdata")
+
+sentences <- read.csv("data/mci_sentences02.csv")[-1,]
+gestures <- read.csv("data/mci_words_gestures01.csv")[-1,]
+
+source("R/Identify_empty_checklist.R")
+
+```
+
+
+
+```{r}
+gestures_no_na <- gestures %>%
+  mutate(empty = iden)
+```
+
