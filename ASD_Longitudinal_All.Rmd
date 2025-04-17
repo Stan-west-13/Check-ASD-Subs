@@ -2,14 +2,20 @@
 title: "ASD Longitudinal RMD"
 author: "Stan West"
 date: "2025-04-17"
-output: pdf_document
+output: html_document
 ---
 
 This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children
 
-```{r, echo=FALSE}
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
 load("data/ASD_longitudinal_all.Rdata")
-diffs <- df_plot_650_diffs_total %>%
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+diff_scores <- ASD_total %>%
   select(subjectkey,interview_age) %>%
   group_by(subjectkey) %>%
   mutate(entry = seq.int(1,n(),1)) %>%
@@ -17,6 +23,65 @@ diffs <- df_plot_650_diffs_total %>%
   mutate(diff = interview_age - lag(interview_age),
          max_diff = max(diff,na.rm = T))
 
+ASD_total <- ASD_total %>%
+  filter(nProduced >= 3 & nProduced <= 600)
+
 ```
+
+
+## Demographic Information
+Demographics for kids with between 3 & 600 producetive vocabulary
+
+```{r,echo=FALSE}
+
+print(paste0("Number of unique subjectkeys is ",
+             length(unique(ASD_total$subjectkey)),
+             " and the number of unique CDI entries is ",nrow(ASD_total %>%
+               select(subjectkey,interview_age) %>%
+               unique())))
+
+ASD_total %>%
+  select(interview_age, nProduced) %>%
+  summary()
+
+
+```
+
+
+
+## Longitudinal Analysis
+# Kids with longitudinal data in 3 month intervals
+Of the 497 CDIs, 241 only have an entry for a single age, removing them from longitudinal consideration. That leaves 256(87 unique) with at least 2 CDIs. There are only three kids with CDIs at the specificity of 1 - 4 months between CDIs.
+
+```{r, echo = FALSE, message=FALSE,warning=FALSE}
+diff_scores <- ASD_total %>%
+  select(subjectkey,interview_age) %>%
+  unique() %>%
+  arrange(subjectkey, interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1)) %>%
+  filter(max(entry) >= 2) %>%
+  mutate(diff = interview_age - lag(interview_age),
+         max_diff = max(diff,na.rm = T),
+         n_entry = length(entry)) %>%
+  left_join(unique(select(ASD_total,subjectkey,interview_age,nProduced)), by = c("subjectkey","interview_age"))
+
+ggplot(diff_scores, aes(x = diff))+
+  geom_histogram()+
+  labs(caption = "Only 3 participants with between 1 and 4 months distance between CDIs")+
+  geom_vline(xintercept = c(1,4), color = "red",linetype = 2)
+
+ggplot(diff_scores %>%
+         filter(subjectkey %in% filter(diff_scores,diff <=4 & diff >= 1)$subjectkey),
+       aes(x = interview_age, y = nProduced))+
+  geom_point(aes(color = subjectkey))+
+  geom_line(aes(color = subjectkey))
+
+```
+
+
+
+
+
 
 
