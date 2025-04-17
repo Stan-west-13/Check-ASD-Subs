@@ -83,7 +83,7 @@ ggplot(diff_scores %>%
 There are 75 kids with CDIs at the specificity of 9 - 15 months between CDIs. 45 of those only have one instance of a gap between 9 and 15 months,
 23 have two instances of 9 - 15 month gaps, and 7 have three instances of this.
 
-```{r, echo = FALSE, message=FALSE,warning=FALSE}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 
 df_9_15 <- diff_scores %>%
   filter(subjectkey %in% filter(diff_scores,diff >= 9 & diff <= 15)$subjectkey) %>%
@@ -101,6 +101,8 @@ df_9_15 %>%
   group_by(n_9_15) %>%
   count(n_9_15)
 
+## Proportion of CDIs that grow from subsequent interviews
+## Some of the vocabulary size shrinks as participants get older.
 
   
 
@@ -113,13 +115,13 @@ ggplot(diff_scores, aes(x = diff))+
   labs(caption = "75 with between 9 and 15 months distance between CDIs")+
   geom_vline(xintercept = c(9,15), color = "red",linetype = 2)
 
-ggplot(df_9_12,
+ggplot(df_9_15,
      aes(x = interview_age, y = nProduced))+
   geom_point(aes(color = subjectkey))+
   geom_line(aes(color = subjectkey))+
   theme(legend.position = "none")
 
-ggplot(df_9_12 %>%
+ggplot(df_9_15 %>%
          mutate(interview_age_cut = cut(interview_age, seq(12, 132,11))),
      aes(x = interview_age, y = nProduced))+
   geom_point(aes(color = subjectkey))+
@@ -130,5 +132,15 @@ ggplot(df_9_12 %>%
 ```
 
 
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
 
 
