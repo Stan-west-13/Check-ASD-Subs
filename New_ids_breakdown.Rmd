@@ -115,7 +115,7 @@ ggplot(df_plot, aes(y = nproduced,x = interview_age, color = form))+
 ```
 
 # Kids between 3 and 650 words w/ longitudinal (~12 months apart) data
-
+- 557 CDIs, 337 unique GUIDs
 - 43 kids were identified as having vocabulary data ~12 months apart
 - Descriptives of the maximum differences within participants are displayed in the table
 
@@ -156,7 +156,68 @@ df_plot_650 <- rbind(
   slice_max(nproduced) 
 
 
-diffs <- df_plot_650 %>%
+ASD_wg_long <- gestures_no_na_650 %>%
+  pivot_longer(.,
+               cols = matches("^mcg_vc?[0-9]"),
+               values_to = "response_code",
+               names_to = "word_code") %>%
+  mutate(response_code = as.numeric(response_code),
+         interview_age = as.numeric(interview_age),
+        mci_words_gestures01_id = as.numeric(mci_words_gestures01_id)) %>%
+  mutate_at(vars("response_code"), ~replace_na(.,0)) %>%
+  mutate(Produces = ifelse(response_code == 2, TRUE, FALSE)) %>%
+  group_by(subjectkey, interview_age, interview_date, mci_words_gestures01_id) %>%
+  mutate(nProduced = sum(Produces)) %>%
+  filter(nProduced >= 20 & nProduced <= 600) %>%
+  left_join(.,word_dict_WG, by = "word_code") %>%
+  ungroup() %>%
+  select(-mci_words_gestures01_id,  -mcg_vc_totpr)
+
+ASD_ws_long <- sentences_no_na_650 %>%
+  pivot_longer(.,
+               cols = matches("^mcs_vc?[0-9]"),
+               values_to = "response_code",
+               names_to = "word_code") %>%
+  mutate(response_code = as.numeric(response_code),
+         interview_age = as.numeric(interview_age),
+         interview_date = as.Date(interview_date, form = "%m/%d/%Y")) %>%
+  mutate_at(vars("response_code"), ~replace_na(.,0)) %>%
+  mutate(Produces = ifelse(response_code == 1 | response_code == 3, TRUE, FALSE)) %>%
+  group_by(subjectkey, interview_age, interview_date, mci_sentences02_id) %>%
+  mutate(nProduced = sum(Produces)) %>%
+  filter(nProduced >= 20 & nProduced <= 600) %>%
+  left_join(.,word_dict_S, by = "word_code") %>%
+  ungroup() %>%
+  select(-mci_sentences02_id, -mcs_vc_total)
+
+
+ASD_all_long <- rbind(ASD_wg_long, ASD_ws_long) %>%
+  group_by(subjectkey) %>%
+  mutate(best = nProduced == max(nProduced),
+         group = "ASD") %>%
+  filter(best == TRUE)%>%
+  ungroup() %>%
+  group_by(subjectkey) %>%
+  mutate(newest_rec = interview_date == max(interview_date)) %>%
+  group_by(subjectkey, interview_age) %>%
+  filter(newest_rec == TRUE) %>%
+  ungroup() %>%
+  unique() %>%
+  select(-nproduced,-best,-group,-newest_rec)
+
+ASD_total <- rbind(ASD_all_long,ASD_all)
+
+
+df_plot_650_diffs_total <- ASD_total %>% select(subjectkey,
+                            nProduced,
+                            form,
+                            interview_age) %>%
+  unique() %>%
+  arrange(subjectkey,interview_age)%>%
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nProduced) 
+
+diffs <- df_plot_650_diffs_total %>%
   select(subjectkey,interview_age) %>%
   group_by(subjectkey) %>%
   mutate(entry = seq.int(1,n(),1)) %>%
@@ -184,11 +245,11 @@ kable(tbl_diffs,caption = "Maximum Interview Latencies Descriptives",format = "s
 ggplot(diffs %>% 
          filter(max_diff >= 9 & max_diff <= 15) %>%
          left_join(.,
-                   df_plot %>%
+                   ASD_total %>%
                      select(subjectkey,
                             interview_age,
-                            nproduced), by = c("subjectkey", "interview_age")), 
-       aes(y = nproduced, x = interview_age))+
+                            nProduced), by = c("subjectkey", "interview_age")), 
+       aes(y = nProduced, x = interview_age))+
   geom_point(aes(color = subjectkey))+
   geom_line(aes(color = subjectkey))+
   theme_bw()+
@@ -196,8 +257,32 @@ ggplot(diffs %>%
   labs(x = "Interview Age",
        y = "# of words produced",
        title ="Longitudinal Relationship Between Age and Word Production",
-       caption = "Differences of 9 or more months considered\n Colors indicate different kids")
+       caption = "Differences of between 9 and 15 months considered\n Colors indicate different kids")
 
+
+x <- diffs %>%
+  filter(diff >= 2 | diff <= 4) %>%
+  group_by(subjectkey) %>%
+  summarize(n = length(diff)) %>%
+  arrange(desc(n)) %>%
+  filter(n > 1)
+
+
+## Mean nProduced per kid.
+diffs %>%
+  filter(diff >= 2 | diff <= 4) %>%
+  group_by(subjectkey) %>%
+  left_join(., ASD_total %>% select(subjectkey, nProduced)) %>%
+  summarize(m = mean(nProduced))
+
+x %>%
+  group_by(n) %>%
+  summarize(n())
+
+length(unique(x$subjectkey))
+
+ggplot(x, aes(x = n))+
+  geom_histogram()
 
 ```
 
@@ -208,3 +293,95 @@ minimal <- df_plot %>%
 
 write.csv(minimal,"minimally_speaking.csv")
 ```
+
+
+
+```{r}
+sentences_VSOA <- sentences_no_na %>%
+  filter(subjectkey %in% df_plot$subjectkey & 
+           interview_age %in% df_plot$interview_age )
+
+gestures_VSOA <- gestures_no_na %>%
+  filter(subjectkey %in% df_plot$subjectkey & 
+           interview_age %in% df_plot$interview_age )
+```
+
+
+
+
+# Filter 3 to 600 CDIs and kids
+
+```{r}
+ASD_total %>%
+  filter(nProduced > 2 & nProduced <= 600) %>%
+  select(interview_age, subjectkey) %>%
+  unique() %>%
+  nrow()
+
+ASD_total %>%
+  filter(nProduced > 2 & nProduced <= 600) %>%
+  select(subjectkey, nProduced) %>%
+  summarize(m = mean(nProduced))
+
+
+  
+
+ASD_3_600 <- ASD_total %>% select(subjectkey,
+                            nProduced,
+                            form,
+                            interview_age) %>%
+  unique() %>%
+  filter(nProduced > 2 & nProduced <= 600) %>%
+  arrange(subjectkey,interview_age)%>%
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nProduced) %>%
+  select(subjectkey,interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1),
+         max_entry = max(entry)) %>%
+  filter(max_entry >= 2) %>%
+  mutate(diff = interview_age - lag(interview_age),
+         max_diff = max(diff,na.rm = T)) %>%
+  filter(diff >= 9 & diff <= 15)
+
+
+ASD_3_600 %>%
+  group_by(subjectkey) %>%
+  summarize(num_entries = length(entry)) %>%
+  group_by(num_entries) %>%
+  summarize(length(num_entries))
+  
+
+
+
+ggplot(ASD_3_600 %>% 
+         left_join(.,
+                   ASD_total %>%
+                     select(subjectkey,
+                            interview_age,
+                            nProduced), by = c("subjectkey", "interview_age")), 
+       aes(y = nProduced, x = interview_age))+
+  geom_point(aes(color = subjectkey))+
+  geom_line(aes(color = subjectkey))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of words produced",
+       title ="Longitudinal Relationship Between Age and Word Production",
+       caption = "Differences of between 9 and 15 months considered\n Colors indicate different kids")
+
+
+minmial_all <- ASD_total %>%
+  filter(interview_age >= 60) %>%
+  select(subjectkey, interview_age, form, nProduced)
+  unique()
+
+write.csv(minmial_all, "data/minimal_ASD_all.csv")
+
+
+save(ASD_total, file = "data/ASD_longitudinal_all.Rdata")
+
+```
+
+
+

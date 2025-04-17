@@ -1,0 +1,22 @@
+---
+title: "ASD Longitudinal RMD"
+author: "Stan West"
+date: "2025-04-17"
+output: pdf_document
+---
+
+This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children
+
+```{r, echo=FALSE}
+load("data/ASD_longitudinal_all.Rdata")
+diffs <- df_plot_650_diffs_total %>%
+  select(subjectkey,interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1)) %>%
+  filter(!max(entry) < 2) %>%
+  mutate(diff = interview_age - lag(interview_age),
+         max_diff = max(diff,na.rm = T))
+
+```
+
+
