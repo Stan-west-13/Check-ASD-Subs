@@ -79,8 +79,55 @@ ggplot(diff_scores %>%
 
 ```
 
+# Kids with longitudinal data in 12 month intervals
+There are 75 kids with CDIs at the specificity of 9 - 15 months between CDIs. 45 of those only have one instance of a gap between 9 and 15 months,
+23 have two instances of 9 - 15 month gaps, and 7 have three instances of this.
+
+```{r, echo = FALSE, message=FALSE,warning=FALSE}
+
+df_9_15 <- diff_scores %>%
+  filter(subjectkey %in% filter(diff_scores,diff >= 9 & diff <= 15)$subjectkey) %>%
+  group_by(subjectkey) %>%
+  mutate(is.between = ifelse(diff >= 9 & diff <= 15,TRUE,FALSE),
+         n_9_15 = sum(is.between,na.rm = T))
+
+## Kid count
+length(unique(df_9_15$subjectkey))
+
+## Count number of 9 - 15 CDI gaps
+df_9_15 %>%
+  select(subjectkey,n_9_15) %>%
+  unique() %>%
+  group_by(n_9_15) %>%
+  count(n_9_15)
 
 
+  
+
+df_9_15 %>%
+  group_by(n_entry) %>%
+  table()
+
+ggplot(diff_scores, aes(x = diff))+
+  geom_histogram()+
+  labs(caption = "75 with between 9 and 15 months distance between CDIs")+
+  geom_vline(xintercept = c(9,15), color = "red",linetype = 2)
+
+ggplot(df_9_12,
+     aes(x = interview_age, y = nProduced))+
+  geom_point(aes(color = subjectkey))+
+  geom_line(aes(color = subjectkey))+
+  theme(legend.position = "none")
+
+ggplot(df_9_12 %>%
+         mutate(interview_age_cut = cut(interview_age, seq(12, 132,11))),
+     aes(x = interview_age, y = nProduced))+
+  geom_point(aes(color = subjectkey))+
+  geom_line(aes(group = subjectkey, color = is.between))+
+  theme(legend.position = "none")+
+  labs(caption = "Red connections are 9-15 month gaps between CDIs")
+
+```
 
 
 
