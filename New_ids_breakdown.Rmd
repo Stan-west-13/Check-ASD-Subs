@@ -1,0 +1,210 @@
+---
+title: "New GUIDS Breakdown"
+author: "Stan West"
+date: "2025-04-16"
+output: slidy_presentation
+theme: "lumen"
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(readxl)
+library(knitr)
+load("data/ASD_all_GM.Rdata")
+
+sentences <- read.csv("data/mci_sentences02.csv",na.strings = "")[-1,]
+gestures <- read.csv("data/mci_words_gestures01.csv",na.strings = "")[-1,]
+checked <- read_xlsx("data/GUIDS_to_check_April2023.xlsx")
+checked2 <- read_xlsx("data/GUIDs_N200_June_2022_SRCLD.xlsx")
+growthmod <- read.csv("data/ASD_GUIDS.csv")[,-1]
+new_ids <-read_xlsx("data/GUIDS_new_March_2025_aut_dx_confirmed.xlsx")
+
+word_dict_S <- read.csv("data/word_dict_S_April2023.csv")
+names(word_dict_S) <- c('num_item_id', 'word_code', 'word1', 'word2', 'WordBank1', 'WordBank2', 'category', 'class', 'classForm', 'classEH', 'classRS','classEHse','classVerbs', 'CDI_Metadata_compatible')
+word_dict_WG <- read.csv("data/word_dict_WG.csv")
+names(word_dict_WG) <- c('num_item_id','word_code', 'word1', 'word2', 'WordBank1', 'WordBank2', 'category', 'class', 'classForm', 'classEH', 'classRS', 'classEHse','classVerbs', 'CDI_Metadata_compatible')
+
+
+
+
+
+## 2. Selecting vocabulary checkists and other demographic info. ########################################
+select_columns <- c('subjectkey', 'interview_age', 'sex','interview_date','mcs_vc_total','mci_sentences02_id', as.character(word_dict_S$word_code))
+mci_sentences02 <- sentences[select_columns] %>%
+  filter(!duplicated(.)) %>%
+  mutate(form = "WS",
+         interview_age = as.integer(interview_age),
+         interview_date = as.Date(interview_date, "%m/%d/%Y"),.after="sex")
+
+select_columns <- c('subjectkey', 'interview_age', 'sex','interview_date','mcg_vc_totpr','mci_words_gestures01_id', as.character(word_dict_WG$word_code))
+mci_words_gestures <- gestures[select_columns] %>%
+  filter(!duplicated(.))%>%
+  mutate(form = "WG",
+         interview_age = as.integer(interview_age),
+         interview_date = as.Date(interview_date, "%m/%d/%Y"),.after = "sex")
+
+source("R/Identify_empty_checklist.R")
+source("R/adds_nProduced_column.R")
+
+```
+
+# Check Pseudo IDs
+
+-   No overlap in multiple GUIDs with PseudoIDs
+
+```{r}
+
+new_ids %>% 
+  select(Pseudoguid, subjectkey.GUID) %>%
+  filter(!is.na(Pseudoguid)) 
+
+```
+
+# New Kids w/vocab 1 - 680 (VSOA Analysis)
+
+- 250 new CDIs coming from 122 unique GUIDs
+
+```{r, echo=FALSE}
+gestures_no_na <- mci_words_gestures %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcg_vc_totpr = as.numeric(mcg_vc_totpr),
+         nproduced = adds_nProduced_column(d=.,start_at = 7, 2),.after = mcg_vc_totpr) %>%
+  filter(empty == FALSE,
+         nproduced > 0,
+         subjectkey %in% new_ids$subjectkey.GUID)
+
+
+
+sentences_no_na <- mci_sentences02 %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcs_vc_total = as.numeric(mcs_vc_total),
+         nproduced = adds_nProduced_column(.,7,1,3),.after=mcs_vc_total) %>%
+  filter(empty == FALSE,
+         nproduced > 0,
+         subjectkey %in% new_ids$subjectkey.GUID) 
+
+
+df_plot <- rbind(
+  gestures_no_na %>% select(subjectkey,
+                            nproduced,
+                            form,
+                            interview_age),
+  sentences_no_na %>% select(subjectkey,
+                            nproduced,
+                            form,
+                            interview_age)
+) %>%
+  unique() %>%
+  arrange(subjectkey,interview_age)%>%
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nproduced)
+
+
+
+ggplot(df_plot, aes(y = nproduced,x = interview_age, color = form))+
+  geom_point()+
+  facet_grid(~form,scales = "free")+
+  lims(y = c(1,700))+
+  labs(x = "Interview Age",
+       y = "# of words produced",
+       title = "Words Produced by Age Scatterplot",
+       caption = "Points are individual CDIs")
+
+
+```
+
+# Kids between 3 and 650 words w/ longitudinal (~12 months apart) data
+
+- 43 kids were identified as having vocabulary data ~12 months apart
+- Descriptives of the maximum differences within participants are displayed in the table
+
+\n
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+gestures_no_na_650 <- mci_words_gestures %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcg_vc_totpr = as.numeric(mcg_vc_totpr),
+         nproduced = adds_nProduced_column(d=.,start_at = 7, 2),.after = mcg_vc_totpr) %>%
+  filter(empty == FALSE,
+         nproduced > 3 & nproduced < 650,
+         subjectkey %in% new_ids$subjectkey.GUID)
+
+
+
+sentences_no_na_650 <- mci_sentences02 %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcs_vc_total = as.numeric(mcs_vc_total),
+         nproduced = adds_nProduced_column(.,7,1,3),.after=mcs_vc_total) %>%
+  filter(empty == FALSE,
+         nproduced > 3 & nproduced < 650,
+         subjectkey %in% new_ids$subjectkey.GUID) 
+
+df_plot_650 <- rbind(
+  gestures_no_na_650 %>% select(subjectkey,
+                            nproduced,
+                            form,
+                            interview_age),
+  sentences_no_na_650 %>% select(subjectkey,
+                            nproduced,
+                            form,
+                            interview_age)
+) %>%
+  unique() %>%
+  arrange(subjectkey,interview_age)%>%
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nproduced) 
+
+
+diffs <- df_plot_650 %>%
+  select(subjectkey,interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1)) %>%
+  filter(!max(entry) < 2) %>%
+  mutate(diff = interview_age - lag(interview_age),
+         max_diff = max(diff,na.rm = T))
+
+tbl_diffs <- diffs %>%
+  ungroup() %>%
+  select(subjectkey,max_diff) %>%
+  unique() %>%
+  filter(max_diff >= 9 & max_diff <= 15) %>%
+  summarize(n = length(max_diff),
+            range = range(max_diff),
+            mean = mean(max_diff),
+            sd = sd(max_diff))
+
+ggplot(diffs %>% filter(!is.na(diff)), aes(x = diff))+
+  geom_histogram(fill = "black")+
+  labs(x = "Distribution of Time Between Interviews",
+       title = "Interview Age Distances Histogram (no distance constraint)")
+
+kable(tbl_diffs,caption = "Maximum Interview Latencies Descriptives",format = "simple")
+
+ggplot(diffs %>% 
+         filter(max_diff >= 9 & max_diff <= 15) %>%
+         left_join(.,
+                   df_plot %>%
+                     select(subjectkey,
+                            interview_age,
+                            nproduced), by = c("subjectkey", "interview_age")), 
+       aes(y = nproduced, x = interview_age))+
+  geom_point(aes(color = subjectkey))+
+  geom_line(aes(color = subjectkey))+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of words produced",
+       title ="Longitudinal Relationship Between Age and Word Production",
+       caption = "Differences of 9 or more months considered\n Colors indicate different kids")
+
+
+```
+
+```{r,echo=FALSE}
+minimal <- df_plot %>%
+  filter(interview_age >= 60) %>%
+  left_join(.,new_ids %>% select(subjectkey.GUID,ADOS.Mod.1), by = c("subjectkey" = "subjectkey.GUID"))
+
+write.csv(minimal,"minimally_speaking.csv")
+```

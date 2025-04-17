@@ -8,20 +8,97 @@ output: html_document
 ```{r setup, echo=FALSE}
 library(ggplot2)
 library(tidyverse)
-
+library(readxl)
 load("data/ASD_all_GM.Rdata")
 
-sentences <- read.csv("data/mci_sentences02.csv")[-1,]
-gestures <- read.csv("data/mci_words_gestures01.csv")[-1,]
+sentences <- read.csv("data/mci_sentences02.csv",na.strings = "")[-1,]
+gestures <- read.csv("data/mci_words_gestures01.csv",na.strings = "")[-1,]
+checked <- read_xlsx("data/GUIDS_to_check_April2023.xlsx")
+checked2 <- read_xlsx("data/GUIDs_N200_June_2022_SRCLD.xlsx")
+growthmod <- read.csv("data/ASD_GUIDS.csv")[,-1]
+new_ids <-read_xlsx("data/GUIDS_new_March_2025_aut_dx_confirmed.xlsx")
+
+word_dict_S <- read.csv("data/word_dict_S_April2023.csv")
+names(word_dict_S) <- c('num_item_id', 'word_code', 'word1', 'word2', 'WordBank1', 'WordBank2', 'category', 'class', 'classForm', 'classEH', 'classRS','classEHse','classVerbs', 'CDI_Metadata_compatible')
+word_dict_WG <- read.csv("data/word_dict_WG.csv")
+names(word_dict_WG) <- c('num_item_id','word_code', 'word1', 'word2', 'WordBank1', 'WordBank2', 'category', 'class', 'classForm', 'classEH', 'classRS', 'classEHse','classVerbs', 'CDI_Metadata_compatible')
+
+
+
+
+
+## 2. Selecting vocabulary checkists and other demographic info. ########################################
+select_columns <- c('subjectkey', 'interview_age', 'sex','interview_date','mcs_vc_total','mci_sentences02_id', as.character(word_dict_S$word_code))
+mci_sentences02 <- sentences[select_columns] %>%
+  filter(!duplicated(.)) %>%
+  mutate(form = "WS",
+         interview_age = as.integer(interview_age),
+         interview_date = as.Date(interview_date, "%m/%d/%Y"))
+
+select_columns <- c('subjectkey', 'interview_age', 'sex','interview_date','mcg_vc_totpr','mci_words_gestures01_id', as.character(word_dict_WG$word_code))
+mci_words_gestures <- gestures[select_columns] %>%
+  filter(!duplicated(.))%>%
+  mutate(form = "WG",
+         interview_age = as.integer(interview_age),
+         interview_date = as.Date(interview_date, "%m/%d/%Y"))
 
 source("R/Identify_empty_checklist.R")
-
+source("R/adds_nProduced_column.R")
 ```
 
 
 
 ```{r}
-gestures_no_na <- gestures %>%
-  mutate(empty = iden)
+
+gestures_age <- mci_words_gestures %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcg_vc_totpr = as.numeric(mcg_vc_totpr),
+         nproduced = adds_nProduced_column(d=.,start_at = 7, 2),.after = mcg_vc_totpr) %>%
+  filter(empty == FALSE,
+         nproduced > 0) %>%
+  select(subjectkey, form, nproduced,interview_age)
+
+
+gestures_no_na <- mci_words_gestures %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcg_vc_totpr = as.numeric(mcg_vc_totpr),
+         nproduced = adds_nProduced_column(d=.,start_at = 7, 2),.after = mcg_vc_totpr) %>%
+  filter(empty == FALSE,
+         nproduced > 0) %>%
+  select(subjectkey, form, nproduced)
+
+
+sentences_ages <- mci_sentences02 %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcs_vc_total = as.numeric(mcs_vc_total),
+         nproduced = adds_nProduced_column(.,7,1,3),.after=mcs_vc_total) %>%
+  filter(empty == FALSE,
+         nproduced > 0) %>%
+  select(subjectkey, form, nproduced,interview_age)
+
+sentences_no_na <- mci_sentences02 %>%
+  mutate(empty = Identify_empty_checklist(.[,-c(1:6)], 0.9),
+         mcs_vc_total = as.numeric(mcs_vc_total),
+         nproduced = adds_nProduced_column(.,7,1,3),.after=mcs_vc_total) %>%
+  filter(empty == FALSE,
+         nproduced > 0) %>%
+  select(subjectkey, form, nproduced)
+
+unique_ids <- unique(rbind(gestures_no_na,sentences_no_na)) %>%
+  group_by(subjectkey) %>%
+  slice_max(nproduced) %>%
+  unique()
+
+ages_df <- rbind(sentences_ages,gestures_age) %>%
+  unique()
+
+new_ids <- unique_ids %>%
+  filter(!subjectkey %in% unique(ASD_all$subjectkey) & 
+           !subjectkey %in% checked$subjectkey & 
+           !subjectkey %in% checked2$subjectkey &
+           !subjectkey %in% growthmod) %>%
+  left_join(ages_df, by = c("subjectkey", "nproduced","form"))
+
+write.csv(new_ids,"data/GUIDS_all.csv")
 ```
 

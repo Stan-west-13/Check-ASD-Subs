@@ -1,0 +1,681 @@
+num_item_id,word_code,word1,word2,WordBank1,WordBank2,category,class,classForm,classEH,classRS,classEHse,classVerbs,CDI_Metadata_compatible
+1,mcs_vc1_1_baa,baa,baa,baa baa,baa baa,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,baa baa
+2,mcs_vc1_2choo,choochoo,choo,choo choo,choo choo,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,choo choo
+3,mcs_vc1_3_cockadoo,cockadoodle,cockadoodledoo,cockadoodledoo,cockadoodledoo,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,cockadoodledoo
+4,mcs_vc1_4_grr,grrr,grr,grrr,grrr,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,grrr
+5,mcs_vc1_5_meow,meow,meow,meow,meow,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,meow
+6,mcs_vc1_6_moo,moo,moo,moo,moo,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,moo
+7,mcs_vc1_7_ouch,ouch,ouch,ouch,ouch,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,ouch
+8,mcs_vc1_8_quack,quack,quack,quack quack,quack quack,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,quack quack
+9,mcs_vc1_9_uhoh,uhoh,uhoh,uh oh,uh oh,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,uh oh
+10,mcs_vc1_10_vroom,vroom,vroom,vroom,vroom,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,vroom
+11,mcs_vc1_11_woof,woof,woof,woof woof,woof woof,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,woof woof
+12,mcs_vc1_12_yum,yum,yum,yum yum,yum yum,sounds,NA,NA,SoundEffect,NA,SoundEffect,NA,yum yum
+13,mcs_vc2_1_alli,alligator,alligator,alligator,alligator,animals,Noun,Noun,Noun,Noun,Noun,Noun,alligator
+14,mcs_vc2_2_animal,animal,animal,animal,animal,animals,Noun,Noun,Noun,Noun,Noun,Noun,animal
+15,mcs_vc2_3ant,ant,ant,ant,ant,animals,Noun,Noun,Noun,Noun,Noun,Noun,ant
+16,mcs_vc2_4bear,bear,bear,bear,bear,animals,Noun,Noun,Noun,Noun,Noun,Noun,bear
+17,mcs_vc2_5bee,bee,bee,bee,bee,animals,Noun,Noun,Noun,Noun,Noun,Noun,bee
+18,mcs_vc2_6bird,bird,bird,bird,bird,animals,Noun,Noun,Noun,Noun,Noun,Noun,bird
+19,mcs_vc2_7bug,bug,bug,bug,bug,animals,Noun,Noun,Noun,Noun,Noun,Noun,bug
+20,mcs_vc2_8bunny,bunny,bunny,bunny,bunny,animals,Noun,Noun,Noun,Noun,Noun,Noun,bunny
+21,mcs_vc2_9butterfly,butterfly,butterfly,butterfly,butterfly,animals,Noun,Noun,Noun,Noun,Noun,Noun,butterfly
+22,mcs_vc2_10cat,cat,cat,cat,cat,animals,Noun,Noun,Noun,Noun,Noun,Noun,cat
+23,mcs_vc2_11chicken,chicken,chicken,chicken (animal),chicken_ani,animals,Noun,Noun,Noun,Noun,Noun,Noun,chicken (animal)
+24,mcs_vc2_12cow,cow,cow,cow,cow,animals,Noun,Noun,Noun,Noun,Noun,Noun,cow
+25,mcs_vc2_13deer,deer,deer,deer,deer,animals,Noun,Noun,Noun,Noun,Noun,Noun,deer
+26,mcs_vc2_14dog,dog,dog,dog,dog,animals,Noun,Noun,Noun,Noun,Noun,Noun,dog
+27,mcs_vc2_15donkey,donkey,donkey,donkey,donkey,animals,Noun,Noun,Noun,Noun,Noun,Noun,donkey
+28,mcs_vc2_16duck,duck,duck,duck,duck,animals,Noun,Noun,Noun,Noun,Noun,Noun,duck
+29,mcs_vc2_17elephant,elephant,elephant,elephant,elephant,animals,Noun,Noun,Noun,Noun,Noun,Noun,elephant
+30,mcs_vc2_18fish,fish,fish,fish (animal),fish_ani,animals,Noun,Noun,Noun,Noun,Noun,Noun,fish (animal)
+31,mcs_vc2_19frog,frog,frog,frog,frog,animals,Noun,Noun,Noun,Noun,Noun,Noun,frog
+32,mcs_vc2_20giraffe,giraffe,giraffe,giraffe,giraffe,animals,Noun,Noun,Noun,Noun,Noun,Noun,giraffe
+33,mcs_vc2_21goose,goose,goose,goose,goose,animals,Noun,Noun,Noun,Noun,Noun,Noun,goose
+34,mcs_vc2_22hen,hen,hen,hen,hen,animals,Noun,Noun,Noun,Noun,Noun,Noun,hen
+35,mcs_vc2_23horse,horse,horse,horse,horse,animals,Noun,Noun,Noun,Noun,Noun,Noun,horse
+36,mcs_vc2_24kitty,kitty,kitty,kitty,kitty,animals,Noun,Noun,Noun,Noun,Noun,Noun,kitty
+37,mcs_vc2_25lamb,lamb,lamb,lamb,lamb,animals,Noun,Noun,Noun,Noun,Noun,Noun,lamb
+38,mcs_vc2_26lion,lion,lion,lion,lion,animals,Noun,Noun,Noun,Noun,Noun,Noun,lion
+39,mcs_vc2_27monkey,monkey,monkey,monkey,monkey,animals,Noun,Noun,Noun,Noun,Noun,Noun,monkey
+40,mcs_vc2_28moose,moose,moose,moose,moose,animals,Noun,Noun,Noun,Noun,Noun,Noun,moose
+41,mcs_vc2_29mouse,mouse,mouse,mouse,mouse,animals,Noun,Noun,Noun,Noun,Noun,Noun,mouse
+42,mcs_vc2_30owl,owl,owl,owl,owl,animals,Noun,Noun,Noun,Noun,Noun,Noun,owl
+43,mcs_vc2_31penguin,penguin,penguin,penguin,penguin,animals,Noun,Noun,Noun,Noun,Noun,Noun,penguin
+44,mcs_vc2_32pig,pig,pig,pig,pig,animals,Noun,Noun,Noun,Noun,Noun,Noun,pig
+45,mcs_vc2_33pony,pony,pony,pony,pony,animals,Noun,Noun,Noun,Noun,Noun,Noun,pony
+46,mcs_vc2_34puppy,puppy,puppy,puppy,puppy,animals,Noun,Noun,Noun,Noun,Noun,Noun,puppy
+47,mcs_vc2_35rooster,rooster,rooster,rooster,rooster,animals,Noun,Noun,Noun,Noun,Noun,Noun,rooster
+48,mcs_vc2_36sheep,sheep,sheep,sheep,sheep,animals,Noun,Noun,Noun,Noun,Noun,Noun,sheep
+49,mcs_vc2_37squirrel,squirrel,squirrel,squirrel,squirrel,animals,Noun,Noun,Noun,Noun,Noun,Noun,squirrel
+50,mcs_vc2_38teddybear,teddybear,teddybear,teddybear,teddybear,animals,Noun,Noun,Noun,Noun,Noun,Noun,teddybear
+51,mcs_vc2_39tiger,tiger,tiger,tiger,tiger,animals,Noun,Noun,Noun,Noun,Noun,Noun,tiger
+52,mcs_vc2_40turkey,turkey,turkey,turkey,turkey,animals,Noun,Noun,Noun,Noun,Noun,Noun,turkey
+53,mcs_vc2_41turtle,turtle,turtle,turtle,turtle,animals,Noun,Noun,Noun,Noun,Noun,Noun,turtle
+54,mcs_vc2_42wolf,wolf,wolf,wolf,wolf,animals,Noun,Noun,Noun,Noun,Noun,Noun,wolf
+55,mcs_vc2_43zebra,zebra,zebra,zebra,zebra,animals,Noun,Noun,Noun,Noun,Noun,Noun,zebra
+56,mcs_vc3_1airplane,airplane,airplane,airplane,airplane,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,airplane
+57,mcs_vc3_2bicycle,bicycle,bicycle,bicycle,bicycle,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,bicycle
+58,mcs_vc3_3boat,boat,boat,boat,boat,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,boat
+59,mcs_vc3_4bus,bus,bus,bus,bus,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,bus
+60,mcs_vc3_5car,car,car,car,car,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,car
+61,mcs_vc3_6firetruck,firetruck,firetruck,firetruck,firetruck,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,firetruck
+62,mcs_vc3_7helicopter,helicopter,helicopter,helicopter,helicopter,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,helicopter
+63,mcs_vc3_8motorcycle,motorcycle,motorcycle,motorcycle,motorcycle,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,motorcycle
+64,mcs_vc3_9sled,sled,sled,sled,sled,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,sled
+65,mcs_vc3_10stroller,stroller,stroller,stroller,stroller,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,stroller
+66,mcs_vc3_11tractor,tractor,tractor,tractor,tractor,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,tractor
+67,mcs_vc3_12train,train,train,train,train,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,train
+68,mcs_vc3_13tricycle,tricycle,tricycle,tricycle,tricycle,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,tricycle
+69,mcs_vc3_14truck,truck,truck,truck,truck,vehicles,Noun,Noun,Noun,Noun,Noun,Noun,truck
+70,mcs_vc4_1ball,ball,ball,ball,ball,toys,Noun,Noun,Noun,Noun,Noun,Noun,ball
+71,mcs_vc4_2balloon,balloon,balloon,balloon,balloon,toys,Noun,Noun,Noun,Noun,Noun,Noun,balloon
+72,mcs_vc4_3bat,bat,bat,bat,bat,toys,Noun,Noun,Noun,Noun,Noun,Noun,bat
+73,mcs_vc4_4block,block,block,block,block,toys,Noun,Noun,Noun,Noun,Noun,Noun,block
+74,mcs_vc4_5book,book,book,book,book,toys,Noun,Noun,Noun,Noun,Noun,Noun,book
+75,mcs_vc4_6bubbles,bubbles,bubbles,bubbles,bubbles,toys,Noun,Noun,Noun,Noun,Noun,Noun,bubbles
+76,mcs_vc4_7chalk,chalk,chalk,chalk,chalk,toys,Noun,Noun,Noun,Noun,Noun,Noun,chalk
+77,mcs_vc4_8crayon,crayon,crayon,crayon,crayon,toys,Noun,Noun,Noun,Noun,Noun,Noun,crayon
+78,mcs_vc4_9doll,doll,doll,doll,doll,toys,Noun,Noun,Noun,Noun,Noun,Noun,doll
+79,mcs_vc4_10game,game,game,game,game,toys,Noun,Noun,Noun,Noun,Noun,Noun,game
+80,mcs_vc4_11glue,glue,glue,glue,glue,toys,Noun,Noun,Noun,Noun,Noun,Noun,glue
+81,mcs_vc4_12pen,pen,pen,pen,pen,toys,Noun,Noun,Noun,Noun,Noun,Noun,pen
+82,mcs_vc4_13pencil,pencil,pencil,pencil,pencil,toys,Noun,Noun,Noun,Noun,Noun,Noun,pencil
+83,mcs_vc4_14playdough,playdough,playdough,playdough,playdough,toys,Noun,Noun,Noun,Noun,Noun,Noun,play dough
+84,mcs_vc4_15present,present,present,present,present,toys,Noun,Noun,Noun,Noun,Noun,Noun,present
+85,mcs_vc4_16puzzle,puzzle,puzzle,puzzle,puzzle,toys,Noun,Noun,Noun,Noun,Noun,Noun,puzzle
+86,mcs_vc4_17story,story,story,story,story,toys,Noun,Noun,Noun,Noun,Noun,Noun,story
+87,mcs_vc4_18toy,toy,toy,toy,toy_obj,toys,Noun,Noun,Noun,Noun,Noun,Noun,toy (object)
+88,mcs_vc5_1apple,apple,apple,apple,apple,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,apple
+89,mcs_vc5_2applesauce,applesauce,applesauce,applesauce,applesauce,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,applesauce
+90,mcs_vc5_3banana,banana,banana,banana,banana,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,banana
+91,mcs_vc5_4beans,beans,beans,beans,beans,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,beans
+92,mcs_vc5_5bread,bread,bread,bread,bread,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,bread
+93,mcs_vc5_6butter,butter,butter,butter,butter,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,butter
+94,mcs_vc5_7cake,cake,cake,cake,cake,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cake
+95,mcs_vc5_8candy,candy,candy,candy,candy,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,candy
+96,mcs_vc5_9carrots,carrots,carrots,carrots,carrots,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,carrots
+97,mcs_vc5_10cereal,cereal,cereal,cereal,cereal,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cereal
+98,mcs_vc5_11cheerios,cheerios,cheerios,cheerios,cheerios,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cheerios
+99,mcs_vc5_12cheese,cheese,cheese,cheese,cheese,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cheese
+100,mcs_vc5_13chicken,chicken,chicken,chicken,chicken_foo,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,chicken (food)
+101,mcs_vc5_14chocolate,chocolate,chocolate,chocolate,chocolate,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,chocolate
+102,mcs_vc5_15coffee,coffee,coffee,coffee,coffee,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,coffee
+103,mcs_vc5_16coke,coke,coke,coke,coke,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,coke
+104,mcs_vc5_17cookie,cookie,cookie,cookie,cookie,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cookie
+105,mcs_vc5_18corn,corn,corn,corn,corn,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,corn
+106,mcs_vc5_19cracker,cracker,cracker,cracker,cracker,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,cracker
+107,mcs_vc5_20donut,donut,donut,donut,donut,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,donut
+108,mcs_vc5_21drink,drink,drink,drink,drink_bev,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,drink (beverage)
+109,mcs_vc5_22egg,egg,egg,egg,egg,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,egg
+110,mcs_vc5_23fish,fish,fish,fish,fish_foo,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,fish (food)
+111,mcs_vc5_24food,food,food,food,food,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,food
+112,mcs_vc5_25frenchfries,frenchfries,frenchfries,frenchfries,frenchfries,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,french fries
+113,mcs_vc5_26grapes,grapes,grapes,grapes,grapes,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,grapes
+114,mcs_vc5_27greenbeans,greenbeans,greenbeans,greenbeans,greenbeans,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,green beans
+115,mcs_vc5_28gum,gum,gum,gum,gum,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,gum
+116,mcs_vc5_29hamburger,hamburger,hamburger,hamburger,hamburger,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,hamburger
+117,mcs_vc5_30ice,ice,ice,ice,ice,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,ice
+118,mcs_vc5_31icecream,icecream,icecream,icecream,icecream,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,ice cream
+119,mcs_vc5_32jello,jello,jello,jello,jello,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,jello
+120,mcs_vc5_33jelly,jelly,jelly,jelly,jelly,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,jelly
+121,mcs_vc5_34juice,juice,juice,juice,juice,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,juice
+122,mcs_vc5_35lollipop,lollipop,lollipop,lollipop,lollipop,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,lollipop
+123,mcs_vc5_36meat,meat,meat,meat,meat,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,meat
+124,mcs_vc5_37melon,melon,melon,melon,melon,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,melon
+125,mcs_vc5_38milk,milk,milk,milk,milk,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,milk
+126,mcs_vc5_39muffin,muffin,muffin,muffin,muffin,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,muffin
+127,mcs_vc5_40noodles,noodles,noodles,noodles,noodles,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,noodles
+128,mcs_vc5_41nuts,nuts,nuts,nuts,nuts,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,nuts
+129,mcs_vc5_42orange,orange,orange,orange,orange_foo,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,orange (food)
+130,mcs_vc5_43pancake,pancake,pancake,pancake,pancake,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pancake
+131,mcs_vc5_44peanutbutter,peanutbutter,peanutbutter,peanutbutter,peanutbutter,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,peanut butter
+132,mcs_vc5_45peas,peas,peas,peas,peas,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,peas
+133,mcs_vc5_46pickle,pickle,pickle,pickle,pickle,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pickle
+134,mcs_vc5_47pizza,pizza,pizza,pizza,pizza,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pizza
+135,mcs_vc5_48popcorn,popcorn,popcorn,popcorn,popcorn,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,popcorn
+136,mcs_vc5_49popsicle,popsicle,popsicle,popsicle,popsicle,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,popsicle
+137,mcs_vc5_50potato,potato,potato,potato,potato,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,potato
+138,mcs_vc5_51potatochip,potatochip,potatochip,potatochip,potatochip,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,potato chip
+139,mcs_vc5_52pretzel,pretzel,pretzel,pretzel,pretzel,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pretzel
+140,mcs_vc5_53pudding,pudding,pudding,pudding,pudding,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pudding
+141,mcs_vc5_54pumpkin,pumpkin,pumpkin,pumpkin,pumpkin,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,pumpkin
+142,mcs_vc5_55raisin,raisin,raisin,raisin,raisin,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,raisin
+143,mcs_vc5_56salt,salt,salt,salt,salt,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,salt
+144,mcs_vc5_57sandwich,sandwich,sandwich,sandwich,sandwich,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,sandwich
+145,mcs_vc5_58sauce,sauce,sauce,sauce,sauce,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,sauce
+146,mcs_vc5_59sodapop,soda/pop,soda/pop,soda/pop,soda/pop,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,soda/pop
+147,mcs_vc5_60soup,soup,soup,soup,soup,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,soup
+148,mcs_vc5_61spaghetti,spaghetti,spaghetti,spaghetti,spaghetti,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,spaghetti
+149,mcs_vc5_62strawberry,strawberry,strawberry,strawberry,strawberry,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,strawberry
+150,mcs_vc5_63toast,toast,toast,toast,toast,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,toast
+151,mcs_vc5_64tuna,tuna,tuna,tuna,tuna,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,tuna
+152,mcs_vc5_65vanilla,vanilla,vanilla,vanilla,vanilla,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,vanilla
+153,mcs_vc5_66vitamins,vitamins,vitamins,vitamins,vitamins,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,vitamins
+154,mcs_vc5_67water,water,water,water,water_bev,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,water (beverage)
+155,mcs_vc5_68yogurt,yogurt,yogurt,yogurt,yogurt,food_drink,Noun,Noun,Noun,Noun,Noun,Noun,yogurt
+156,mcs_vc6_1beads,beads,beads,beads,beads,clothing,Noun,Noun,Noun,Noun,Noun,Noun,beads
+157,mcs_vc6_2belt,belt,belt,belt,belt,clothing,Noun,Noun,Noun,Noun,Noun,Noun,belt
+158,mcs_vc6_3bib,bib,bib,bib,bib,clothing,Noun,Noun,Noun,Noun,Noun,Noun,bib
+159,mcs_vc6_4boots,boots,boots,boots,boots,clothing,Noun,Noun,Noun,Noun,Noun,Noun,boots
+160,mcs_vc6_5button,button,button,button,button,clothing,Noun,Noun,Noun,Noun,Noun,Noun,button
+161,mcs_vc6_6coat,coat,coat,coat,coat,clothing,Noun,Noun,Noun,Noun,Noun,Noun,coat
+162,mcs_vc6_7diaper,diaper,diaper,diaper,diaper,clothing,Noun,Noun,Noun,Noun,Noun,Noun,diaper
+163,mcs_vc6_8dress,dress,dress,dress,dress_obj,clothing,Noun,Noun,Noun,Noun,Noun,Noun,dress (object)
+164,mcs_vc6_9gloves,gloves,gloves,gloves,gloves,clothing,Noun,Noun,Noun,Noun,Noun,Noun,gloves
+165,mcs_vc6_10hat,hat,hat,hat,hat,clothing,Noun,Noun,Noun,Noun,Noun,Noun,hat
+166,mcs_vc6_11jacket,jacket,jacket,jacket,jacket,clothing,Noun,Noun,Noun,Noun,Noun,Noun,jacket
+167,mcs_vc6_12jeans,jeans,jeans,jeans,jeans,clothing,Noun,Noun,Noun,Noun,Noun,Noun,jeans
+168,mcs_vc6_13mittens,mittens,mittens,mittens,mittens,clothing,Noun,Noun,Noun,Noun,Noun,Noun,mittens
+169,mcs_vc6_14necklace,necklace,necklace,necklace,necklace,clothing,Noun,Noun,Noun,Noun,Noun,Noun,necklace
+170,mcs_vc6_15pajamas,pajamas,pajamas,pajamas,pajamas,clothing,Noun,Noun,Noun,Noun,Noun,Noun,pajamas
+171,mcs_vc6_16pants,pants,pants,pants,pants,clothing,Noun,Noun,Noun,Noun,Noun,Noun,pants
+172,mcs_vc6_17scarf,scarf,scarf,scarf,scarf,clothing,Noun,Noun,Noun,Noun,Noun,Noun,scarf
+173,mcs_vc6_18shirt,shirt,shirt,shirt,shirt,clothing,Noun,Noun,Noun,Noun,Noun,Noun,shirt
+174,mcs_vc6_19shoe,shoe,shoe,shoe,shoe,clothing,Noun,Noun,Noun,Noun,Noun,Noun,shoe
+175,mcs_vc6_20shorts,shorts,shorts,shorts,shorts,clothing,Noun,Noun,Noun,Noun,Noun,Noun,shorts
+176,mcs_vc6_21slipper,slipper,slipper,slipper,slipper,clothing,Noun,Noun,Noun,Noun,Noun,Noun,slipper
+177,mcs_vc6_22sneaker,sneaker,sneaker,sneaker,sneaker,clothing,Noun,Noun,Noun,Noun,Noun,Noun,sneaker
+178,mcs_vc6_23snowsuit,snowsuit,snowsuit,snowsuit,snowsuit,clothing,Noun,Noun,Noun,Noun,Noun,Noun,snowsuit
+179,mcs_vc6_24sock,sock,sock,sock,sock,clothing,Noun,Noun,Noun,Noun,Noun,Noun,sock
+180,mcs_vc6_25sweater,sweater,sweater,sweater,sweater,clothing,Noun,Noun,Noun,Noun,Noun,Noun,sweater
+181,mcs_vc6_26tights,tights,tights,tights,tights,clothing,Noun,Noun,Noun,Noun,Noun,Noun,tights
+182,mcs_vc6_27underpants,underpants,underpants,underpants,underpants,clothing,Noun,Noun,Noun,Noun,Noun,Noun,underpants
+183,mcs_vc6_28zipper,zipper,zipper,zipper,zipper,clothing,Noun,Noun,Noun,Noun,Noun,Noun,zipper
+184,mcs_vc7_1ankle,ankle,ankle,ankle,ankle,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,ankle
+185,mcs_vc7_2arm,arm,arm,arm,arm,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,arm
+186,mcs_vc7_3bellybutton,bellybutton,bellybutton,bellybutton,bellybutton,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,belly button
+187,mcs_vc7_4buttocks_bottom,buttocks/bottom,buttocks/bottom,buttocks/bottom,buttocks/bottom,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,buttocks/bottom*
+188,mcs_vc7_5cheek,cheek,cheek,cheek,cheek,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,cheek
+189,mcs_vc7_6chin,chin,chin,chin,chin,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,chin
+190,mcs_vc7_7ear,ear,ear,ear,ear,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,ear
+191,mcs_vc7_8eye,eye,eye,eye,eye,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,eye
+192,mcs_vc7_9face,face,face,face,face,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,face
+193,mcs_vc7_10feet,feet,feet,feet,feet,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,foot
+194,mcs_vc7_11finger,finger,finger,finger,finger,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,finger
+195,mcs_vc7_12hair,hair,hair,hair,hair,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,hair
+196,mcs_vc7_13hand,hand,hand,hand,hand,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,hand
+197,mcs_vc7_14head,head,head,head,head,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,head
+198,mcs_vc7_15knee,knee,knee,knee,knee,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,knee
+199,mcs_vc7_16leg,leg,leg,leg,leg,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,leg
+200,mcs_vc7_17lips,lips,lips,lips,lips,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,lips
+201,mcs_vc7_18mouth,mouth,mouth,mouth,mouth,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,mouth
+202,mcs_vc7_19nose,nose,nose,nose,nose,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,nose
+203,mcs_vc7_20owie_booboo,owiebooboo,owiebooboo,owiebooboo,owiebooboo,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,owie/boo boo
+204,mcs_vc7_21penis,penis,penis,penis,penis,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,penis*
+205,mcs_vc7_22shoulder,shoulder,shoulder,shoulder,shoulder,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,shoulder
+206,mcs_vc7_23tooth,tooth,tooth,tooth,tooth,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,tooth
+207,mcs_vc7_24toe,toe,toe,toe,toe,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,toe
+208,mcs_vc7_25tongue,tongue,tongue,tongue,tongue,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,tongue
+209,mcs_vc7_26tummy,tummy,tummy,tummy,tummy,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,tummy
+210,mcs_vc7_27vagina,vagina,vagina,vagina,vagina,body_parts,Noun,Noun,Noun,Noun,Noun,Noun,vagina*
+211,mcs_vc8_1basket,basket,basket,basket,basket,household,Noun,Noun,Noun,Noun,Noun,Noun,basket
+212,mcs_vc8_2blanket,blanket,blanket,blanket,blanket,household,Noun,Noun,Noun,Noun,Noun,Noun,blanket
+213,mcs_vc8_3bottle,bottle,bottle,bottle,bottle,household,Noun,Noun,Noun,Noun,Noun,Noun,bottle
+214,mcs_vc8_4box,box,box,box,box,household,Noun,Noun,Noun,Noun,Noun,Noun,box
+215,mcs_vc8_5bowl,5bowl,5bowl,5bowl,5bowl,household,Noun,Noun,Noun,Noun,Noun,Noun,bowl
+216,mcs_vc8_6broom,broom,broom,broom,broom,household,Noun,Noun,Noun,Noun,Noun,Noun,broom
+217,mcs_vc8_7brush,brush,brush,brush,brush,household,Noun,Noun,Noun,Noun,Noun,Noun,brush
+218,mcs_vc8_8bucket,bucket,bucket,bucket,bucket,household,Noun,Noun,Noun,Noun,Noun,Noun,bucket
+219,mcs_vc8_9camera,camera,camera,camera,camera,household,Noun,Noun,Noun,Noun,Noun,Noun,camera
+220,mcs_vc8_10can,can,can,can (house),can_obj,household,Noun,Noun,Noun,Noun,Noun,Noun,can (object)
+221,mcs_vc8_11clock,clock,clock,clock,clock,household,Noun,Noun,Noun,Noun,Noun,Noun,clock
+222,mcs_vc8_12comb,comb,comb,comb,comb,household,Noun,Noun,Noun,Noun,Noun,Noun,comb
+223,mcs_vc8_13cup,cup,cup,cup,cup,household,Noun,Noun,Noun,Noun,Noun,Noun,cup
+224,mcs_vc8_14dish,dish,dish,dish,dish,household,Noun,Noun,Noun,Noun,Noun,Noun,dish
+225,mcs_vc8_15fork,fork,fork,fork,fork,household,Noun,Noun,Noun,Noun,Noun,Noun,fork
+226,mcs_vc8_16garbage,garbage,garbage,garbage,garbage,household,Noun,Noun,Noun,Noun,Noun,Noun,garbage
+227,mcs_vc8_17glass,glass,glass,glass,glass,household,Noun,Noun,Noun,Noun,Noun,Noun,glass
+228,mcs_vc8_18glasses,glasses,glasses,glasses,glasses,household,Noun,Noun,Noun,Noun,Noun,Noun,glasses
+229,mcs_vc8_19hammer,hammer,hammer,hammer,hammer,household,Noun,Noun,Noun,Noun,Noun,Noun,hammer
+230,mcs_vc8_20jar,jar,jar,jar,jar,household,Noun,Noun,Noun,Noun,Noun,Noun,jar
+231,mcs_vc8_21keys,keys,keys,keys,keys,household,Noun,Noun,Noun,Noun,Noun,Noun,keys
+232,mcs_vc8_22knife,knife,knife,knife,knife,household,Noun,Noun,Noun,Noun,Noun,Noun,knife
+233,mcs_vc8_23lamp,lamp,lamp,lamp,lamp,household,Noun,Noun,Noun,Noun,Noun,Noun,lamp
+234,mcs_vc8_24light,light,light,light,light,household,Noun,Noun,Noun,Noun,Noun,Noun,light
+235,mcs_vc8_25medicine,medicine,medicine,medicine,medicine,household,Noun,Noun,Noun,Noun,Noun,Noun,medicine
+236,mcs_vc8_26money,money,money,money,money,household,Noun,Noun,Noun,Noun,Noun,Noun,money
+237,mcs_vc8_27mop,mop,mop,mop,mop,household,Noun,Noun,Noun,Noun,Noun,Noun,mop
+238,mcs_vc8_28nail,nail,nail,nail,nail,household,Noun,Noun,Noun,Noun,Noun,Noun,nail
+239,mcs_vc8_29napkin,napkin,napkin,napkin,napkin,household,Noun,Noun,Noun,Noun,Noun,Noun,napkin
+240,mcs_vc8_30paper,paper,paper,paper,paper,household,Noun,Noun,Noun,Noun,Noun,Noun,paper
+241,mcs_vc8_31penny,penny,penny,penny,penny,household,Noun,Noun,Noun,Noun,Noun,Noun,penny
+242,mcs_vc8_32picture,picture,picture,picture,picture,household,Noun,Noun,Noun,Noun,Noun,Noun,picture
+243,mcs_vc8_33pillow,pillow,pillow,pillow,pillow,household,Noun,Noun,Noun,Noun,Noun,Noun,pillow
+244,mcs_vc8_34plant,plant,plant,plant,plant,household,Noun,Noun,Noun,Noun,Noun,Noun,plant
+245,mcs_vc8_35plate,plate,plate,plate,plate,household,Noun,Noun,Noun,Noun,Noun,Noun,plate
+246,mcs_vc8_36purse,purse,purse,purse,purse,household,Noun,Noun,Noun,Noun,Noun,Noun,purse
+247,mcs_vc8_37radio,radio,radio,radio,radio,household,Noun,Noun,Noun,Noun,Noun,Noun,radio
+248,mcs_vc8_38scissors,scissors,scissors,scissors,scissors,household,Noun,Noun,Noun,Noun,Noun,Noun,scissors
+249,mcs_vc8_39soap,soap,soap,soap,soap,household,Noun,Noun,Noun,Noun,Noun,Noun,soap
+250,mcs_vc8_40spoon,spoon,spoon,spoon,spoon,household,Noun,Noun,Noun,Noun,Noun,Noun,spoon
+251,mcs_vc8_41tape,tape,tape,tape,tape,household,Noun,Noun,Noun,Noun,Noun,Noun,tape
+252,mcs_vc8_42telephone,telephone,telephone,telephone,telephone,household,Noun,Noun,Noun,Noun,Noun,Noun,telephone
+253,mcs_vc8_43tissklee,tissklee,tissklee,tissklee,tissklee,household,Noun,Noun,Noun,Noun,Noun,Noun,tissue/kleenex
+254,mcs_vc8_44toothbrush,toothbrush,toothbrush,toothbrush,toothbrush,household,Noun,Noun,Noun,Noun,Noun,Noun,toothbrush
+255,mcs_vc8_45towel,towel,towel,towel,towel,household,Noun,Noun,Noun,Noun,Noun,Noun,towel
+256,mcs_vc8_46trash,trash,trash,trash,trash,household,Noun,Noun,Noun,Noun,Noun,Noun,trash
+257,mcs_vc8_47tray,tray,tray,tray,tray,household,Noun,Noun,Noun,Noun,Noun,Noun,tray
+258,mcs_vc8_48vacuum,vacuum,vacuum,vacuum,vacuum,household,Noun,Noun,Noun,Noun,Noun,Noun,vacuum
+259,mcs_vc8_49walker,walker,walker,walker,walker,household,Noun,Noun,Noun,Noun,Noun,Noun,walker
+260,mcs_vc8_50watch,watch,watch,watch,watch_obj,household,Noun,Noun,Noun,Noun,Noun,Noun,watch (object)
+261,mcs_vc9_1basement,basement,basement,basement,basement,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,basement
+262,mcs_vc9_2bathroom,bathroom,bathroom,bathroom,bathroom,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,bathroom
+263,mcs_vc9_3bathtub,bathtub,bathtub,bathtub,bathtub,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,bathtub
+264,mcs_vc9_4bed,bed,bed,bed,bed,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,bed
+265,mcs_vc9_5bedroom,bedroom,bedroom,bedroom,bedroom,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,bedroom
+266,mcs_vc9_6bench,bench,bench,bench,bench,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,bench
+267,mcs_vc9_7chair,chair,chair,chair,chair,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,chair
+268,mcs_vc9_8closet,closet,closet,closet,closet,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,closet
+269,mcs_vc9_9couch,couch,couch,couch,couch,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,couch
+270,mcs_vc9_10crib,crib,crib,crib,crib,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,crib
+271,mcs_vc9_11door,door,door,door,door,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,door
+272,mcs_vc9_12drawer,drawer,drawer,drawer,drawer,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,drawer
+273,mcs_vc9_13dryer,dryer,dryer,dryer,dryer,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,dryer
+274,mcs_vc9_14garage,garage,garage,garage,garage,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,garage
+275,mcs_vc9_15highchair,highchair,highchair,highchair,highchair,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,high chair
+276,mcs_vc9_16kitchen,kitchen,kitchen,kitchen,kitchen,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,kitchen
+277,mcs_vc9_17livingroom,livingroom,livingroom,livingroom,livingroom,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,living room
+278,mcs_vc9_18oven,oven,oven,oven,oven,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,oven
+279,mcs_vc9_19playpen,playpen,playpen,playpen,playpen,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,play pen
+280,mcs_vc9_20porch,porch,porch,porch,porch,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,porch
+281,mcs_vc9_21potty,potty,potty,potty,potty,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,potty
+282,mcs_vc9_22refrigerator,refrigerator,refrigerator,refrigerator,refrigerator,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,rocking chair
+283,mcs_vc9_23rockingchair,rockingchair,rockingchair,rockingchair,rockingchair,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,refrigerator
+284,mcs_vc9_24room,room,room,room,room,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,room
+285,mcs_vc9_25shower,shower,shower,shower,shower,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,shower
+286,mcs_vc9_26sink,sink,sink,sink,sink,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,sink
+287,mcs_vc9_27sofa,sofa,sofa,sofa,sofa,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,sofa
+288,mcs_vc9_28stairs,stairs,stairs,stairs,stairs,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,stairs
+289,mcs_vc9_29stove,stove,stove,stove,stove,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,stove
+290,mcs_vc9_30table,table,table,table,table,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,table
+291,mcs_vc9_31tv,TV,TV,TV,TV,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,TV
+292,mcs_vc9_32washingmachine,washingmachine,washingmachine,washingmachine,washingmachine,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,window
+293,mcs_vc9_33window,window,window,window,window,furniture_rooms,Noun,Noun,Noun,Noun,Noun,Noun,washing machine
+294,mcs_vc10_1backyard,backyard,backyard,backyard,backyard,outside,NA,NA,Noun,Noun,Noun,NA,backyard
+295,mcs_vc10_2cloud,cloud,cloud,cloud,cloud,outside,NA,NA,Noun,Noun,Noun,NA,cloud
+296,mcs_vc10_3flag,flag,flag,flag,flag,outside,NA,NA,Noun,Noun,Noun,NA,flag
+297,mcs_vc10_4flower,flower,flower,flower,flower,outside,NA,NA,Noun,Noun,Noun,NA,flower
+298,mcs_vc10_5garden,garden,garden,garden,garden,outside,NA,NA,Noun,Noun,Noun,NA,garden
+299,mcs_vc10_6grass,grass,grass,grass,grass,outside,NA,NA,Noun,Noun,Noun,NA,grass
+300,mcs_vc10_7hose,hose,hose,hose,hose,outside,NA,NA,Noun,Noun,Noun,NA,hose
+301,mcs_vc10_8ladder,ladder,ladder,ladder,ladder,outside,NA,NA,Noun,Noun,Noun,NA,ladder
+302,mcs_vc10_9lawnmower,lawnmower,lawnmower,lawnmower,lawnmower,outside,NA,NA,Noun,Noun,Noun,NA,lawn mower
+303,mcs_vc10_10moon,moon,moon,moon,moon,outside,NA,NA,Noun,Noun,Noun,NA,moon
+304,mcs_vc10_11pool,pool,pool,pool,pool,outside,NA,NA,Noun,Noun,Noun,NA,pool
+305,mcs_vc10_12rain,rain,rain,rain,rain,outside,NA,NA,Noun,Noun,Noun,NA,rain
+306,mcs_vc10_13rock,rock,rock,rock,rock,outside,NA,NA,Noun,Noun,Noun,NA,rock
+307,mcs_vc10_14roof,roof,roof,roof,roof,outside,NA,NA,Noun,Noun,Noun,NA,roof
+308,mcs_vc10_15sandbox,sandbox,sandbox,sandbox,sandbox,outside,NA,NA,Noun,Noun,Noun,NA,sandbox
+309,mcs_vc10_16shovel,shovel,shovel,shovel,shovel,outside,NA,NA,Noun,Noun,Noun,NA,shovel
+310,mcs_vc10_17sidewalk,sidewalk,sidewalk,sidewalk,sidewalk,outside,NA,NA,Noun,Noun,Noun,NA,sidewalk
+311,mcs_vc10_18sky,sky,sky,sky,sky,outside,NA,NA,Noun,Noun,Noun,NA,sky
+312,mcs_vc10_19slide,slide,slide,slide,slide_obj,outside,NA,NA,Noun,Noun,Noun,NA,slide (object)
+313,mcs_vc10_20snow,snow,snow,snow,snow,outside,NA,NA,Noun,Noun,Noun,NA,snow
+314,mcs_vc10_21snowman,snowman,snowman,snowman,snowman,outside,NA,NA,Noun,Noun,Noun,NA,snowman
+315,mcs_vc10_22sprinkler,sprinkler,sprinkler,sprinkler,sprinkler,outside,NA,NA,Noun,Noun,Noun,NA,sprinkler
+316,mcs_vc10_23star,star,star,star,star,outside,NA,NA,Noun,Noun,Noun,NA,star
+317,mcs_vc10_24stick,stick,stick,stick,stick,outside,NA,NA,Noun,Noun,Noun,NA,stick
+318,mcs_vc10_25stone,stone,stone,stone,stone,outside,NA,NA,Noun,Noun,Noun,NA,stone
+319,mcs_vc10_26street,street,street,street,street,outside,NA,NA,Noun,Noun,Noun,NA,street
+320,mcs_vc10_27sun,sun,sun,sun,sun,outside,NA,NA,Noun,Noun,Noun,NA,sun
+321,mcs_vc10_28swing,swing,swing,swing,swing_obj,outside,NA,NA,Noun,Noun,Noun,NA,swing (object)
+322,mcs_vc10_29tree,tree,tree,tree,tree,outside,NA,NA,Noun,Noun,Noun,NA,tree
+323,mcs_vc10_30water,water,water,water,water_notbev,outside,NA,NA,Noun,Noun,Noun,NA,water (not beverage)
+324,mcs_vc10_31wind,wind,wind,wind,wind,outside,NA,NA,Noun,Noun,Noun,NA,wind
+325,mcs_vc14_79spill,spill,spill,spill,spill,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,spill
+326,mcs_vc11_1beach,beach,beach,beach,beach,places_to_go,NA,NA,Noun,Noun,Noun,NA,beach
+327,mcs_vc11_2camping,camping,camping,camping,camping,places_to_go,NA,NA,NA,NA,NA,NA,camping
+328,mcs_vc11_3church,church,church,church,church,places_to_go,NA,NA,Noun,Noun,Noun,NA,church*
+329,mcs_vc11_4circus,circus,circus,circus,circus,places_to_go,NA,NA,Noun,Noun,Noun,NA,circus
+330,mcs_vc11_5country,country,country,country,country,places_to_go,NA,NA,Noun,Noun,Noun,NA,country
+331,mcs_vc11_6downtown,downtown,downtown,downtown,downtown,places_to_go,NA,NA,Noun,Noun,Noun,NA,downtown
+332,mcs_vc11_7farm,farm,farm,farm,farm,places_to_go,NA,NA,Noun,Noun,Noun,NA,farm
+333,mcs_vc11_8gasstation,gasstation,gasstation,gasstation,gasstation,places_to_go,NA,NA,Noun,Noun,Noun,NA,gas station
+334,mcs_vc11_9home,home,home,home,home,places_to_go,NA,NA,Noun,Noun,Noun,NA,home
+335,mcs_vc11_10house,house,house,house,house,places_to_go,NA,NA,Noun,Noun,Noun,NA,house
+336,mcs_vc11_11movie,movie,movie,movie,movie,places_to_go,NA,NA,Noun,Noun,Noun,NA,movie
+337,mcs_vc11_12outside,outside,outside,outside,outside,places_to_go,NA,NA,Noun,Noun,Noun,NA,outside
+338,mcs_vc11_13park,park,park,park,park,places_to_go,NA,NA,Noun,Noun,Noun,NA,park
+339,mcs_vc11_14party,party,party,party,party,places_to_go,NA,NA,Noun,Noun,Noun,NA,party
+340,mcs_vc11_15picnic,picnic,picnic,picnic,picnic,places_to_go,NA,NA,Noun,Noun,Noun,NA,picnic
+341,mcs_vc11_16playground,playground,playground,playground,playground,places_to_go,NA,NA,Noun,Noun,Noun,NA,playground
+342,mcs_vc11_17school,school,school,school,school,places_to_go,NA,NA,Noun,Noun,Noun,NA,school
+343,mcs_vc11_18store,store,store,store,store,places_to_go,NA,NA,Noun,Noun,Noun,NA,store
+344,mcs_vc11_19woods,woods,woods,woods,woods,places_to_go,NA,NA,Noun,Noun,Noun,NA,woods
+345,mcs_vc11_20work,work,work,work,work_pla,places_to_go,NA,NA,Noun,Noun,Noun,NA,work (place)
+346,mcs_vc11_21yard,yard,yard,yard,yard,places_to_go,NA,NA,Noun,Noun,Noun,NA,yard
+347,mcs_vc11_22zoo,zoo,zoo,zoo,zoo,places_to_go,NA,NA,Noun,Noun,Noun,NA,zoo
+348,mcs_vc12_1aunt,aunt,aunt,aunt,aunt,people,NA,NA,Noun,People,People,NA,aunt
+349,mcs_vc12_2baby,baby,baby,baby,baby,people,NA,NA,Noun,People,People,NA,baby
+350,mcs_vc12_3babysitter,babysitter,babysitter,babysitter,babysitter,people,NA,NA,Noun,People,People,NA,babysitter
+351,mcs_vc12_4babysittername,babysitter'sname,babysitter'sname,babysitter'sname,babysitter'sname,people,NA,NA,Noun,People,People,NA,babysitter's name
+352,mcs_vc12_5boy,boy,boy,boy,boy,people,NA,NA,Noun,People,People,NA,boy
+353,mcs_vc12_6brother,brother,brother,brother,brother,people,NA,NA,Noun,People,People,NA,brother
+354,mcs_vc12_7child,child,child,child,child,people,NA,NA,Noun,People,People,NA,child
+355,mcs_vc12_8clown,clown,clown,clown,clown,people,NA,NA,Noun,People,People,NA,clown
+356,mcs_vc12_9cowboy,cowboy,cowboy,cowboy,cowboy,people,NA,NA,Noun,People,People,NA,cowboy
+357,mcs_vc12_10daddy,daddy,daddy,daddy,daddy,people,NA,NA,Noun,People,People,NA,daddy*
+358,mcs_vc12_11doctor,doctor,doctor,doctor,doctor,people,NA,NA,Noun,People,People,NA,doctor
+359,mcs_vc12_12fireman,fireman,fireman,fireman,fireman,people,NA,NA,Noun,People,People,NA,fireman
+360,mcs_vc12_13friend,friend,friend,friend,friend,people,NA,NA,Noun,People,People,NA,friend
+361,mcs_vc12_14girl,girl,girl,girl,girl,people,NA,NA,Noun,People,People,NA,girl
+362,mcs_vc12_15grandma,grandma,grandma,grandma,grandma,people,NA,NA,Noun,People,People,NA,grandma*
+363,mcs_vc12_16grandpa,grandpa,grandpa,grandpa,grandpa,people,NA,NA,Noun,People,People,NA,grandpa*
+364,mcs_vc12_17lady,lady,lady,lady,lady,people,NA,NA,Noun,People,People,NA,lady
+365,mcs_vc12_18mailman,mailman,mailman,mailman,mailman,people,NA,NA,Noun,People,People,NA,mailman
+366,mcs_vc12_19man,man,man,man,man,people,NA,NA,Noun,People,People,NA,man
+367,mcs_vc12_20mommy,mommy,mommy,mommy,mommy,people,NA,NA,Noun,People,People,NA,mommy*
+368,mcs_vc12_21nurse,nurse,nurse,nurse,nurse,people,NA,NA,Noun,People,People,NA,nurse
+369,mcs_vc12_22childname,childname,childname,childname,childname,people,NA,NA,Noun,People,People,NA,child's own name
+370,mcs_vc12_23people,people,people,people,people,people,NA,NA,Noun,People,People,NA,people
+371,mcs_vc12_24person,person,person,person,person,people,NA,NA,Noun,People,People,NA,person
+372,mcs_vc12_25petname,petname,petname,petname,petname,people,NA,NA,Noun,People,People,NA,pet's name
+373,mcs_vc12_26police,police,police,police,police,people,NA,NA,Noun,People,People,NA,police
+374,mcs_vc12_27sister,sister,sister,sister,sister,people,NA,NA,Noun,People,People,NA,sister
+375,mcs_vc12_28teacher,teacher,teacher,teacher,teacher,people,NA,NA,Noun,People,People,NA,teacher
+376,mcs_vc12_29uncle,uncle,uncle,uncle,uncle,people,NA,NA,Noun,People,People,NA,uncle
+377,mcs_vc13_1bath,bath,bath,bath,bath,games_routines,NA,NA,Noun,Noun,Noun,NA,bath
+378,mcs_vc13_2breakfast,breakfast,breakfast,breakfast,breakfast,games_routines,NA,NA,Noun,Noun,Noun,NA,breakfast
+379,mcs_vc13_3bye,bye,bye,bye,bye,games_routines,NA,NA,NA,NA,NA,NA,bye
+380,mcs_vc13_4callph,callph,callph,callph,callph,games_routines,NA,NA,NA,NA,NA,NA,call (on phone)
+381,mcs_vc13_5dinner,dinner,dinner,dinner,dinner,games_routines,NA,NA,Noun,Noun,Noun,NA,dinner
+382,mcs_vc13_6givemefive,givemefive,givemefive,givemefive,givemefive,games_routines,NA,NA,NA,NA,NA,NA,give me five!
+383,mcs_vc13_7gonnagetyou,gonnagetyou,gonnagetyou,gonnagetyou,gonnagetyou,games_routines,NA,NA,NA,NA,NA,NA,gonna get you!
+384,mcs_vc13_8gopotty,gopotty,gopotty,gopotty,gopotty,games_routines,NA,NA,NA,NA,NA,NA,go potty
+385,mcs_vc13_9hi,hi,hi,hi,hi,games_routines,NA,NA,NA,NA,NA,NA,hi
+386,mcs_vc13_10hello,hello,hello,hello,hello,games_routines,NA,NA,NA,NA,NA,NA,hello
+387,mcs_vc13_11lunch,lunch,lunch,lunch,lunch,games_routines,NA,NA,Noun,Noun,Noun,NA,lunch
+388,mcs_vc13_12nap,nap,nap,nap,nap,games_routines,NA,NA,Noun,NA,NA,NA,nap
+389,mcs_vc13_13night,nightnight,nightnight,nightnight,nightnight,games_routines,NA,NA,NA,NA,NA,NA,night night
+390,mcs_vc13_14no,no,no,no,no,games_routines,NA,NA,NA,NA,NA,NA,no
+391,mcs_vc13_15pattycake,pattycake,pattycake,pattycake,pattycake,games_routines,NA,NA,Noun,NA,NA,NA,pattycake
+392,mcs_vc13_16peekaboo,peekaboo,peekaboo,peekaboo,peekaboo,games_routines,NA,NA,Noun,NA,NA,NA,peekaboo
+393,mcs_vc13_17please,please,please,please,please,games_routines,NA,NA,NA,NA,NA,NA,please
+394,mcs_vc13_18shush,shush,shush,shush,shush,games_routines,NA,NA,NA,NA,NA,NA,shh/shush/hush
+395,mcs_vc13_19shopping,shopping,shopping,shopping,shopping,games_routines,NA,NA,NA,NA,NA,NA,shopping
+396,mcs_vc13_20snack,snack,snack,snack,snack,games_routines,NA,NA,Noun,Noun,Noun,NA,snack
+397,mcs_vc13_21sobig,sobig,sobig,sobig,sobig,games_routines,NA,NA,NA,NA,NA,NA,so big!
+398,mcs_vc13_22thankyou,thankyou,thankyou,thankyou,thankyou,games_routines,NA,NA,NA,NA,NA,NA,thank you
+399,mcs_vc13_23thislittlepiggy,thislittlepiggy,thislittlepiggy,thislittlepiggy,thislittlepiggy,games_routines,NA,NA,NA,NA,NA,NA,this little piggy
+400,mcs_vc13_24turnaround,turnaround,turnaround,turnaround,turnaround,games_routines,NA,NA,Predicate,NA,NA,NA,turn around
+401,mcs_vc13_25yes,yes,yes,yes,yes,games_routines,NA,NA,NA,NA,NA,NA,yes
+402,mcs_vc14_1bite,bite,bite,bite,bite,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,bite
+403,mcs_vc14_2blow,blow,blow,blow,blow,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,blow
+404,mcs_vc14_3break,break,break,break,break,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,break
+405,mcs_vc14_4bring,bring,bring,bring,bring,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,bring
+406,mcs_vc14_5build,build,build,build,build,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,build
+407,mcs_vc14_6bump,bump,bump,bump,bump,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,bump
+408,mcs_vc14_7buy,buy,buy,buy,buy,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,buy
+409,mcs_vc14_8carry,carry,carry,carry,carry,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,carry
+410,mcs_vc14_9catch,catch,catch,catch,catch,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,catch
+411,mcs_vc14_10chase,chase,chase,chase,chase,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,chase
+412,mcs_vc14_11clap,clap,clap,clap,clap,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,clap
+413,mcs_vc14_12clean,clean,clean,clean,clean_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,clean (action)
+414,mcs_vc14_13climb,climb,climb,climb,climb,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,climb
+415,mcs_vc14_14close,close,close,close,close,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,close
+416,mcs_vc14_15cook,cook,cook,cook,cook,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,cook
+417,mcs_vc14_16cover,cover,cover,cover,cover,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,cover
+418,mcs_vc14_17cry,cry,cry,cry,cry,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,cry
+419,mcs_vc14_18cut,cut,cut,cut,cut,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,cut
+420,mcs_vc14_19dance,dance,dance,dance,dance,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,dance
+421,mcs_vc14_20draw,draw,draw,draw,draw,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,draw
+422,mcs_vc14_21drink,drink,drink,drink,drink_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,drink (action)
+423,mcs_vc14_22drive,drive,drive,drive,drive,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,drive
+424,mcs_vc14_23drop,drop,drop,drop,drop,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,drop
+425,mcs_vc14_24dry,dry,dry,dry,dry,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,dry (action)
+426,mcs_vc14_25dump,dump,dump,dump,dump,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,dump
+427,mcs_vc14_26eat,eat,eat,eat,eat,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,eat
+428,mcs_vc14_27fall,fall,fall,fall,fall,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,fall
+429,mcs_vc14_28feed,feed,feed,feed,feed,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,feed
+430,mcs_vc14_29find,find,find,find,find,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,find
+431,mcs_vc14_30finish,finish,finish,finish,finish,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,finish
+432,mcs_vc14_31fit,fit,fit,fit,fit,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,fit
+433,mcs_vc14_32fix,fix,fix,fix,fix,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,fix
+434,mcs_vc14_33get,get,get,get,get,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,get
+435,mcs_vc14_34give,give,give,give,give,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,give
+436,mcs_vc14_35go,go,go,go,go,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,go
+437,mcs_vc14_36hate,hate,hate,hate,hate,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hate
+438,mcs_vc14_37have,have,have,have,have,action_words,Predicate,Predicate,Predicate,NA,NA,Verb,have
+439,mcs_vc14_38hear,hear,hear,hear,hear,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hear
+440,mcs_vc14_39help,help,help,help,help,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,help
+441,mcs_vc14_40hide,hide,hide,hide,hide,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hide
+442,mcs_vc14_41hit,hit,hit,hit,hit,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hit
+443,mcs_vc14_42hold,hold,hold,hold,hold,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hold
+444,mcs_vc14_43hug,hug,hug,hug,hug,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hug
+445,mcs_vc14_44hurry,hurry,hurry,hurry,hurry,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,hurry
+446,mcs_vc14_45jump,jump,jump,jump,jump,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,jump
+447,mcs_vc14_46kick,kick,kick,kick,kick,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,kick
+448,mcs_vc14_47kiss,kiss,kiss,kiss,kiss,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,kiss
+449,mcs_vc14_48knock,knock,knock,knock,knock,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,knock
+450,mcs_vc14_49lick,lick,lick,lick,lick,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,lick
+451,mcs_vc14_50like,like,like,like,like,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,like
+452,mcs_vc14_51listen,listen,listen,listen,listen,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,listen
+453,mcs_vc14_52look,look,look,look,look,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,look
+454,mcs_vc14_53love,love,love,love,love,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,love
+455,mcs_vc14_54make,make,make,make,make,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,make
+456,mcs_vc14_55open,open,open,open,open,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,open
+457,mcs_vc14_56paint,paint,paint,paint,paint,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,paint
+458,mcs_vc14_57pick,pick,pick,pick,pick,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,pick
+459,mcs_vc14_58play,play,play,play,play,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,play
+460,mcs_vc14_59pour,pour,pour,pour,pour,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,pour
+461,mcs_vc14_60pretend,pretend,pretend,pretend,pretend,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,pretend
+462,mcs_vc14_61pull,pull,pull,pull,pull,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,pull
+463,mcs_vc14_62push,push,push,push,push,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,push
+464,mcs_vc14_63put,put,put,put,put,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,put
+465,mcs_vc14_64read,read,read,read,read,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,read
+466,mcs_vc14_65ride,ride,ride,ride,ride,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,ride
+467,mcs_vc14_66rip,rip,rip,rip,rip,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,rip
+468,mcs_vc14_67run,run,run,run,run,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,run
+469,mcs_vc14_68say,say,say,say,say,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,say
+470,mcs_vc14_69see,see,see,see,see,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,see
+471,mcs_vc14_70shake,shake,shake,shake,shake,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,shake
+472,mcs_vc14_71share,share,share,share,share,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,share
+473,mcs_vc14_72show,show,show,show,show,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,show
+474,mcs_vc14_73sing,sing,sing,sing,sing,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,sing
+475,mcs_vc14_74sit,sit,sit,sit,sit,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,sit
+476,mcs_vc14_75skate,skate,skate,skate,skate,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,skate
+477,mcs_vc14_76sleep,sleep,sleep,sleep,sleep,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,sleep
+478,mcs_vc14_77slide,slide,slide,slide,slide_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,slide (action)
+479,mcs_vc14_78smile,smile,smile,smile,smile,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,smile
+480,mcs_vc14_80splash,splash,splash,splash,splash,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,splash
+481,mcs_vc14_81stand,stand,stand,stand,stand,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,stand
+482,mcs_vc14_82stay,stay,stay,stay,stay,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,stay
+483,mcs_vc14_83stop,stop,stop,stop,stop,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,stop
+484,mcs_vc14_84sweep,sweep,sweep,sweep,sweep,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,sweep
+485,mcs_vc14_85swim,swim,swim,swim,swim,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,swim
+486,mcs_vc14_86swing,swing,swing,swing,swing_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,swing (action)
+487,mcs_vc14_87take,take,take,take,take,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,take
+488,mcs_vc14_88talk,talk,talk,talk,talk,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,talk
+489,mcs_vc14_89taste,taste,taste,taste,taste,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,taste
+490,mcs_vc14_90tear,tear,tear,tear,tear,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,tear
+491,mcs_vc14_91think,think,think,think,think,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,think
+492,mcs_vc14_92throw,throw,throw,throw,throw,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,throw
+493,mcs_vc14_93tickle,tickle,tickle,tickle,tickle,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,tickle
+494,mcs_vc14_94touch,touch,touch,touch,touch,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,touch
+495,mcs_vc14_95wait,wait,wait,wait,wait,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,wait
+496,mcs_vc14_96wake,wake,wake,wake,wake,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,wake
+497,mcs_vc14_97walk,walk,walk,walk,walk,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,walk
+498,mcs_vc14_98wash,wash,wash,wash,wash,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,wash
+499,mcs_vc14_99watch,watch,watch,watch,watch_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,watch (action)
+500,mcs_vc14_100wipe,wipe,wipe,wipe,wipe,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,wipe
+501,mcs_vc14_101wish,wish,wish,wish,wish,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,wish
+502,mcs_vc14_102work,work,work,work,work_act,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,work (action)
+503,mcs_vc14_103write,write,write,write,write,action_words,Predicate,Predicate,Predicate,Verb,Verb,Verb,write
+504,mcs_vc15_1allgone,allgone,allgone,allgone,allgone,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,all gone
+505,mcs_vc15_2asleep,asleep,asleep,asleep,asleep,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,asleep
+506,mcs_vc15_3awake,awake,awake,awake,awake,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,awake
+507,mcs_vc15_4bad,bad,bad,bad,bad,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,bad
+508,mcs_vc15_5better,better,better,better,better,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,better
+509,mcs_vc15_6big,big,big,big,big,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,big
+510,mcs_vc15_7black,black,black,black,black,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,black
+511,mcs_vc15_8blue,blue,blue,blue,blue,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,blue
+512,mcs_vc15_9broken,broken,broken,broken,broken,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,broken
+513,mcs_vc15_10brown,brown,brown,brown,brown,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,brown
+514,mcs_vc15_11careful,careful,careful,careful,careful,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,careful
+515,mcs_vc15_12clean,clean,clean,clean,clean_des,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,clean (description)
+516,mcs_vc15_13cold,cold,cold,cold,cold,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,cold
+517,mcs_vc15_14cute,cute,cute,cute,cute,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,cute
+518,mcs_vc15_15dark,dark,dark,dark,dark,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,dark
+519,mcs_vc15_16dirty,dirty,dirty,dirty,dirty,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,dirty
+520,mcs_vc15_17dry,dry,dry,dry,dry_des,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,dry (description)
+521,mcs_vc15_18empty,empty,empty,empty,empty,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,empty
+522,mcs_vc15_19fast,fast,fast,fast,fast,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,fast
+523,mcs_vc15_20fine,fine,fine,fine,fine,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,fine
+524,mcs_vc15_21first,first,first,first,first,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,first
+525,mcs_vc15_22full,full,full,full,full,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,full
+526,mcs_vc15_23gentle,gentle,gentle,gentle,gentle,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,gentle
+527,mcs_vc15_24good,good,good,good,good,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,good
+528,mcs_vc15_25green,green,green,green,green,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,green
+529,mcs_vc15_26happy,happy,happy,happy,happy,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,happy
+530,mcs_vc15_27hard,hard,hard,hard,hard,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,hard
+531,mcs_vc15_28heavy,heavy,heavy,heavy,heavy,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,heavy
+532,mcs_vc15_29high,high,high,high,high,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,high
+533,mcs_vc15_30hot,hot,hot,hot,hot,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,hot
+534,mcs_vc15_31hungry,hungry,hungry,hungry,hungry,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,hungry
+535,mcs_vc15_32hurt,hurt,hurt,hurt,hurt,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,hurt
+536,mcs_vc15_33last,last,last,last,last,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,last
+537,mcs_vc15_34little,little,little,little,little_des,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,little (description)
+538,mcs_vc15_35long,long,long,long,long,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,long
+539,mcs_vc15_36loud,loud,loud,loud,loud,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,loud
+540,mcs_vc15_37mad,mad,mad,mad,mad,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,mad
+541,mcs_vc15_38naughty,naughty,naughty,naughty,naughty,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,naughty
+542,mcs_vc15_39new,new,new,new,new,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,new
+543,mcs_vc15_40nice,nice,nice,nice,nice,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,nice
+544,mcs_vc15_41noisy,noisy,noisy,noisy,noisy,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,noisy
+545,mcs_vc15_42old,old,old,old,old,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,old
+546,mcs_vc15_43orange,orange,orange,orange,orange_des,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,orange (description)
+547,mcs_vc15_44poor,poor,poor,poor,poor,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,poor
+548,mcs_vc15_45pretty,pretty,pretty,pretty,pretty,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,pretty
+549,mcs_vc15_46quiet,quiet,quiet,quiet,quiet,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,quiet
+550,mcs_vc15_47red,red,red,red,red,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,red
+551,mcs_vc15_48sad,sad,sad,sad,sad,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,sad
+552,mcs_vc15_49scared,scared,scared,scared,scared,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,scared
+553,mcs_vc15_50sick,sick,sick,sick,sick,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,sick
+554,mcs_vc15_51sleepy,sleepy,sleepy,sleepy,sleepy,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,sleepy
+555,mcs_vc15_52slow,slow,slow,slow,slow,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,slow
+556,mcs_vc15_53soft,soft,soft,soft,soft,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,soft
+557,mcs_vc15_54sticky,sticky,sticky,sticky,sticky,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,sticky
+558,mcs_vc15_55stuck,stuck,stuck,stuck,stuck,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,stuck
+559,mcs_vc15_56thirsty,thirsty,thirsty,thirsty,thirsty,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,thirsty
+560,mcs_vc15_57tiny,tiny,tiny,tiny,tiny,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,tiny
+561,mcs_vc15_58tired,tired,tired,tired,tired,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,tired
+562,mcs_vc15_59wet,wet,wet,wet,wet,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,wet
+563,mcs_vc15_60white,white,white,white,white,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,white
+564,mcs_vc15_61windy,windy,windy,windy,windy,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,windy
+565,mcs_vc15_62yellow,yellow,yellow,yellow,yellow,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,yellow
+566,mcs_vc15_63yucky,yucky,yucky,yucky,yucky,descriptive_words,Predicate,Predicate,Predicate,Adjective,Adjective,Predicate,yucky
+567,mcs_vc16_1after,after,after,after,after,time_words,NA,NA,NA,NA,NA,NA,after
+568,mcs_vc16_2before,before,before,before,before,time_words,NA,NA,NA,NA,NA,NA,before
+569,mcs_vc16_3day,day,day,day,day,time_words,NA,NA,NA,NA,NA,NA,day
+570,mcs_vc16_4later,later,later,later,later,time_words,NA,NA,NA,NA,NA,NA,later
+571,mcs_vc16_5morning,morning,morning,morning,morning,time_words,NA,NA,NA,NA,NA,NA,morning
+572,mcs_vc16_6night,night,night,night,night,time_words,NA,NA,NA,NA,NA,NA,night
+573,mcs_vc16_7now,now,now,now,now,time_words,NA,NA,NA,NA,NA,NA,now
+574,mcs_vc16_8time,time,time,time,time,time_words,NA,NA,NA,NA,NA,NA,time
+575,mcs_vc16_9today,today,today,today,today,time_words,NA,NA,NA,NA,NA,NA,today
+576,mcs_vc16_10tomorrow,tomorrow,tomorrow,tomorrow,tomorrow,time_words,NA,NA,NA,NA,NA,NA,tomorrow
+577,mcs_vc16_11tonight,tonight,tonight,tonight,tonight,time_words,NA,NA,NA,NA,NA,NA,tonight
+578,mcs_vc16_12yesterday,yesterday,yesterday,yesterday,yesterday,time_words,NA,NA,NA,NA,NA,NA,yesterday
+579,mcs_vc17_1he,he,he,he,he,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,he
+580,mcs_vc17_2her,her,her,her,her,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,her
+581,mcs_vc17_3hers,hers,hers,hers,hers,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,hers
+582,mcs_vc17_4him,him,him,him,him,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,him
+583,mcs_vc17_5his,his,his,his,his,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,his
+584,mcs_vc17_6i,I,I,I,I,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,I
+585,mcs_vc17_7it,it,it,it,it,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,it
+586,mcs_vc17_8me,me,me,me,me,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,me
+587,mcs_vc17_9mine,mine,mine,mine,mine,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,mine
+588,mcs_vc17_10my,my,my,my,my,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,my
+589,mcs_vc17_11myself,myself,myself,myself,myself,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,myself
+590,mcs_vc17_12our,our,our,our,our,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,our
+591,mcs_vc17_13she,she,she,she,she,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,she
+592,mcs_vc17_14that,that,that,that,that,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,that
+593,mcs_vc17_15their,their,their,their,their,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,their
+594,mcs_vc17_16them,them,them,them,them,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,them
+595,mcs_vc17_17these,these,these,these,these,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,these
+596,mcs_vc17_18they,they,they,they,they,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,they
+597,mcs_vc17_19this,this,this,this,this,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,this
+598,mcs_vc17_20those,those,those,those,those,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,those
+599,mcs_vc17_21us,us,us,us,us,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,us
+600,mcs_vc17_22we,we,we,we,we,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,we
+601,mcs_vc17_23you,you,you,you,you,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,you
+602,mcs_vc17_24your,your,your,your,your,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,your
+603,mcs_vc17_25yourself,yourself,yourself,yourself,yourself,pronouns,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,yourself
+604,mcs_vc18_1how,how,how,how,how,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,how
+605,mcs_vc18_2what,what,what,what,what,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,what
+606,mcs_vc18_3when,when,when,when,when,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,when
+607,mcs_vc18_4where,where,where,where,where,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,where
+608,mcs_vc18_5which,which,which,which,which,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,which
+609,mcs_vc18_6who,who,who,who,who,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,who
+610,mcs_vc18_7why,why,why,why,why,question_words,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,why
+611,mcs_vc19_1about,about,about,about,about,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,about
+612,mcs_vc19_2above,above,above,above,above,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,above
+613,mcs_vc19_3around,around,around,around,around,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,around
+614,mcs_vc19_4at,at,at,at,at,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,at
+615,mcs_vc19_5away,away,away,away,away,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,away
+616,mcs_vc19_6back,back,back,back,back,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,back
+617,mcs_vc19_7behind,behind,behind,behind,behind,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,behind
+618,mcs_vc19_8beside,beside,beside,beside,beside,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,beside
+619,mcs_vc19_9by,by,by,by,by,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,by
+620,mcs_vc19_10down,down,down,down,down,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,down
+621,mcs_vc19_11for,for,for,for,for,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,for
+622,mcs_vc19_12here,here,here,here,here,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,here
+623,mcs_vc19_13inside_in,inside/in,inside/in,inside/in,inside/in,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,inside/in
+624,mcs_vc19_14into,into,into,into,into,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,into
+625,mcs_vc19_15nextto,nextto,nextto,nextto,nextto,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,next to
+626,mcs_vc19_16of,of,of,of,of,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,of
+627,mcs_vc19_17off,off,off,off,off,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,off
+628,mcs_vc19_18on,on,on,on,on,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,on
+629,mcs_vc19_19ontopof,ontopof,ontopof,ontopof,ontopof,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,on top of
+630,mcs_vc19_20out,out,out,out,out,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,out
+631,mcs_vc19_21over,over,over,over,over,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,over
+632,mcs_vc19_22there,there,there,there,there,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,there
+633,mcs_vc19_23to,to,to,to,to,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,to
+634,mcs_vc19_24under,under,under,under,under,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,under
+635,mcs_vc19_25up,up,up,up,up,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,up
+636,mcs_vc19_26with,with,with,with,with,prepositions_and_locations,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,with
+637,mcs_vc20_1a,a,a,a,a,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,a
+638,mcs_vc20_2all,all,all,all,all,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,all
+639,mcs_vc20_3alot,alot,alot,alot,alot,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,a lot
+640,mcs_vc20_4an,an,an,an,an,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,an
+641,mcs_vc20_5another,another,another,another,another,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,another
+642,mcs_vc20_6any,any,any,any,any,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,any
+643,mcs_vc20_7each,each,each,each,each,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,each
+644,mcs_vc20_8every,every,every,every,every,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,every
+645,mcs_vc20_9more,more,more,more,more,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,more
+646,mcs_vc20_10much,much,much,much,much,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,much
+647,mcs_vc20_11not,not,not,not,not,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,not
+648,mcs_vc20_12none,none,none,none,none,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,none
+649,mcs_vc20_13other,other,other,other,other,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,other
+650,mcs_vc20_14same,same,same,same,same,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,same
+651,mcs_vc20_15some,some,some,some,some,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,some
+652,mcs_vc20_16the,the,the,the,the,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,the
+653,mcs_vc20_17too,too,too,too,too,quantifiers_and_articles,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,ClossedClass,too
+654,mcs_vc21_1am,am,am,am,am,helping_verbs,NA,NA,Predicate,NA,NA,NA,am
+655,mcs_vc21_2are,are,are,are,are,helping_verbs,NA,NA,Predicate,NA,NA,NA,are
+656,mcs_vc21_3be,be,be,be,be,helping_verbs,NA,NA,Predicate,NA,NA,NA,be
+657,mcs_vc21_4can,can,can,can (verb),can_v,helping_verbs,NA,NA,Predicate,NA,NA,NA,can (auxiliary)
+658,mcs_vc21_5could,could,could,could,could,helping_verbs,NA,NA,Predicate,NA,NA,NA,could
+659,mcs_vc21_6did,did,did,did,did,helping_verbs,NA,NA,Predicate,NA,NA,NA,did/did ya
+660,mcs_vc21_7do,do,do,do,do,helping_verbs,NA,NA,Predicate,NA,NA,NA,do
+661,mcs_vc21_8does,does,does,does,does,helping_verbs,NA,NA,Predicate,NA,NA,NA,does
+662,mcs_vc21_9dont,dont,dont,dont,dont,helping_verbs,NA,NA,Predicate,NA,NA,NA,don't
+663,mcs_vc21_10gonna,gonna,gonna,gonna,gonna,helping_verbs,NA,NA,Predicate,NA,NA,NA,gonna/going to
+664,mcs_vc21_11gotta,gotta,gotta,gotta,gotta,helping_verbs,NA,NA,Predicate,NA,NA,NA,gotta/got to
+665,mcs_vc21_12hafta,hafta,hafta,hafta,hafta,helping_verbs,NA,NA,Predicate,NA,NA,NA,hafta/have to
+666,mcs_vc21_13is,is,is,is,is,helping_verbs,NA,NA,Predicate,NA,NA,NA,is
+667,mcs_vc21_14lemme,lemme,lemme,lemme,lemme,helping_verbs,NA,NA,Predicate,NA,NA,NA,lemme/let me
+668,mcs_vc21_15need,need,need,need,need,helping_verbs,NA,NA,Predicate,NA,NA,NA,need/need to
+669,mcs_vc21_16try,try,try,try,try,helping_verbs,NA,NA,Predicate,NA,NA,NA,try/try to
+670,mcs_vc21_17wanna,wanna,wanna,wanna,wanna,helping_verbs,NA,NA,Predicate,NA,NA,NA,wanna/want to
+671,mcs_vc21_18was,was,was,was,was,helping_verbs,NA,NA,Predicate,NA,NA,NA,was
+672,mcs_vc21_19were,were,were,were,were,helping_verbs,NA,NA,Predicate,NA,NA,NA,were
+673,mcs_vc21_20will,will,will,will,will,helping_verbs,NA,NA,Predicate,NA,NA,NA,will
+674,mcs_vc21_21would,would,would,would,would,helping_verbs,NA,NA,Predicate,NA,NA,NA,would
+675,mcs_vc22_1and,and,and,and,and,connecting_words,NA,NA,ClossedClass,NA,NA,NA,and
+676,mcs_vc22_2because,because,because,because,because,connecting_words,NA,NA,ClossedClass,NA,NA,NA,because
+677,mcs_vc22_3but,but,but,but,but,connecting_words,NA,NA,ClossedClass,NA,NA,NA,but
+678,mcs_vc22_4if,if,if,if,if,connecting_words,NA,NA,ClossedClass,NA,NA,NA,if
+679,mcs_vc22_5so,so,so,so,so,connecting_words,NA,NA,ClossedClass,NA,NA,NA,so
+680,mcs_vc22_6then,then,then,then,then,connecting_words,NA,NA,ClossedClass,NA,NA,NA,then
