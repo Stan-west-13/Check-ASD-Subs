@@ -19,6 +19,7 @@ library(purrr)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
+library(ggExtra)
 
 ASD_total <- ASD_total %>%
   filter(nProduced >= 3 & nProduced <= 600) %>%
@@ -31,7 +32,7 @@ ASD_total <- ASD_total %>%
 ## Demographic Information
 Demographics for kids with between 3 & 600 productive vocabulary
 
-```{r,echo=FALSE, warning=FALSE,message=FALSE}
+```{r,echo=FALSE, warning=FALSE,message=FALSE,out.width="50%",fig.align='center'}
 
 print(paste0("Number of unique subjectkeys is ",
              length(unique(ASD_total$subjectkey)),
@@ -43,16 +44,25 @@ ASD_total %>%
   select(interview_age, nProduced) %>%
   summary()
 
+ggplot(ASD_total %>% select(subjectkey,interview_age,nProduced) %>% unique(), aes(x = interview_age, y = nProduced))+
+  geom_density_2d_filled()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of Words Produced",
+       title = "Interview Age by Vocabulary Density Map")
+
+
+
 
 ```
-
+\newpage
 
 
 ## Longitudinal Analysis
 
 Of the 628 CDIs, 206 only have an entry for a single age, removing them from longitudinal consideration. That leaves 422(111 unique kids) with at least 2 CDIs. 
 
-```{r, echo = FALSE, message=FALSE,warning=FALSE}
+```{r, echo = FALSE, message=FALSE,warning=FALSE, fig.show='hold'}
 
 num_tbl <- ASD_total %>% 
   select(subjectkey, interview_age) %>%
@@ -88,6 +98,14 @@ kable(tbl_all,booktabs = TRUE, col.names = c("# of CDIs","# of Records", "# of K
                 full_width = FALSE) %>%
   column_spec(1, bold = TRUE, border_right = TRUE, color = "black")
 
+
+ggplot(tbl_all, aes(x = max_entry, y = n_pp))+
+  geom_col()+
+  labs(x = "# of Longitudinal CDIs",
+       y = "# of Kids")+
+  geom_text(aes(label = c(206,102,162,128,30),vjust = -0.5))+
+  annotate("text",x = 4, y = 150, label = "Numbers indicate the amount of longitudinal records, \n bars indicate number of kids.")+
+  theme_bw()
 
 
 ```
@@ -164,7 +182,7 @@ tbl_counts <- df_9_15 %>%
   group_by(diff) %>%
   count(diff) 
 
-kable(tbl_counts,col.names = c("Month Latency","Count"),caption = "CDI Latencies Counts") 
+kable(tbl_counts,col.names = c("Month Latency","Count"),caption = "CDI Latencies Counts")
 
 tbl_n_cont <- df_9_15 %>%
   select(subjectkey,n_9_15) %>%
@@ -172,7 +190,7 @@ tbl_n_cont <- df_9_15 %>%
   group_by(n_9_15) %>%
   count(n_9_15)
 
-kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple Contributions Counts") 
+kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple Contributions Counts: Note: 1 contribution = 2 CDIs 9-15 months apart") 
 
 
   
@@ -180,7 +198,6 @@ kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple
 ```
 
 
-\newpage
 
 ## Histograms
 Graphical representation of tables above. Plot on the right: red lines reflect the 9 - 15 month cutoffs.
