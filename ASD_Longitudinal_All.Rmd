@@ -5,7 +5,11 @@ date: "2025-04-17"
 output: pdf_document
 ---
 
-This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children
+This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children. Here we are interested in vocabulary sizes between 3 & 600 words produced. The numbers reported here differ from our first look because of a couple of reasons: 
+
+  1. I recycled old code from a different project to combine the old and new GUIDs. This code had a part where we were only accepting the "best" CDI record (that with the highest number of words produced across multiple records). This was reducing the number of possible longitudinal data points. Good news, we have more kids with longitudinal data 9 - 15 months between CDIs. 
+  
+  2. I used an "|" instead of "&" when defining the 2 - 4 window for kids with more granular longitudinal data. This made it seem like we had much more kids with fine-tuned longitudinal data. After fixing this, we only have 6 kids with data at that level of specificity.
 
 ```{r, echo=FALSE,warning=FALSE,message=FALSE}
 load("data/ASD_longitudinal_all.Rdata")
@@ -92,6 +96,7 @@ kable(tbl_all,booktabs = TRUE, col.names = c("# of CDIs","# of Records", "# of K
 \newpage
 
 ## Kids with longitudinal data in 3 month intervals
+There are only 6 kids with between 2 and 4 months between CDIs. This is different from our first look at this because we mistakenly used "|" in our filer instead of "&" when defining our time window.
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side, fig.show='hold',out.width="50%"}
 
@@ -109,7 +114,7 @@ diff_scores <- ASD_total %>%
 
 ggplot(diff_scores, aes(x = diff))+
   geom_histogram()+
-  labs(caption = "Only 6 participants with between 2 and 4 months distance between CDIs")+
+  labs(caption = "Only 6 kids with between 2 and 4 months distance between CDIs")+
   geom_vline(xintercept = c(2,4), color = "red",linetype = 2)+
   theme_bw()+
   labs(x = "Time Between CDIs",
@@ -136,7 +141,7 @@ diff_scores %>%
 \newpage
 
 # Kids with longitudinal data in 12 month intervals
-There are 111 kids with CDIs at the specificity of 9 - 15 months between CDIs. Below are tables and figures showing the distribution of time between CDIs both across participants and how many individual participants have multiple CDIs within the 9 - 15 time range. 
+There are 111 kids with CDIs at the specificity of 9 - 15 months between CDIs. Below are tables and figures showing the distribution of time between CDIs both across participants and how many individual participants have multiple CDIs within the 9 - 15 time range. The majority of CDIs that meet the 9 - 15 month criteria fall in the 12-month time between CDIs. Additionally, the majority (79 of 111) only have one instance of records that are 9 - 15 months apart. 
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 
@@ -174,7 +179,11 @@ kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple
 
 ```
 
+
+\newpage
+
 ## Histograms
+Graphical representation of tables above. Plot on the right: red lines reflect the 9 - 15 month cutoffs.
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side2, fig.show='hold',out.width="50%",fig.cap="Histograms of 9 - 15 months between CDIs"}
 ggplot(tbl_counts, aes( x = diff, y = n))+
