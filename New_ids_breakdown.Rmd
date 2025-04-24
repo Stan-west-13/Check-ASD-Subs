@@ -18,7 +18,7 @@ gestures <- read.csv("data/mci_words_gestures01.csv",na.strings = "")[-1,]
 checked <- read_xlsx("data/GUIDS_to_check_April2023.xlsx")
 checked2 <- read_xlsx("data/GUIDs_N200_June_2022_SRCLD.xlsx")
 growthmod <- read.csv("data/ASD_GUIDS.csv")[,-1]
-new_ids <-read_xlsx("data/GUIDS_new_March_2025_aut_dx_confirmed.xlsx")
+new_ids <-read_xlsx("data/GUIDS_new_March_2025_aut_dx_confirmed 2.xlsx")
 
 word_dict_S <- read.csv("data/word_dict_S_April2023.csv")
 names(word_dict_S) <- c('num_item_id', 'word_code', 'word1', 'word2', 'WordBank1', 'WordBank2', 'category', 'class', 'classForm', 'classEH', 'classRS','classEHse','classVerbs', 'CDI_Metadata_compatible')
@@ -156,7 +156,7 @@ df_plot_650 <- rbind(
   slice_max(nproduced) 
 
 
-ASD_wg_long <- gestures_no_na_650 %>%
+ASD_wg_long <- gestures_no_na %>%
   pivot_longer(.,
                cols = matches("^mcg_vc?[0-9]"),
                values_to = "response_code",
@@ -168,12 +168,12 @@ ASD_wg_long <- gestures_no_na_650 %>%
   mutate(Produces = ifelse(response_code == 2, TRUE, FALSE)) %>%
   group_by(subjectkey, interview_age, interview_date, mci_words_gestures01_id) %>%
   mutate(nProduced = sum(Produces)) %>%
-  filter(nProduced >= 20 & nProduced <= 600) %>%
+  filter(nProduced >= 1 & nProduced <= 680) %>%
   left_join(.,word_dict_WG, by = "word_code") %>%
   ungroup() %>%
   select(-mci_words_gestures01_id,  -mcg_vc_totpr)
 
-ASD_ws_long <- sentences_no_na_650 %>%
+ASD_ws_long <- sentences_no_na %>%
   pivot_longer(.,
                cols = matches("^mcs_vc?[0-9]"),
                values_to = "response_code",
@@ -185,27 +185,18 @@ ASD_ws_long <- sentences_no_na_650 %>%
   mutate(Produces = ifelse(response_code == 1 | response_code == 3, TRUE, FALSE)) %>%
   group_by(subjectkey, interview_age, interview_date, mci_sentences02_id) %>%
   mutate(nProduced = sum(Produces)) %>%
-  filter(nProduced >= 20 & nProduced <= 600) %>%
+  filter(nProduced >= 1 & nProduced <= 680) %>%
   left_join(.,word_dict_S, by = "word_code") %>%
   ungroup() %>%
   select(-mci_sentences02_id, -mcs_vc_total)
 
 
 ASD_all_long <- rbind(ASD_wg_long, ASD_ws_long) %>%
-  group_by(subjectkey) %>%
-  mutate(best = nProduced == max(nProduced),
-         group = "ASD") %>%
-  filter(best == TRUE)%>%
-  ungroup() %>%
-  group_by(subjectkey) %>%
-  mutate(newest_rec = interview_date == max(interview_date)) %>%
-  group_by(subjectkey, interview_age) %>%
-  filter(newest_rec == TRUE) %>%
-  ungroup() %>%
-  unique() %>%
-  select(-nproduced,-best,-group,-newest_rec)
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nProduced)
 
-ASD_total <- rbind(ASD_all_long,ASD_all)
+ASD_total <- rbind(ASD_all_long,ASD_all) %>%
+  select(-nproduced)
 
 
 df_plot_650_diffs_total <- ASD_total %>% select(subjectkey,

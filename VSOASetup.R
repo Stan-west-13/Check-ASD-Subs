@@ -75,7 +75,8 @@ ttest_d <- all_prep_matched %>%
 ttest_d %>%
   group_by(group) %>%
   summarize(mean_nprod = mean(nproduced),
-            sd_prod = sd(nproduced)) 
+            sd_prod = sd(nproduced)) %>%
+  as.data.frame()
 t.test(nproduced~group, data = ttest_d)
 
 
@@ -111,6 +112,6 @@ VSOA <- all_prep_matched %>%
 
 
 
-
+write_rds(VSOA, file = paste0("data/asd_na-osg-",Sys.Date(),".rds"))
 
 
