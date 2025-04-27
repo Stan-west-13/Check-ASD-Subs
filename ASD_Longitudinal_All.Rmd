@@ -20,6 +20,7 @@ library(ggplot2)
 library(knitr)
 library(kableExtra)
 library(ggExtra)
+library(forcats)
 
 ASD_total <- ASD_total %>%
   filter(nProduced >= 3 & nProduced <= 600) %>%
@@ -29,8 +30,8 @@ ASD_total <- ASD_total %>%
 ```
 
 
-## Demographic Information
-Demographics for kids with between 3 & 600 productive vocabulary
+# Demographic Information
+Demographics for kids with between 3 & 600 productive vocabulary. The majority of kids have early interviews with relatively low productive vocabularies.
 
 ```{r,echo=FALSE, warning=FALSE,message=FALSE,out.width="50%",fig.align='center'}
 
@@ -58,7 +59,7 @@ ggplot(ASD_total %>% select(subjectkey,interview_age,nProduced) %>% unique(), ae
 \newpage
 
 
-## Longitudinal Analysis
+# Longitudinal Analysis
 
 Of the 628 CDIs, 206 only have an entry for a single age, removing them from longitudinal consideration. That leaves 422(111 unique kids) with at least 2 CDIs. 
 
@@ -110,11 +111,10 @@ ggplot(tbl_all, aes(x = max_entry, y = n_pp))+
 
 ```
 
-
 \newpage
 
-## Kids with longitudinal data in 3 month intervals
-There are only 6 kids with between 2 and 4 months between CDIs. This is different from our first look at this because we mistakenly used "|" in our filer instead of "&" when defining our time window.
+# Kids with longitudinal data in 3 month intervals
+There are only 6 kids with between 2 and 4 months between CDIs. This is different from our first look at this because we mistakenly used "|" in our filer instead of "&" when defining our time window. There are 9 total records with between 2 and 4 months in between CDIs, with the majority of those (4) being 4 months apart. 
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side, fig.show='hold',out.width="50%"}
 
@@ -166,7 +166,7 @@ There are 111 kids with CDIs at the specificity of 9 - 15 months between CDIs. B
 df_9_15 <- diff_scores %>%
   filter(subjectkey %in% filter(diff_scores,diff >= 9 & diff <= 15)$subjectkey) %>%
   group_by(subjectkey) %>%
-  mutate(is.between = ifelse(diff >= 9 & diff <= 15,TRUE,FALSE),
+  mutate(is.between = diff >= 9 & diff <= 15,
          n_9_15 = sum(is.between,na.rm = T))
 
 ## Kid count
@@ -197,12 +197,12 @@ kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple
 
 ```
 
+\newpage
 
+# Histograms
+## Graphical representation of tables above. Plot on the bottom: red lines reflect the 9 - 15 month cutoffs.
 
-## Histograms
-Graphical representation of tables above. Plot on the right: red lines reflect the 9 - 15 month cutoffs.
-
-```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side2, fig.show='hold',out.width="50%",fig.cap="Histograms of 9 - 15 months between CDIs"}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 ggplot(tbl_counts, aes( x = diff, y = n))+
   geom_col()+
   scale_x_continuous(breaks = seq.int(9,15,1))+
@@ -221,13 +221,48 @@ ggplot(diff_scores, aes(x = diff))+
        title =  "Histogram of Times Between CDIs (All)")+
   theme_bw()
 
+
 ```
+
+
+## Distributions of first interviews
+
+```{r,message=FALSE,echo=FALSE,warning=FALSE}
+
+ggplot(df_9_15 %>%
+         filter(entry == 1),
+       aes(x = interview_age))+
+  geom_histogram()+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
+  theme_bw()+
+  labs(x = "Interview Age",
+       y = "Count",
+       title = "Distribution of First Interviews")
+
+ggplot(df_9_15 %>%
+         filter(entry == 1) %>%
+         mutate(n_entry = factor(n_entry, levels = c(2,3,4,5), labels = c(2,3,4,5))),
+       aes(x = interview_age, fill = n_entry))+
+  geom_histogram(binwidth = 4)+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
+  theme_bw()+
+  labs(x = "Interview Age",
+       y = "Count",
+       title = "Distribution of First Interviews")+
+  facet_wrap(~n_entry)
+
+```
+
+
+
 
 \newpage
 
-## Spaghetti Plots
+# Spaghetti Plots
+Plots showing the progression of productive vocabulary over interview age. The majority of kids show increases in productive vocabulary over time, but this is not always the case. The next page digs deeper into those cases. 
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side3, fig.show='hold',out.width="50%",fig.cap="Spaghetti plots of longitudinal vocabulary growth"}
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side3,out.height="50%",fig.show='hold'}
 
 
 ggplot(df_9_15,
@@ -246,9 +281,149 @@ ggplot(df_9_15 %>%
   geom_line(aes(group = subjectkey, color = is.between))+
   labs(caption = "Red connections are 9-15 month gaps between CDIs")+
   theme_bw()+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
   theme(legend.position = "none")+
   labs(x = "Interview Age",
        y = "# of Words Produced")
 ```
+
+\newpage
+
+# Inconsistent gains in vocabulary over time
+Some of the kids show drops in vocabulary size between CDI administrations. There are 30 kids who have longitudinal CDIs that decrease at some point in development. These may be considerations for removal as they do not follow the pattern of development of the majority of the kids. It is impossible to know if this is due to bad reporting or legitimate losses in productive vocacbulary.
+
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+diff_scores_dec <- diff_scores %>%
+  group_by(subjectkey) %>%
+  mutate(decrease = ifelse(nProduced < lag(nProduced), TRUE,FALSE)) %>%
+  mutate(decrease = ifelse(is.na(decrease),FALSE,decrease)) %>%
+  filter(subjectkey %in% .[.$decrease == TRUE,]$subjectkey) %>%
+  mutate(dec_group = ifelse(decrease == TRUE,
+                            "A",
+                            ifelse(lead(decrease) == TRUE,
+                                   "A",
+                                   NA))) %>%
+  mutate(dec_group = ifelse(is.na(dec_group), "B",dec_group),
+         dec_group = as.factor(dec_group))
+
+
+diff_scores_dec <- diff_scores %>%
+  group_by(subjectkey) %>%
+  mutate(decrease = ifelse(nProduced < lag(nProduced), TRUE,FALSE)) %>%
+  mutate(decrease = ifelse(is.na(decrease),FALSE,decrease)) %>%
+  filter(subjectkey %in% .[.$decrease == TRUE,]$subjectkey) %>%
+  mutate(color = nProduced > lead(nProduced))
+
+
+ggplot(diff_scores_dec,
+     aes(x = interview_age, y = nProduced))+
+  geom_path(aes(group = subjectkey, color = color))+
+  scale_color_manual(values = c("grey","red"))+
+  geom_point(aes(fill = subjectkey))+
+  labs(caption = "Red indicates decreases in words produced over CDIs")+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of Words Produced")
+
+
+
+diff_scores_dec %>%
+  group_by(subjectkey) %>%
+  mutate(neg_diffs = lead(nProduced) - nProduced) %>%
+  filter(neg_diffs < 0) %>%
+  ungroup() %>%
+  summarize(m_neg_diffs = mean(neg_diffs),
+            sd_neg_diffs = sd(neg_diffs),
+            range = range(neg_diffs)) %>%
+  kable(col.names = c("Mean Vocabulary Decreases", "SD", "Range"))
+```
+
+
+## Top 40 words not consistently reported across CDIs.
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+
+
+## Work on computing words that are not consistently reported between CDIs within participants.
+
+first_vocabs <- ASD_total %>%
+  filter(subjectkey %in% df_9_15$subjectkey) %>%
+  group_by(subjectkey) %>%
+  select(subjectkey,interview_age, CDI_Metadata_compatible,Produces, nProduced) %>%
+  left_join(select(df_9_15,subjectkey,interview_age,entry), by = c("subjectkey","interview_age")) %>%
+  filter(entry == 1, Produces == TRUE) %>%
+  mutate(in_1 = ifelse(entry == 1 & Produces == TRUE,1,0))
+
+Itmlvl_not_maintained <- ASD_total %>%
+  filter(subjectkey %in% df_9_15$subjectkey) %>%
+  group_by(subjectkey) %>%
+  select(subjectkey,interview_age, CDI_Metadata_compatible,Produces, nProduced) %>%
+  left_join(select(df_9_15,subjectkey,interview_age,entry), by = c("subjectkey","interview_age")) %>%
+  group_by(subjectkey,CDI_Metadata_compatible) %>%
+  left_join(select(first_vocabs,subjectkey,CDI_Metadata_compatible,in_1))  %>%
+  mutate(in_1  = ifelse(is.na(in_1),0,1),
+         not_subsequent = ifelse(in_1 == 1 & Produces == FALSE, TRUE, FALSE)) %>%
+  filter(!entry == 1,in_1 == 1) %>%
+  left_join(ASD_total %>% select(CDI_Metadata_compatible, category) %>% unique())
+
+Itm_lvl_summ <- Itmlvl_not_maintained %>%
+  group_by(CDI_Metadata_compatible) %>%
+  summarize(sum_itm = sum(not_subsequent))
+
+ggplot(Itm_lvl_summ %>%
+         slice_max(sum_itm,n = 40) %>%
+         arrange(desc(sum_itm)) %>%
+         left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()), aes(y = reorder(CDI_Metadata_compatible,sum_itm), x = sum_itm, fill = category))+
+  geom_bar(stat="identity")+
+  theme_bw()+
+  labs(y = "Word",
+       x = "# of Omissions From First CDI")
+
+
+
+
+```
+
+Here, we are looking at item-level distributions of the top 50 words that were reported as being known in the first CDI administration, but not reported as being known in at least one of the subsequent administrations. The bars are filled by CDI category. Values on the x-axis report the number of times the word was reported on the first administration of the CDI but not later CDIs.
+
+
+## Overall distribution of omissions across categories
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+
+x <- Itm_lvl_summ %>%
+         left_join(ASD_total %>%
+                     ungroup() %>% 
+                     select(CDI_Metadata_compatible,category) %>% 
+                     unique())%>%
+  group_by(category) %>%
+  summarize(sum = sum(sum_itm)) %>% 
+  arrange(sum)
+
+
+ggplot(Itm_lvl_summ %>%
+         left_join(ASD_total %>%
+                     ungroup() %>% 
+                     select(CDI_Metadata_compatible,category) %>% 
+                     unique()) %>%
+         mutate(category = factor(category, x$category))
+         , aes(y = category, x = sum_itm, fill = category))+
+  geom_bar(stat="identity")+
+  theme_bw()+
+  labs(y = "Category",
+       x = "# of Omissions From First CDI")+
+  theme(legend.position = "none")
+
+
+
+
+
+```
+
+The majority of words not being included in subsequent CDIs are action words, followed by animals and food and drinks.
+
+
 
 
