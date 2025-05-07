@@ -98,7 +98,7 @@ NA_setup <- mci_all %>%
   rename("nproduced" = "nProduced")
 
 ASD_setup <- ASD_total %>%
-  select(group,subjectkey,interview_age,num_item_id,Produces,nProduced) %>%
+  select(group,subjectkey,interview_age,num_item_id,Produces,nProduced,word_code) %>%
   mutate(group = as.factor(group),
          subjectkey = as.factor(subjectkey)) %>%
   rename("produced" = "Produces",

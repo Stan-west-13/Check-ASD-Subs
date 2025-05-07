@@ -398,25 +398,32 @@ Itm_lvl_summ <- Itmlvl_not_maintained %>%
   ungroup()
 
 ggplot(Itm_lvl_summ %>%
-         slice_max(prop_itm,n = 40) %>%
+         slice_max(prop_itm,n = 50) %>%
          arrange(desc(prop_itm)) %>% 
          left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()), aes(y = reorder(CDI_Metadata_compatible,prop_itm), x = prop_itm, fill = category))+
   geom_bar(stat="identity")+
   theme_bw(base_size = 8)+
   theme(axis.ticks.length =unit(2.5,"mm"),axis.ticks.y = element_line(size=0.5),aspect.ratio = 20/10)+
   labs(y = "Word",
-       x = "# of Omissions From First CDI")
+       x = "Proportion of Omissions From First CDI")
 
-Itm_lvl_summ %>%
-         slice_max(prop_itm,n = 40) %>%
-         arrange(desc(prop_itm)) %>% 
-         left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()) %>%
-  kable()
 
 
 ```
 
-Here, we are looking at item-level distributions of the top 40 words that were reported as being known in the first CDI administration, but not reported as being known in at least one of the subsequent administrations. The bars are filled by CDI category. Values on the x-axis report the number of times the word was reported on the first administration of the CDI but not later CDIs.
+Here, we are looking at item-level distributions of the top 50 words that were reported as being known in the first CDI administration, but not reported as being known in at least one of the subsequent administrations. The bars are filled by CDI category. Values on the x-axis report the proportion of omissions to the total number of times the word was produced on the first CDI administration.
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+Itm_lvl_summ %>%
+         slice_max(prop_itm,n = 50) %>%
+         arrange(desc(prop_itm), desc(CDI_Metadata_compatible)) %>% 
+         left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()) %>%
+  kable(caption = "Top 50 Inconsistent Words",col.names = c("Word","Count Inconsistent",  "Count First Produced", "Proportion Inconsistent", "Category"))
+
+```
+
 
 
 ## Overall distribution of omissions across categories
@@ -424,11 +431,7 @@ Here, we are looking at item-level distributions of the top 40 words that were r
 ```{r,echo=FALSE, message=FALSE,warning=FALSE}
 
 x <- Itmlvl_not_maintained %>%
-  left_join(first_prod, by = "CDI_Metadata_compatible") %>%
-  group_by(CDI_Metadata_compatible) %>%
-  summarize(sum_inconsistent = sum(not_subsequent),
-         sum_first_prod = total_1,
-         prop_itm = sum_inconsistent/sum_first_prod) %>%
+  left_join(first_prod %>% ungroup(), by = "CDI_Metadata_compatible") %>%
   unique() %>%
   ungroup() %>%
   left_join(ASD_total %>%
@@ -436,21 +439,18 @@ x <- Itmlvl_not_maintained %>%
                select(CDI_Metadata_compatible,category) %>% 
                unique())%>%
   group_by(category) %>%
-  summarize(prop_cat = sum(sum_inconsistent)) %>% 
-  arrange(prop_cat)
+  summarize(sum_inconsistent_cat = sum(not_subsequent),
+         sum_first_prod_cat = sum(total_1),
+         prop_itm_cat = (sum_inconsistent_cat/sum_first_prod_cat)/0.3020069) %>%
+  arrange(prop_itm_cat)
 
-
-ggplot(Itm_lvl_summ %>%
-         left_join(ASD_total %>%
-                     ungroup() %>% 
-                     select(CDI_Metadata_compatible,category) %>% 
-                     unique()) %>%
+ggplot(x %>%
          mutate(category = factor(category, x$category))
-         , aes(y = category, x = prop_itm, fill = category))+
+         , aes(y = category, x = prop_itm_cat, fill = category))+
   geom_bar(stat="identity")+
   theme_bw()+
   labs(y = "Category",
-       x = "# of Omissions From First CDI")+
+       x = "Proportion of Omissions From First CDI")+
   theme(legend.position = "none")
 
 
@@ -459,8 +459,7 @@ ggplot(Itm_lvl_summ %>%
 
 ```
 
-The majority of words not being included in subsequent CDIs are action words, followed by animals and food and drinks.
-
+This plot is showing the proportion of inconsistencies across words summarized into their CDI categories. First I took the count of the number of total inconsistencies in a category and divided by the total number of times words from that category were produced in the first CDI administration. These proportions were then divided by the sum of those proportions to ascertain the degree to which individual categories were contributing to inconsistent vocabulary reporting.
 
 \newpage
 
