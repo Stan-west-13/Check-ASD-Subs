@@ -1,5 +1,7 @@
 load("data/ASD_longitudinal_all.Rdata")
 load("data/NA_all_long.Rdata")
+load("data/cdi-metadata.Rdata")
+
 library(dplyr)
 library(MatchIt)
 library(tidyverse)
@@ -24,6 +26,38 @@ df_all <- rbind(gender_match_ASD,gender_match_NA) %>%
          group = relevel(group, ref = "NA"),
          subjeckey = as.factor(subjectkey),
          sex = as.factor(sex))
+
+
+
+mci_all <- mci_all %>%
+  mutate(word = ifelse(word == "inside" | word == "in", "inside/in",word)) %>%
+  unique() %>%
+  group_by(subjectkey,num_item_id) %>%
+  slice_max(produced)
+## Check num_item_ids ######
+ids_asd <- ASD_total %>%
+  ungroup() %>%
+  select(num_item_id,CDI_Metadata_compatible) %>% 
+  rename(word = CDI_Metadata_compatible) %>%
+  unique() %>%
+  arrange(num_item_id)
+
+ids_na <- mci_all %>%
+  ungroup() %>% 
+  select(num_item_id,word) %>%
+  unique() %>%
+  arrange(num_item_id)
+
+ids_na[duplicated(ids_na$num_item_id),]
+
+
+all.equal(ids_asd,ids_na)
+
+###########################
+
+
+
+
 
 
 ##############################################

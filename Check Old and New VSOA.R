@@ -92,3 +92,44 @@ z <- rbind(x,y) %>%
 
 
 
+
+new_counts_sounds <- new2 %>% filter(!subjectkey %in% old$subjectkey, num_item_id %in% c(1:12),group == "ASD") 
+new_counts_num_item <- new_counts_sounds %>% 
+  group_by(nproduced, num_item_id) %>% 
+  mutate(sum = sum(produced)) %>%
+  group_by(subjectkey) %>%
+  
+
+
+ggplot(new_counts_num_item, aes(x = nproduced,y = prop,group = num_item_id, color = as.factor(num_item_id)))+
+  geom_point()+
+  facet_wrap(~num_item_id)+
+  labs(title = "New")
+ggsave("New_ASD_nproduced.png")
+
+
+
+
+old_counts_sounds <- old %>% filter(num_item_id %in% c(1:12),group == "ASD") 
+old_counts_num_item <- old_counts_sounds %>% group_by(nproduced, num_item_id) %>% summarize(sum = sum(produced),
+                                                                                            prop = sum(produced)/n(),
+                                                                                            n = n())
+
+
+ggplot(old_counts_num_item, aes(x = nproduced,y = prop,group = num_item_id, color = as.factor(num_item_id)))+
+  geom_point()+
+  facet_wrap(~num_item_id)+
+  labs(title = "Old")
+ggsave("Old_ASD_nproduced.png")
+
+
+
+old_guids <- droplevels(unique(old$subjectkey[old$group == "ASD"]))
+new_guids <- unique(new2[!new2$subjectkey %in% old$subjectkey & new2$group == "ASD", ]$subjectkey)
+write.csv(new_guids,"data/new_guidscsv.csv")
+save(old_guids, file = "data/old_guids.Rdata")
+
+save(new_guids, file = "data/new_guids.Rdata")
+sum(old_guids %in% new_guids)
+
+

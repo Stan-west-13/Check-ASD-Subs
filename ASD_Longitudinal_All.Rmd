@@ -25,7 +25,8 @@ library(gt)
 ASD_total <- ASD_total %>%
   filter(nProduced >= 3 & nProduced <= 600) %>%
   group_by(subjectkey,interview_age) %>%
-  slice_max(nProduced) 
+  slice_max(nProduced) %>%
+  unique()
 
 ```
 
@@ -172,11 +173,22 @@ df_9_15 <- diff_scores %>%
   mutate(is.between = diff >= 9 & diff <= 15,
          n_9_15 = sum(is.between,na.rm = T))
 
+
+df_6 <- diff_scores %>%
+  filter(subjectkey %in% filter(diff_scores,diff >=4 | diff <=7)$subjectkey) %>%
+  group_by(subjectkey) %>%
+  mutate(is.between = diff >= 9 & diff <= 15,
+         n_9_15 = sum(is.between,na.rm = T))
+
+## Number of kids with item-level data at 6 and 9-15 months.
+sum(df_9_15$subjectkey %in% df_6$subjectkey)
+
+
 ## Kid count
 
 print(paste0("There are ",length(unique(df_9_15$subjectkey))," unique kids with CDIs 9 - 15 months between CDIs"))
 
-print(paste0("There are ",nrow(df_9_15 %>% filter(diff >= 9 & diff <= 15))," cases of CDIs being between 9 and 15 months apart. The counts are shown below."))
+print(paste0("There are ",nrow(df_9_15 %>% filter(diff  == 6))," cases of CDIs being between 9 and 15 months apart. The counts are shown below."))
 
 ## Count number of 9 - 15 CDI gaps
 tbl_counts <- df_9_15 %>%
@@ -264,7 +276,9 @@ ggplot(df_9_15 %>%
 \newpage
 
 # Spaghetti Plots
-Plots showing the progression of productive vocabulary over interview age. The majority of kids show increases in productive vocabulary over time, but this is not always the case. Page 10 digs deeper into those cases.
+Plots showing the progression of productive vocabulary over interview age. The majority of kids show increases in productive vocabulary over time, but this is not always the case. Page 10 digs deeper into those cases. 
+
+The big dip is subjectkey NDARZV011HWD. It looks like the earlier administration (at 116 months) was words and sentences and the later administration (132 months) was words and gestures. Dosen't seem to be a scoring error: the words previously scored 1 in words and sentences (produces) were later scored 0 in words and gestures (does not produce or understand), so it doesn't seem to be that they mixed up the "understand" and "produces" codes between forms, just that they no longer considered it to be produced.
 
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side3,out.height="50%",fig.show='hold'}
@@ -297,6 +311,7 @@ ggplot(df_9_15 %>%
 # Inconsistent gains in vocabulary over time
 Some of the kids show drops in vocabulary size between CDI administrations. There are 30 kids who have longitudinal CDIs that decrease at some point in development. These may be considerations for removal as they do not follow the pattern of development of the majority of the kids. It is impossible to know if this is due to bad reporting or legitimate losses in productive vocabulary (Arunachalam, S., Avtushka, V., Luyster, R. J., & Guthrie, W. (2022). Consistency and inconsistency in caregiver reporting of vocabulary. Language Learning and Development, 18(1), 81-96. https://pmc.ncbi.nlm.nih.gov/articles/PMC9119658/pdf/nihms-1714234.pdf).
 
+It could be the case that some of the parents or administrators put 0s in the cases that they did not have data for a word (most of the CDI entries just put NA if there is no data for a word), but it is impossible to tell if those 0s actually reflect non-production or inconsistent reporting of null data. We do filter out records with more than 10% NA in item-level reporting to try and curb some of these incomplete records.
 
 ```{r,echo=FALSE, message=FALSE,warning=FALSE}
 diff_scores_dec <- diff_scores %>%
@@ -472,7 +487,25 @@ diff_scores %>%
   filter(subjectkey %in% .[.$diff >= 24,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
   kable(caption = "Kids with 12 month 'skips' in CDI administrations")
   
-  
+print(paste("The number of unique kids with 12 month intervals and larger gaps in CDIs is",diff_scores %>%
+  filter(subjectkey %in% .[.$diff >= 24,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+    ungroup()%>%
+    summarize(n =length(unique(subjectkey)))))
 ```
 
 
+\newpage
+
+# Skips 6 months apart for more than 2 CDIs
+Some kids have CDIs that are around 6 months apart between two administrations, but there is a larger gap in subsequent administrations. We can make predictions about the vocabulary size in these gaps using linear models. Below are some examples of kids with 6 month administrations and larger gaps in times between CDIs. 
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+diff_scores %>%
+  filter(subjectkey %in% .[.$diff == 6,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+  kable(caption = "Kids with 6 month 'skips' in CDI administrations")
+  
+print(paste("The number of unique kids with 6 month intervals in CDIs and larger gaps is",diff_scores %>%
+  filter(subjectkey %in% .[.$diff == 6,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+    ungroup()%>%
+    summarize(n =length(unique(subjectkey)))))
+```
