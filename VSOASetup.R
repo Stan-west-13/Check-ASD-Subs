@@ -27,13 +27,17 @@ df_all <- rbind(gender_match_ASD,gender_match_NA) %>%
          subjeckey = as.factor(subjectkey),
          sex = as.factor(sex))
 
-
+## In, Inside, and Inside/In is being counted multiple times for NA group.
+## Here I am changing all cases of in and inside to the all-encompassing inside/in
+## If a NA kid is reported to produce that word, just keep the TRUE produced row for that kid.
+## slice_max will only keep the TRUE for produced for each word when grouped by word and subjectkey.
 
 mci_all <- mci_all %>%
   mutate(word = ifelse(word == "inside" | word == "in", "inside/in",word)) %>%
   unique() %>%
   group_by(subjectkey,num_item_id) %>%
-  slice_max(produced)
+  slice_max(produced) %>%
+  ungroup()
 ## Check num_item_ids ######
 ids_asd <- ASD_total %>%
   ungroup() %>%
@@ -132,7 +136,7 @@ NA_setup <- mci_all %>%
   rename("nproduced" = "nProduced")
 
 ASD_setup <- ASD_total %>%
-  select(group,subjectkey,interview_age,num_item_id,Produces,nProduced,word_code) %>%
+  select(group,subjectkey,interview_age,num_item_id,Produces,nProduced) %>%
   mutate(group = as.factor(group),
          subjectkey = as.factor(subjectkey)) %>%
   rename("produced" = "Produces",
