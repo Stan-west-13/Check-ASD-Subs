@@ -146,7 +146,8 @@ all <- rbind(NA_setup,ASD_setup) %>%
   filter(subjectkey %in% all_prep_matched$subjectkey & nproduced %in% all_prep_matched$nproduced)
 
 VSOA <- all_prep_matched %>%
-  left_join(all, by = c("subjectkey","nproduced","group"))
+  left_join(all, by = c("subjectkey","nproduced","group")) %>% 
+  unique()
 
 
 
