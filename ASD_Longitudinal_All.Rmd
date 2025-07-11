@@ -2,10 +2,14 @@
 title: "ASD Longitudinal RMD"
 author: "Stan West"
 date: "2025-04-17"
-output: html_document
+output: pdf_document
 ---
 
-This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children
+This Markdown summarizes information regarding the data that will be used for a longitudinal analysis of vocabulary acquisition in autistic children. Here we are interested in vocabulary sizes between 3 & 600 words produced. The numbers reported here differ from our first look because of a couple of reasons: 
+
+  1. I recycled old code from a different project to combine the old and new GUIDs. This code had a part where we were only accepting the "best" CDI record (that with the highest number of words produced across multiple records). This was reducing the number of possible longitudinal data points. Good news, we have more kids with longitudinal data 9 - 15 months between CDIs. 
+  
+  2. I used an "|" instead of "&" when defining the 2 - 4 window for kids with more granular longitudinal data. This made it seem like we had much more kids with fine-tuned longitudinal data. After fixing this, we only have 6 kids with data at that level of specificity.
 
 ```{r, echo=FALSE,warning=FALSE,message=FALSE}
 load("data/ASD_longitudinal_all.Rdata")
@@ -15,24 +19,22 @@ library(purrr)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
-diff_scores <- ASD_total %>%
-  select(subjectkey,interview_age) %>%
-  group_by(subjectkey) %>%
-  mutate(entry = seq.int(1,n(),1)) %>%
-  filter(!max(entry) < 2) %>%
-  mutate(diff = interview_age - lag(interview_age),
-         max_diff = max(diff,na.rm = T))
-
+library(ggExtra)
+library(forcats)
+library(gt)
 ASD_total <- ASD_total %>%
-  filter(nProduced >= 3 & nProduced <= 600)
+  filter(nProduced >= 3 & nProduced <= 600) %>%
+  group_by(subjectkey,interview_age) %>%
+  slice_max(nProduced) %>%
+  unique()
 
 ```
 
 
-## Demographic Information
-Demographics for kids with between 3 & 600 producetive vocabulary
+# Demographic Information
+Demographics for kids with between 3 & 600 productive vocabulary. The majority of kids have early interviews with relatively low productive vocabularies.
 
-```{r,echo=FALSE}
+```{r,echo=FALSE, warning=FALSE,message=FALSE,out.width="50%",fig.align='center'}
 
 print(paste0("Number of unique subjectkeys is ",
              length(unique(ASD_total$subjectkey)),
@@ -44,16 +46,79 @@ ASD_total %>%
   select(interview_age, nProduced) %>%
   summary()
 
+ggplot(ASD_total %>% select(subjectkey,interview_age,nProduced) %>% unique(), aes(x = interview_age, y = nProduced))+
+  geom_density_2d_filled()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of Words Produced",
+       title = "Interview Age by Vocabulary Density Map")
+
+
+
+
+```
+\newpage
+
+
+# Longitudinal Analysis - all kids (no restriction on time between CDIs)
+
+Of the 628 CDIs, 206 only have an entry for a single age, removing them from longitudinal consideration. That leaves 422(111 unique kids) with at least 2 CDIs. 
+
+```{r, echo = FALSE, message=FALSE,warning=FALSE, fig.show='hold'}
+
+num_tbl <- ASD_total %>% 
+  select(subjectkey, interview_age) %>%
+  unique() %>%
+  arrange(subjectkey, interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1),
+         max_entry = max(entry)) %>%
+  group_by(max_entry) %>%
+  count(max_entry)
+
+
+
+num_tbl_pps <- ASD_total %>% 
+  select(subjectkey, interview_age) %>%
+  unique() %>%
+  arrange(subjectkey, interview_age) %>%
+  group_by(subjectkey) %>%
+  mutate(entry = seq.int(1,n(),1),
+         max_entry = max(entry)) %>%
+  select(subjectkey, max_entry) %>%
+  group_by(max_entry) %>%
+  summarize(n = length(unique(subjectkey)))
+
+
+tbl_all <- left_join(num_tbl,num_tbl_pps, by = "max_entry") %>%
+  rename("n_CDI" = "n.x",
+         "n_pp" = "n.y")
+
+
+kable(tbl_all,booktabs = TRUE, col.names = c("# of CDIs","# of Records", "# of Kids"),caption = "CDI Longitudinal Counts ") %>%
+  kable_styling(latex_options = "scale_down",
+                full_width = FALSE) %>%
+  column_spec(1, bold = TRUE, border_right = TRUE, color = "black")
+
+
+ggplot(tbl_all, aes(x = max_entry, y = n_pp))+
+  geom_col()+
+  labs(x = "# of Longitudinal CDIs",
+       y = "# of Kids")+
+  geom_text(aes(label = c(206,102,162,128,30),vjust = -0.5))+
+  annotate("text",x = 4, y = 150, label = "Numbers indicate the amount of longitudinal records, \n bars indicate number of kids.")+
+  theme_bw()
+
 
 ```
 
+\newpage
 
-
-## Longitudinal Analysis
 # Kids with longitudinal data in 3 month intervals
-Of the 497 CDIs, 241 only have an entry for a single age, removing them from longitudinal consideration. That leaves 256(87 unique) with at least 2 CDIs. There are only three kids with CDIs at the specificity of 1 - 4 months between CDIs.
+There are only 6 kids with between 2 and 4 months between CDIs. This is different from our first look at this because we mistakenly used "|" in our filer instead of "&" when defining our time window. There are 9 total records with between 2 and 4 months in between CDIs, with the majority of those (4) being 4 months apart. 
 
-```{r, echo = FALSE, message=FALSE,warning=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side, fig.show='hold',out.width="50%"}
+
 diff_scores <- ASD_total %>%
   select(subjectkey,interview_age) %>%
   unique() %>%
@@ -68,79 +133,379 @@ diff_scores <- ASD_total %>%
 
 ggplot(diff_scores, aes(x = diff))+
   geom_histogram()+
-  labs(caption = "Only 3 participants with between 1 and 4 months distance between CDIs")+
-  geom_vline(xintercept = c(1,4), color = "red",linetype = 2)
+  labs(caption = "Only 6 kids with between 2 and 4 months distance between CDIs")+
+  geom_vline(xintercept = c(2,4), color = "red",linetype = 2)+
+  theme_bw()+
+  labs(x = "Time Between CDIs",
+       y = "Count")+
+  scale_x_continuous(breaks = seq.int(1,40,2))
 
 ggplot(diff_scores %>%
-         filter(subjectkey %in% filter(diff_scores,diff <=4 & diff >= 1)$subjectkey),
+         filter(subjectkey %in% filter(diff_scores,diff <=4 & diff >= 2)$subjectkey),
        aes(x = interview_age, y = nProduced))+
   geom_point(aes(color = subjectkey))+
-  geom_line(aes(color = subjectkey))
+  geom_line(aes(color = subjectkey))+
+  theme_bw()+
+  labs(x = "Interview Age",
+       y = "# of Words Produced")
+
+diff_scores %>%
+  filter(subjectkey %in% filter(diff_scores,diff <=4 & diff >= 2)$subjectkey) %>%
+  select(subjectkey, interview_age, diff, nProduced) %>%
+  kable()
 
 ```
 
-# Kids with longitudinal data in 12 month intervals
-There are 75 kids with CDIs at the specificity of 9 - 15 months between CDIs. 45 of those only have one instance of a gap between 9 and 15 months,
-23 have two instances of 9 - 15 month gaps, and 7 have three instances of this.
+Many of the kids with more frequent CDIs  (2 - 4 months apart) have several CDI administrations, however, for most of the kids only 2 timepoints will work for this analysis (e.g., "NDARET878JC0" has 5 CDIs, but only vocabularies at 57 and 60 months would be applicable).
 
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
+
+
+\newpage
+
+# Kids with longitudinal data in 9 - 15 month intervals
+There are 111 kids with CDIs at the specificity of 9 - 15 months between CDIs. Below are tables and figures showing the distribution of time between CDIs both across participants and how many individual participants have multiple CDIs within the 9 - 15 time range. The majority of CDIs that meet the 9 - 15 month criteria fall in the 12-month time between CDIs. Additionally, the majority (79 of 111) only have one instance of records that are 9 - 15 months apart. 
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,results='asis'}
 
 df_9_15 <- diff_scores %>%
   filter(subjectkey %in% filter(diff_scores,diff >= 9 & diff <= 15)$subjectkey) %>%
   group_by(subjectkey) %>%
-  mutate(is.between = ifelse(diff >= 9 & diff <= 15,TRUE,FALSE),
+  mutate(is.between = diff >= 9 & diff <= 15,
          n_9_15 = sum(is.between,na.rm = T))
 
+
+df_6 <- diff_scores %>%
+  filter(subjectkey %in% filter(diff_scores,diff >=4 | diff <=7)$subjectkey) %>%
+  group_by(subjectkey) %>%
+  mutate(is.between = diff >= 9 & diff <= 15,
+         n_9_15 = sum(is.between,na.rm = T))
+
+## Number of kids with item-level data at 6 and 9-15 months.
+sum(df_9_15$subjectkey %in% df_6$subjectkey)
+
+
 ## Kid count
-length(unique(df_9_15$subjectkey))
+
+print(paste0("There are ",length(unique(df_9_15$subjectkey))," unique kids with CDIs 9 - 15 months between CDIs"))
+
+print(paste0("There are ",nrow(df_9_15 %>% filter(diff  == 6))," cases of CDIs being between 9 and 15 months apart. The counts are shown below."))
 
 ## Count number of 9 - 15 CDI gaps
-df_9_15 %>%
+tbl_counts <- df_9_15 %>%
+  filter(diff >= 9 & diff <= 15) %>%
+  select(subjectkey,n_9_15, diff) %>%
+  group_by(diff) %>%
+  count(diff) 
+
+kable(tbl_counts,col.names = c("Month Latency","Count"),caption = "CDI Latencies Counts",align = 'clc') 
+tbl_n_cont <- df_9_15 %>%
   select(subjectkey,n_9_15) %>%
   unique() %>%
   group_by(n_9_15) %>%
   count(n_9_15)
 
-## Proportion of CDIs that grow from subsequent interviews
-## Some of the vocabulary size shrinks as participants get older.
+kable(tbl_n_cont,col.names = c("# of Contributions","Count"),caption = "Multiple Contributions Counts: Note: 1 contribution = 2 CDIs 9-15 months apart",align = "r") 
+
 
   
 
-df_9_15 %>%
-  group_by(n_entry) %>%
-  table()
+```
+
+\newpage
+
+# Histograms
+Graphical representation of tables above. Plot on the bottom: red lines reflect the 9 - 15 month cutoffs. If we want to focus on a single time interval between CDIs, we will retain the most data for 12 months between administrations. 
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,out.width="50%",fig.show='hold'}
+ggplot(tbl_counts, aes( x = diff, y = n))+
+  geom_col()+
+  scale_x_continuous(breaks = seq.int(9,15,1))+
+  labs(x = "Time Between CDIs",
+       y = "Count",
+       title = "Histogram of Times Between CDIs (9-15)")+
+  theme_bw()
 
 ggplot(diff_scores, aes(x = diff))+
   geom_histogram()+
-  labs(caption = "75 with between 9 and 15 months distance between CDIs")+
-  geom_vline(xintercept = c(9,15), color = "red",linetype = 2)
+  labs(caption = "111 with between 9 and 15 months distance between CDIs")+
+  geom_vline(xintercept = c(9,15), color = "red",linetype = 2)+
+  scale_x_continuous(breaks = seq.int(1,40,2))+
+  labs(x = "Time Between CDIs",
+       y = "Count",
+       title =  "Histogram of Times Between CDIs (All)")+
+  theme_bw()
+
+
+```
+
+\newpage
+
+## Distributions of first interviews
+Histograms show the ages of first administration for kids with longitudinal data between 9 and 15 months apart. The second plot facets this by the number of longitudinal data points available.
+
+```{r,message=FALSE,echo=FALSE,warning=FALSE}
+
+ggplot(df_9_15 %>%
+         filter(entry == 1),
+       aes(x = interview_age))+
+  geom_histogram()+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
+  theme_bw()+
+  labs(x = "Interview Age",
+       y = "Count",
+       title = "Distribution of First Interviews")
+
+ggplot(df_9_15 %>%
+         filter(entry == 1) %>%
+         mutate(n_entry = factor(n_entry, levels = c(2,3,4,5), labels = c(2,3,4,5))),
+       aes(x = interview_age, fill = n_entry))+
+  geom_histogram(binwidth = 4)+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
+  theme_bw()+
+  labs(x = "Interview Age",
+       y = "Count",
+       title = "Distribution of First Interviews",
+       fill = "Number of CDIs")+
+  facet_wrap(~n_entry)
+
+```
+
+
+
+
+\newpage
+
+# Spaghetti Plots
+Plots showing the progression of productive vocabulary over interview age. The majority of kids show increases in productive vocabulary over time, but this is not always the case. Page 10 digs deeper into those cases. 
+
+The big dip is subjectkey NDARZV011HWD. It looks like the earlier administration (at 116 months) was words and sentences and the later administration (132 months) was words and gestures. Dosen't seem to be a scoring error: the words previously scored 1 in words and sentences (produces) were later scored 0 in words and gestures (does not produce or understand), so it doesn't seem to be that they mixed up the "understand" and "produces" codes between forms, just that they no longer considered it to be produced.
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE,figures-side3,out.height="50%",fig.show='hold'}
+
 
 ggplot(df_9_15,
      aes(x = interview_age, y = nProduced))+
   geom_point(aes(color = subjectkey))+
   geom_line(aes(color = subjectkey))+
-  theme(legend.position = "none")
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of Words Produced")
 
 ggplot(df_9_15 %>%
          mutate(interview_age_cut = cut(interview_age, seq(12, 132,11))),
      aes(x = interview_age, y = nProduced))+
   geom_point(aes(color = subjectkey))+
   geom_line(aes(group = subjectkey, color = is.between))+
+  labs(caption = "Red connections are 9-15 month gaps between CDIs")+
+  theme_bw()+
+  scale_x_continuous(breaks = seq.int(12,132,11))+
   theme(legend.position = "none")+
-  labs(caption = "Red connections are 9-15 month gaps between CDIs")
+  labs(x = "Interview Age",
+       y = "# of Words Produced")
+```
+
+\newpage
+
+# Inconsistent gains in vocabulary over time
+Some of the kids show drops in vocabulary size between CDI administrations. There are 30 kids who have longitudinal CDIs that decrease at some point in development. These may be considerations for removal as they do not follow the pattern of development of the majority of the kids. It is impossible to know if this is due to bad reporting or legitimate losses in productive vocabulary (Arunachalam, S., Avtushka, V., Luyster, R. J., & Guthrie, W. (2022). Consistency and inconsistency in caregiver reporting of vocabulary. Language Learning and Development, 18(1), 81-96. https://pmc.ncbi.nlm.nih.gov/articles/PMC9119658/pdf/nihms-1714234.pdf).
+
+It could be the case that some of the parents or administrators put 0s in the cases that they did not have data for a word (most of the CDI entries just put NA if there is no data for a word), but it is impossible to tell if those 0s actually reflect non-production or inconsistent reporting of null data. We do filter out records with more than 10% NA in item-level reporting to try and curb some of these incomplete records.
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+diff_scores_dec <- diff_scores %>%
+  group_by(subjectkey) %>%
+  mutate(decrease = ifelse(nProduced < lag(nProduced), TRUE,FALSE)) %>%
+  mutate(decrease = ifelse(is.na(decrease),FALSE,decrease)) %>%
+  filter(subjectkey %in% .[.$decrease == TRUE,]$subjectkey) %>%
+  mutate(dec_group = ifelse(decrease == TRUE,
+                            "A",
+                            ifelse(lead(decrease) == TRUE,
+                                   "A",
+                                   NA))) %>%
+  mutate(dec_group = ifelse(is.na(dec_group), "B",dec_group),
+         dec_group = as.factor(dec_group))
+
+
+diff_scores_dec <- diff_scores %>%
+  group_by(subjectkey) %>%
+  mutate(decrease = ifelse(nProduced < lag(nProduced), TRUE,FALSE)) %>%
+  mutate(decrease = ifelse(is.na(decrease),FALSE,decrease)) %>%
+  filter(subjectkey %in% .[.$decrease == TRUE,]$subjectkey) %>%
+  mutate(color = nProduced > lead(nProduced))
+
+
+ggplot(diff_scores_dec,
+     aes(x = interview_age, y = nProduced))+
+  geom_path(aes(group = subjectkey, color = color))+
+  scale_color_manual(values = c("grey","red"))+
+  geom_point(aes(fill = subjectkey))+
+  labs(caption = "Red indicates decreases in words produced over CDIs")+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x = "Interview Age",
+       y = "# of Words Produced")
+
+
+
+diff_scores_dec %>%
+  group_by(subjectkey) %>%
+  mutate(neg_diffs = lead(nProduced) - nProduced) %>%
+  filter(neg_diffs < 0) %>%
+  ungroup() %>%
+  summarize(m_neg_diffs = mean(neg_diffs),
+            sd_neg_diffs = sd(neg_diffs),
+            range = range(neg_diffs)) %>%
+  kable(col.names = c("Mean Vocabulary Decreases", "SD", "Range"))
+```
+
+\newpage
+ 
+## Top 40 words not consistently reported across CDIs. 
+This is data aggregated across kids with longitudinal data with 9 - 15 months between CDIs where the vocabulary size decreased with age 
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+
+
+## Work on computing words that are not consistently reported between CDIs within participants.
+
+first_vocabs <- ASD_total %>%
+  filter(subjectkey %in% df_9_15$subjectkey) %>%
+  group_by(subjectkey) %>%
+  select(subjectkey,interview_age, CDI_Metadata_compatible,Produces, nProduced) %>%
+  left_join(select(df_9_15,subjectkey,interview_age,entry), by = c("subjectkey","interview_age")) %>%
+  filter(entry == 1, Produces == TRUE) %>%
+  mutate(in_1 = ifelse(entry == 1 & Produces == TRUE,1,0),
+         decreases = ifelse(subjectkey %in% diff_scores_dec
+                            $subjectkey, TRUE,FALSE))
+
+
+
+first_prod <- first_vocabs %>%
+  group_by(CDI_Metadata_compatible) %>%
+  summarize(total_1 = sum(Produces))
+
+
+Itmlvl_not_maintained <- ASD_total %>%
+  filter(subjectkey %in% df_9_15$subjectkey) %>%
+  group_by(subjectkey) %>%
+  select(subjectkey,interview_age, CDI_Metadata_compatible,Produces, nProduced) %>%
+  left_join(select(df_9_15,subjectkey,interview_age,entry), by = c("subjectkey","interview_age")) %>%
+  group_by(subjectkey,CDI_Metadata_compatible) %>%
+  left_join(select(first_vocabs,subjectkey,CDI_Metadata_compatible,in_1))  %>%
+  mutate(in_1  = ifelse(is.na(in_1),0,1),
+         not_subsequent = ifelse(in_1 == 1 & Produces == FALSE, TRUE, FALSE),
+         decreases = ifelse(subjectkey %in% diff_scores_dec
+                            $subjectkey, TRUE,FALSE)) %>%
+  filter(!entry == 1,in_1 == 1) %>%
+  left_join(ASD_total %>% select(CDI_Metadata_compatible, category) %>% unique()) %>%
+  select(subjectkey, CDI_Metadata_compatible, not_subsequent) %>%
+  unique()
+
+Itm_lvl_summ <- Itmlvl_not_maintained %>%
+  left_join(first_prod, by = "CDI_Metadata_compatible") %>%
+  group_by(CDI_Metadata_compatible) %>%
+  summarize(sum_inconsistent = sum(not_subsequent),
+         sum_first_prod = total_1,
+         prop_itm = sum_inconsistent/sum_first_prod) %>%
+  unique() %>%
+  ungroup()
+
+ggplot(Itm_lvl_summ %>%
+         slice_max(prop_itm,n = 50) %>%
+         arrange(desc(prop_itm)) %>% 
+         left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()), aes(y = reorder(CDI_Metadata_compatible,prop_itm), x = prop_itm, fill = category))+
+  geom_bar(stat="identity")+
+  theme_bw(base_size = 8)+
+  theme(axis.ticks.length =unit(2.5,"mm"),axis.ticks.y = element_line(size=0.5),aspect.ratio = 20/10)+
+  labs(y = "Word",
+       x = "Proportion of Omissions From First CDI")
+
+
+
+```
+
+Here, we are looking at item-level distributions of the top 50 words that were reported as being known in the first CDI administration, but not reported as being known in at least one of the subsequent administrations. The bars are filled by CDI category. Values on the x-axis report the proportion of omissions to the total number of times the word was produced on the first CDI administration.
+
+
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+Itm_lvl_summ %>%
+         slice_max(prop_itm,n = 50) %>%
+         arrange(desc(prop_itm), desc(CDI_Metadata_compatible)) %>% 
+         left_join(ASD_total %>%ungroup() %>% select(CDI_Metadata_compatible,category) %>% unique()) %>%
+  kable(caption = "Top 50 Inconsistent Words",col.names = c("Word","Count Inconsistent",  "Count First Produced", "Proportion Inconsistent", "Category"))
 
 ```
 
 
 
-```{r}
+## Overall distribution of omissions across categories
+
+```{r,echo=FALSE, message=FALSE,warning=FALSE}
+
+x <- Itmlvl_not_maintained %>%
+  left_join(first_prod %>% ungroup(), by = "CDI_Metadata_compatible") %>%
+  unique() %>%
+  ungroup() %>%
+  left_join(ASD_total %>%
+               ungroup() %>% 
+               select(CDI_Metadata_compatible,category) %>% 
+               unique())%>%
+  group_by(category) %>%
+  summarize(sum_inconsistent_cat = sum(not_subsequent),
+         sum_first_prod_cat = sum(total_1),
+         prop_itm_cat = (sum_inconsistent_cat/sum_first_prod_cat)/0.3020069) %>%
+  arrange(prop_itm_cat)
+
+ggplot(x %>%
+         mutate(category = factor(category, x$category))
+         , aes(y = category, x = prop_itm_cat, fill = category))+
+  geom_bar(stat="identity")+
+  theme_bw()+
+  labs(y = "Category",
+       x = "Proportion of Omissions From First CDI")+
+  theme(legend.position = "none")
+
+
+
+
 
 ```
 
+This plot is showing the proportion of inconsistencies across words summarized into their CDI categories. First I took the count of the number of total inconsistencies in a category and divided by the total number of times words from that category were produced in the first CDI administration. These proportions were then divided by the sum of those proportions to ascertain the degree to which individual categories were contributing to inconsistent vocabulary reporting.
+
+\newpage
+
+# Skips 12 months apart for more than 2 CDIs
+Some kids have CDIs that are around 12 months apart between two administrations, but there is a larger gap in subsequent administrations. We can make predictions about the vocabulary size in these gaps using linear models. Below are some examples of kids with 12 month administrations and larger gaps in times between CDIs. Some kids start with more frequent CDIs and they become less frequent over time (e.g., NDARAJ572PGT) and some start with less frequent CDIs and progressively get more frequent (NDAREH113WHB). 
 
 
-```{r}
-
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+diff_scores %>%
+  filter(subjectkey %in% .[.$diff >= 24,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+  kable(caption = "Kids with 12 month 'skips' in CDI administrations")
+  
+print(paste("The number of unique kids with 12 month intervals and larger gaps in CDIs is",diff_scores %>%
+  filter(subjectkey %in% .[.$diff >= 24,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+    ungroup()%>%
+    summarize(n =length(unique(subjectkey)))))
 ```
 
 
+\newpage
+
+# Skips 6 months apart for more than 2 CDIs
+Some kids have CDIs that are around 6 months apart between two administrations, but there is a larger gap in subsequent administrations. We can make predictions about the vocabulary size in these gaps using linear models. Below are some examples of kids with 6 month administrations and larger gaps in times between CDIs. 
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+diff_scores %>%
+  filter(subjectkey %in% .[.$diff == 6,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+  kable(caption = "Kids with 6 month 'skips' in CDI administrations")
+  
+print(paste("The number of unique kids with 6 month intervals in CDIs and larger gaps is",diff_scores %>%
+  filter(subjectkey %in% .[.$diff == 6,]$subjectkey & subjectkey %in% .[.$entry >= 3,]$subjectkey) %>%
+    ungroup()%>%
+    summarize(n =length(unique(subjectkey)))))
+```
