@@ -1,0 +1,41 @@
+---
+title: "Minimally Speaking Breakdown"
+author: "Stan West"
+date: "2025-07-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readxl)
+library(ggplot2)
+
+d <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit()
+
+```
+
+Data were collected from NDAR and classified as minimally speaking using SET CRITERIA. Here, we split the data according to age of CDI administration and are attempting to match 2-4, 4-6, and 6-8 year age bins. Networks based on these data may reveal different learning mechanisms in minimally speaking children as observed through network structure.
+
+
+# Everyone
+
+```{r}
+ggplot(d, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
+```
+
+
+
+## look at older kids  6-8 first then move to the 4-6 then 2 - 4. What form and what are the vocabulary distributions
+# Bin 1: 72 - 96 months
+```{r}
+oldest_group <- d |>
+  filter(interview_age >= 72 & interview_age < 96)
+
+```
+
