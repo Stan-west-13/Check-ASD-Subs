@@ -89,8 +89,9 @@ Data were collected from NDAR and classified as minimally speaking using SET CRI
 Data used here has first been filtered in several ways: 
 
 * 1. The oldest group (also the minimally speaking group) was filtered to include children from 72 months to 126 months. If a kid had more than one CDI administration, we took their first CDI (n = 51)
-* 2. The middle and youngest groups only include children from 24 - 47 and 48 - 71 months, respectively (n_middle = 80, n_youngest = 174).
-* 3. The middle and youngest groups were then filtered to include appropriate entries given the standards set by 
+* 2. The middle and youngest groups only include children from 24 - 47 and 48 - 71 months, respectively and does not include any children also in the oldest group (n_youngest = 174,n_middle = 80).
+* 3. The middle and youngest groups were then filtered to include appropriate entries given the standards set by Wordbank (exclude WG forms where children were 19 months or younger and produce more than 95 words & exclude WS forms where children were 30 months or older and produce more than 563 words) (n_youngest = 140 ,n_middle = 50 ).
+* 4. The youngest group was filtered to not include any children from the middle group (n = 117)
 
 
 # Distribiution of productive vocabulary across all ages
