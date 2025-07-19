@@ -35,7 +35,19 @@ ggplot(d, aes(x = nProduced))+
 # Bin 1: 72 - 96 months
 ```{r}
 oldest_group <- d |>
-  filter(interview_age >= 72 & interview_age < 96)
+  filter(interview_age >= 72 & interview_age < 96) |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  mutate(months_between = interview_age - lag(interview_age))
 
+
+oldest_group |>
+  group_by(subjectkey) |>
+  filter(length(interview_age) > 1)
+
+
+ggplot(oldest_group, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
 ```
 
