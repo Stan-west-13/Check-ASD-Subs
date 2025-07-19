@@ -38,6 +38,10 @@ word_dict_WG <- word_dict_WG %>%
   rename(num_item_id = num_item_id_cdi)
 
 
+ASD_all <- ASD_all %>%
+  left_join(cdi_metadata %>% select(num_item_id_cdi = num_item_id,word), by = c("CDI_Metadata_compatible" = "word")) %>%
+  select(-num_item_id) %>%
+  rename(num_item_id = num_item_id_cdi)
 
 ## 2. Selecting vocabulary checkists and other demographic info. ########################################
 select_columns <- c('subjectkey', 'interview_age', 'sex','interview_date','mcs_vc_total','mci_sentences02_id', as.character(word_dict_S$word_code))

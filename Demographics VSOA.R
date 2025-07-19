@@ -1,4 +1,5 @@
-d <- readRDS("data/asd_na-osg-2025-05-07.rds")
+library(dplyr)
+d <- readRDS("data/asd_na-osg-2025-05-19.rds")
 load("data/ASD_longitudinal_all.Rdata")
 load("data/NA_all_long.Rdata")
 

@@ -11,17 +11,43 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(readxl)
 library(ggplot2)
+library(WeightIt)
+library(cobalt)
+library(MatchIt)
+library(kableExtra)
+library(jtools)
+
+keep_minmax <- function(x){
+  r <- x |>
+    group_by(subjectkey) |>
+    reframe(interview_age = range(interview_age))
+  x <- semi_join(x,r, by = c("subjectkey", "interview_age"))
+  return(x)
+}
+
+
 
 d <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
   select(subjectkey,interview_age, nProduced, form) |>
-  na.omit()
+  na.omit() |>
+  filter(interview_age <=96) |>
+  mutate(group = ifelse(interview_age > 72 & interview_age <= 96, "old", "mdl")) |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(CDI_dist = interview_age - lag(interview_age))
+
+load("data/ASD_all_GM.Rdata")
+ASD_all <- ASD_all %>%
+  filter(!subjectkey %in% d$subjectkey)
 
 ```
 
 Data were collected from NDAR and classified as minimally speaking using SET CRITERIA. Here, we split the data according to age of CDI administration and are attempting to match 2-4, 4-6, and 6-8 year age bins. Networks based on these data may reveal different learning mechanisms in minimally speaking children as observed through network structure.
 
 
-# Everyone
+# Distribiution of productive vocabulary across all ages
+
+Lower vocabulary range for WG, but we still see a high concentration of productive vocabulary on the low end. This makes sense as WG is typically the first form completed for a kiddo.
 
 ```{r}
 ggplot(d, aes(x = nProduced))+
@@ -31,14 +57,190 @@ ggplot(d, aes(x = nProduced))+
 
 
 
-## look at older kids  6-8 first then move to the 4-6 then 2 - 4. What form and what are the vocabulary distributions
-# Bin 1: 72 - 96 months
+
+# Bin 1: 72 - 96 months (6 - 8 years)
+
+The majority of cases where kiddos switch from WG -> WS, the productive vocabulary goes up. Children where both administrations are WG seem to have stagnant vocabulary production. Table 1 shows the majority of kiddos in this bin only have one administration. In cases where they have 2, the measures of central tendency (Table 2) indicate the time between CDIs is generally about a year.
+
 ```{r}
 oldest_group <- d |>
   filter(interview_age >= 72 & interview_age < 96) |>
   group_by(subjectkey) |>
   arrange(subjectkey,interview_age) |>
-  mutate(months_between = interview_age - lag(interview_age))
+  mutate(months_between = interview_age - lag(interview_age)) |>
+  filter(group == "old")
+
+ggplot(oldest_group, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
+
+ggplot(oldest_group, aes(x = interview_age))+
+  geom_histogram()+
+  facet_grid(~form)
+
+ggplot(oldest_group, aes(x = interview_age, y = nProduced,group = subjectkey, color = form))+
+  geom_point(size = 2)+
+  geom_line(color = "black", linetype = 2)
+
+oldest_group |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,n_entry) |>
+  unique() |>
+  group_by(n_entry) |>
+  summarize(n = length(n_entry)) |>
+  kable(col.names = c("Number of CDIs", "count"),
+        caption = "The oldest group has 36 kids with a single CDI administration and 11 with 2 administrations",
+        label = "Table 1")
+
+oldest_group |>
+  ungroup() |>
+  summarize(median_dist = median(CDI_dist,na.rm = T),
+            range_dist = range(CDI_dist, na.rm = T),
+            mean_dist = mean(CDI_dist, na.rm = T)) %>%
+  kable(label = "Table 2")
+
+
+```
+
+# Bin 2: 60 - 72 months (5 - 6 years) 
+## Note: no minimally speaking children younger than 5
+
+All children in this bin only have one administration.
+
+```{r}
+middle_group <- d |>
+  filter(!subjectkey %in% oldest_group$subjectkey & group == "mdl")
+  
+  
+ggplot(middle_group, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
+
+ggplot(middle_group, aes(x = interview_age))+
+  geom_histogram(stat = "count")+
+  facet_grid(~form)
+
+ggplot(middle_group, aes(x = interview_age, y = nProduced,group = subjectkey, color = form))+
+  geom_point(size = 2)+
+  geom_line(color = "black", linetype = 2)
+
+
+  
+```
+
+# Bin 3: 24 - 48 months (2 - 4 years) 
+Table 3 shows the majority of kiddos in this bin only have one administration. In cases where they have 2, the measures of central tendency (Table 2) indicate the time between CDIs is generally about 11 months.
+
+```{r}
+youngest_group <- ASD_all |>
+  filter(interview_age >= 24 & interview_age < 48) |>
+  select(subjectkey,nProduced,interview_age,form) |>
+  unique() |>
+  mutate(group = "yng")
+
+youngest_group <- keep_minmax(youngest_group) |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(CDI_dist = interview_age - lag(interview_age)) |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age))
+
+
+  
+
+  
+ggplot(youngest_group, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
+
+ggplot(youngest_group, aes(x = interview_age, y = nProduced,group = subjectkey, color = form))+
+  geom_point(size = 2)+
+  geom_line(color = "black", linetype = 2)
+
+
+youngest_group |>
+  select(subjectkey,n_entry)|>
+  unique()|>
+  group_by(n_entry) |>
+  summarize(n = length(n_entry)) |>
+  kable(col.names = c("Number of CDIs", "count"),
+        label = "Table 3")
+
+youngest_group |>
+  ungroup() |>
+  summarize(median_dist = median(CDI_dist,na.rm = T),
+            range_dist = range(CDI_dist, na.rm = T),
+            mean_dist = mean(CDI_dist, na.rm = T)) %>%
+  kable(label = "Table 4")
+  
+```
+
+
+
+
+## Propensity matching
+Using the Matchit package, we can match our three groups on productive vocabulary. Seeing as the 4 - 6 year old group is the smallest, we will match to that to keep sample sizes equivalent across all three groups. End up with 21 per group, only 2 children with 2 data points were retained after matching.
+
+```{r}
+
+all_groups <- rbind(oldest_group, middle_group, youngest_group)
+
+
+m.out_mo <- matchit(group ~ nProduced, data = all_groups |>
+                   filter(group == 'mdl'|group =="old") |> 
+                   mutate(group = factor(group,levels = c("mdl","old"))),
+                 method = "optimal",
+                 distance = "glm")
+summary(m.out_mo)
+plot(m.out_mo, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+
+df_mo <- match.data(m.out_mo)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  as.data.frame()
+
+
+m.out_my <- matchit(group ~ nProduced, data = all_groups |>
+                   filter(group == 'mdl'|group =="yng") |>
+                   mutate(group = factor(group,levels = c('mdl',"yng"))),
+                 method = "optimal",
+                 distance = "glm")
+summary(m.out_my)
+plot(m.out_my, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+df_y <- match.data(m.out_my)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  filter(group == "yng") |>
+  as.data.frame()
+
+df_matched <- rbind(df_mo, df_y) |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age)) |>
+  ungroup() |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(CDI_dist = interview_age - lag(interview_age))
+
+
+ggplot(df_matched, aes(x = nProduced, color = group))+
+  geom_density()
+
+df_matched |>
+  group_by(group) |>
+  summarize(n = n())
+
+df_matched |>
+  group_by(group,n_entry) |>
+  summarize(n_cdi = length(n_entry)) |>
+  kable(col.names = c("group","Number of CDIs", "count"))
+
+df_matched |>
+  ungroup() |>
+  summarize(median_dist = median(CDI_dist,na.rm = T),
+            range_dist = range(CDI_dist, na.rm = T),
+            mean_dist = mean(CDI_dist, na.rm = T)) %>%
+  kable()
+
+
 
 
 oldest_group |>
@@ -50,4 +252,71 @@ ggplot(oldest_group, aes(x = nProduced))+
   geom_histogram(stat = "density")+
   facet_grid(~form)
 ```
+
+
+
+
+
+## What cutoffs do we retain the most data?
+Adjusting the group cutoffs for the middle and oldest group will allow for a larger sample while still maintaining even age groups (instead of 2 years, making it 1.5 year intervals). Propose that middle age group be 60 - 78 months and oldest group being 78 - 96 months.
+
+```{r}
+ggplot(d,aes(x = interview_age, color = group))+
+  geom_histogram()
+
+d |>
+  select(subjectkey,group) |>
+  unique() |>
+  group_by(group) |>
+  summarize(n = length(subjectkey))
+
+```
+
+
+
+
+```{r}
+optimal_cutoffs <- d |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=96) |>
+  mutate(interval = cut(interview_age,breaks = c(60,78,96),include.lowest = T),
+         interval_num = as.numeric(cut(interview_age,breaks = c(60,78,96),include.lowest = T)),
+         group = ifelse(interval_num == 1,"mdl","old")) |>
+  rbind(youngest_group |> 
+          select(subjectkey, interview_age,nProduced,form,group) |>
+          filter(interview_age <= 42 & interview_age >= 24)) |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(CDI_dist = interview_age - lag(interview_age),
+         n_entry = length(interview_age))
+
+old_subs <- optimal_cutoffs$subjectkey[optimal_cutoffs$group == "old"]
+
+
+middle_no_old <- optimal_cutoffs[optimal_cutoffs$group == "mdl",] |>
+  filter(!subjectkey %in% old_subs & !subjectkey %in% youngest_group$subjectkey)
+
+optimal_cutoffs <- optimal_cutoffs |>
+  filter(!group == "mdl") |>
+  rbind(middle_no_old)
+
+ggplot(optimal_cutoffs,aes(x = interview_age, color = group))+
+  geom_histogram()
+
+optimal_cutoffs|>
+  select(subjectkey,n_entry,group)|>
+  unique()|>
+  group_by(n_entry,group) |>
+  summarize(n = length(n_entry)) |>
+  arrange(group,n_entry) |>
+  kable(col.names = c("Number of CDIs","group", "count"),
+        label = "Table 3")
+
+```
+
+
+
+
+
 

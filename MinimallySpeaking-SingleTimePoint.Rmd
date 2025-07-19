@@ -1,0 +1,385 @@
+---
+title: "MinimallySpeaking-SingleTimePoint"
+author: "Stan West"
+date: "2025-07-17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(WeightIt)
+library(cobalt)
+library(MatchIt)
+library(kableExtra)
+library(jtools)
+library(TriMatch)
+library(tidyverse)
+library(purrr)
+
+
+keep_minmax <- function(x){
+  r <- x |>
+    group_by(subjectkey) |>
+    reframe(interview_age = range(interview_age))
+  x <- semi_join(x,r, by = c("subjectkey", "interview_age"))
+  return(x)
+}
+
+
+
+d <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  slice_min(interview_age)
+
+read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,n_entry) |>
+  unique() |>
+  group_by(n_entry) |>
+  summarize(n = length(n_entry))
+
+load("data/ASD_all_GM.Rdata")
+ASD_all_filt <- ASD_all |>
+  filter(!subjectkey %in% d$subjectkey & interview_age < 72 & interview_age >= 24) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl"))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+ASD_all_filt <- ASD_all_filt |>
+  anti_join(ASD_all |>filter(form == "WG" , interview_age >= 19 , nProduced > 96)) |>
+  anti_join(ASD_all |>filter(form == "WS" , interview_age >= 31 , nProduced > 564))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = length(subjectkey))
+
+ASD_all_filt |>
+  group_by(subjectkey,group) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,group,n_entry) |>
+  unique() |>
+  group_by(group,n_entry) |>
+  summarize(n = length(n_entry)) 
+  
+
+yng_subs <- ASD_all_filt[ASD_all_filt$group == "yng",] |>
+  filter(!subjectkey %in% ASD_all_filt$subjectkey[ASD_all_filt$group == "mdl"]) 
+
+ASD_all_filt <- ASD_all_filt |>
+  filter(!group == "yng") |>
+  rbind(yng_subs) |>
+  group_by(subjectkey) |>
+  slice_min(interview_age)
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+all_subs <- rbind(d,ASD_all_filt) |>
+  mutate(group = factor(group, levels = c("yng","mdl","old")))
+  
+
+```
+
+
+Data were collected from NDAR and classified as minimally speaking using SET CRITERIA. Here, we split the data according to age of CDI administration and are attempting to match 2-4, 4-6, and 6-8 year age bins. Networks based on these data may reveal different learning mechanisms in minimally speaking children as observed through network structure. 
+
+Data used here has first been filtered in several ways: 
+
+1. The oldest group (also the minimally speaking group) was filtered to include children from 72 months to 126 months. If a kid had more than one CDI administration, we took their first CDI (n = 51)
+2. The middle and youngest groups only include children from 24 - 47 and 48 - 71 months, respectively and does not include any children also in the oldest group (n_youngest = 174,n_middle = 80).
+3. The middle and youngest groups were then filtered to include appropriate entries given the standards set by the CDI (exclude WG forms where children were 19 months or older and produce more than 96 words & exclude WS forms where children were 30 months or older and produce more than 564 words) (n_youngest = 140 ,n_middle = 50 ).
+4. The youngest group was filtered to not include any children from the middle group (n = 117).
+5. Finally, the middle and youngest groups were filtered to only include the first CDI administration for any children with multiple CDIs (n_youngest = 108, n_middle = 38). The table below shows the distribution of multiple CDIs across groups. 
+
+
+
+| group | n_entry | count |
+|-------|---------|-------|
+|  yng  |    1    |   113 |
+|  yng  |    2    |   12  |
+|  yng  |    3    |   1   |
+|  mdl  |    1    |   26  |
+|  mdl  |    2    |   12  |
+|  old  |    1    |   31  |
+|  old  |    2    |   11  |
+|  old  |    3    |   8   |
+|  old  |    4    |   1   |
+
+
+
+
+
+# Removed entries because of inappropriate forms
+
+Some administrations were removed due to children exceeding the 50th percentile for their respective forms. These numbers are reported in the tables below.
+
+```{r,echo=FALSE}
+
+ASD_all |>
+  filter(!subjectkey %in% d$subjectkey) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl")) |>
+  filter(form == "WG" , interview_age >= 19 , nProduced > 96) |>
+  group_by(group) |>
+  summarize(n = n()) |>
+  kable(caption = "Words and Gestures Removed Subs")
+
+ASD_all |>
+  filter(!subjectkey %in% d$subjectkey) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl")) |>
+  filter(form == "WS" , interview_age >= 31 , nProduced > 564) |>
+  group_by(group) |>
+  summarize(n = n()) |>
+  kable(caption = "Words and Sentences Removed Subs")
+
+```
+
+# Tables of unmatched distributions across groups, vocabulary size, and age.
+
+```{r}
+ggplot(all_subs, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(group~form)+
+  theme_bw()
+
+ggplot(all_subs, aes(x = interview_age,y=nProduced))+
+  geom_point()+
+  facet_grid(group~form,axes = "all_y")+
+  theme_bw()
+
+ggplot(all_subs, aes(x =nProduced,color = group))+
+  geom_density()+
+  theme_bw()
+
+
+all_subs |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_production = mean(nProduced),
+            mean_age = mean(interview_age)) |>
+  kable(caption = "Descriptive Stats for Unmatched Sample")
+```
+
+
+# Propensity matching
+Either way you try matching, the fit is not great across the productive vocabulary distribution. Whether you match to the middle or old group, the difference in match is negligible. 
+
+## Matching groups to the middle age group - For balanced groups, I matched to the smallest group first.
+
+The procedure I am following here is first filtering down to the young and middle group and setting the middle group as the reference. Once those are matched, I fit another model matching the oldest group to the newly-selected young group that was just matched to the middle group. I combine the matched young-middle and young-old children and plot a density distribution across nProduced. Descriptives are also provided below.
+
+```{r}
+m.out_ym <- matchit(group ~ nProduced, data = all_subs |>
+                   filter(group == 'yng'|group =="mdl") |> 
+                   mutate(group = factor(group,levels = c("mdl","yng"))),
+                 method = "optimal",
+                 distance = "glm")
+summary(m.out_ym)
+plot(m.out_ym, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+
+df_ym <- match.data(m.out_ym)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  as.data.frame()
+
+
+m.out_yo <- matchit(group ~ nProduced, data = rbind(df_ym, all_subs |>
+                                                      filter(group == "old")) |>
+                   filter(group == 'yng'|group =="old") |>
+                   mutate(group = factor(group,levels = c('yng',"old"))),
+                 method = "optimal",
+                 distance = "glm")
+summary(m.out_yo)
+plot(m.out_yo, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+df_o <- match.data(m.out_yo)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  filter(group == "old") |>
+  as.data.frame()
+
+df_matched_y <- rbind(df_ym, df_o) |>
+  mutate(group = factor(group, levels = c("yng","mdl","old")))
+
+
+ggplot(df_matched_y, aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()
+
+df_matched_y |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame() |>
+  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+## Matching groups to the old age group - Will result in over-representation of one of the groups
+
+
+The procedure I am following here is first filtering down to the young and old group and setting the old group as the reference. Once those are matched, I fit another model matching the middle group to the newly-selected young group that was just matched to the old group. I combine the matched young-old and middle-young children and plot a density distribution across nProduced. Descriptives are also provided below.
+
+```{r}
+m.out_yo <- matchit(group ~ nProduced, data = all_subs |>
+                   filter(group == 'yng'|group =="old") |> 
+                   mutate(group = factor(group,levels = c("old","yng"))),
+                 method = "optimal",
+                 distance = "glm")
+
+summary(m.out_yo)
+plot(m.out_yo, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+
+df_yo <- match.data(m.out_yo)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  as.data.frame()
+
+
+m.out_my <- matchit(group ~ nProduced, data = rbind(df_yo, all_subs |>
+                                                      filter(group == "mdl")) |>
+                   filter(group == 'mdl'|group =="yng") |>
+                   mutate(group = factor(group,levels = c('mdl',"yng"))),
+                 method = "optimal",
+                 distance = "glm")
+summary(m.out_my)
+plot(m.out_my, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+df_m <- match.data(m.out_my)[c("subjectkey","interview_age","nProduced","form","group")] |>
+  filter(group == "mdl") |>
+  as.data.frame()
+
+df_matched_o <- rbind(df_yo, df_m) |>
+  mutate(group = factor(group, levels = c("yng","mdl","old")))
+
+
+ggplot(df_matched_o, aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()
+
+df_matched_o |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+# Propensity score matching with [\textcolor{blue}{TriMatch}](https://jbryer.github.io/TriMatch/articles/TriMatch.html) - Mid Control
+First, defining the formula to match only on nProduced. We then assign treatment and control labels to the data, here assigning the middle group as control and, oldest group as treatment 1, and youngest group as treatment 2. This logistic model will produce two propensity scores per subject. For the treatments, the scores will be acquired from a model matching to the control and the other treatment. The control will get two scores matching to each of the other two treatments. Three distance matrices are calculated corresponding to these propensity scores. A good match is determined by the size of a standardized distance metric for each pairwise propensity score. Using the caliper method, we can set different cutoffs for how many standard deviation distance units we want to include in our matching. The higher the caliper, the more liberal matching we are allowing.
+
+This method has a hard time matching the higher end of productive vocabulary, so the more conservative matching estimates chop off the tail end of the nProduced distribution. 
+
+```{r}
+## Setting matching formula
+formula <- ~ nProduced
+all_subs$treats <- ifelse(all_subs$group == "mdl", "Control",
+                          ifelse(all_subs$group == "old", "Treat1","Treat2"))
+prop_scores <- trips(all_subs, all_subs$treats, formula) 
+
+plot(prop_scores) + ggtitle("Triangle plot",subtitle = "Shows propensity scores from the three models. Each subject has two scores,\n connected by  a line.")
+
+```
+## Distribution and Descriptives with a 0.15 SD caliper cutoff. 
+
+```{r}
+
+prop_scores <- prop_scores|>
+  mutate(subjectkey = all_subs$subjectkey)
+
+all_data.matched <- trimatch(prop_scores, method = NULL, caliper = 0.15) |>
+  pivot_longer(cols = c("Treat1", "Control","Treat2"),
+               names_to = "treat",
+               values_to = "id",
+               values_transform = as.integer) |>
+  left_join(select(prop_scores,subjectkey,id), by = "id")
+
+trimatched_subs <- all_subs |>
+  filter(subjectkey %in% all_data.matched$subjectkey)
+
+
+ggplot(trimatched_subs, aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()
+
+trimatched_subs |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+## Series of calipers
+Setting lower calipers (in standardized units) makes the matching more strict. More liberal calipers keeps larger distance propensity triplets. As you approach 0.5, you retain more and more data until you are left with the full unmatched sample at 0.5. Differences in distributions across caliper cutoffs seem to dissappear at around 0.25.
+
+
+```{r}
+series <- map_dfr(.x = seq(0.05,0.5,0.05),function(x){
+  d_matched <- trimatch(prop_scores, method = NULL, caliper = x) |>
+    pivot_longer(cols = c("Treat1", "Control","Treat2"),
+               names_to = "treat",
+               values_to = "id",
+               values_transform = as.integer) |>
+  left_join(select(prop_scores,subjectkey,id), by = "id")
+  
+  trimatched_subs <- all_subs |>
+    filter(subjectkey %in% d_matched$subjectkey) |>
+    mutate(caliper = x)
+  return(trimatched_subs)
+})
+
+ggplot(series , aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()+
+  facet_wrap(~caliper) +
+  labs(title = "Matching nProduced distributions w/ different caliper cutoffs")
+
+
+
+series |>
+  group_by(caliper,group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("caliper","group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
