@@ -1,0 +1,125 @@
+---
+title: "MinimallySpeaking-Longitudinal"
+author: "Stan West"
+date: "2025-07-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(WeightIt)
+library(cobalt)
+library(MatchIt)
+library(kableExtra)
+library(jtools)
+library(TriMatch)
+library(tidyverse)
+library(purrr)
+
+
+keep_minmax <- function(x){
+  r <- x |>
+    group_by(subjectkey) |>
+    reframe(interview_age = range(interview_age))
+  x <- semi_join(x,r, by = c("subjectkey", "interview_age"))
+  return(x)
+}
+
+
+
+d <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  mutate(CDI_dist = interview_age-lag(interview_age),
+         n_entry = length(interview_age))
+
+read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,n_entry) |>
+  unique() |>
+  group_by(n_entry) |>
+  summarize(n = length(n_entry))
+
+load("data/ASD_all_GM.Rdata")
+ASD_all_filt <- ASD_all |>
+  filter(!subjectkey %in% d$subjectkey & interview_age < 72 & interview_age >= 24) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl"))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+ASD_all_filt <- ASD_all_filt |>
+  anti_join(ASD_all |>filter(form == "WG" , interview_age >= 19 , nProduced > 96)) |>
+  anti_join(ASD_all |>filter(form == "WS" , interview_age >= 31 , nProduced > 564))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = length(subjectkey))
+
+ASD_all_filt |>
+  group_by(subjectkey,group) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,group,n_entry) |>
+  unique() |>
+  group_by(group,n_entry) |>
+  summarize(n = length(n_entry)) 
+  
+
+yng_subs <- ASD_all_filt[ASD_all_filt$group == "yng",] |>
+  filter(!subjectkey %in% ASD_all_filt$subjectkey[ASD_all_filt$group == "mdl"]) 
+
+ASD_all_filt <- ASD_all_filt |>
+  filter(!group == "yng") |>
+  rbind(yng_subs) |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  mutate(CDI_dist = interview_age - lag(interview_age),
+         n_entry = length(interview_age))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+all_subs <- rbind(d,ASD_all_filt) |>
+  mutate(group = factor(group, levels = c("yng","mdl","old")))
+  
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
