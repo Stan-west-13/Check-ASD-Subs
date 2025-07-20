@@ -64,6 +64,10 @@ The majority of cases where kiddos switch from WG -> WS, the productive vocabula
 
 ```{r}
 oldest_group <- d |>
+  filter(interview_age >= 72 & interview_age < 96) |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  mutate(months_between = interview_age - lag(interview_age)) |>
   filter(group == "old")
 
 ggplot(oldest_group, aes(x = nProduced))+
@@ -238,6 +242,15 @@ df_matched |>
 
 
 
+
+oldest_group |>
+  group_by(subjectkey) |>
+  filter(length(interview_age) > 1)
+
+
+ggplot(oldest_group, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(~form)
 ```
 
 
