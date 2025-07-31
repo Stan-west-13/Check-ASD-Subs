@@ -290,6 +290,35 @@ df_matched_o |>
   as.data.frame()|>
   kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
 
+
+match_final_mo <- matchit(group~nProduced, data = df_matched_o |>
+                            filter(group == "mdl" | group == "old"),
+                  distance = "glm",
+                  method = "optimal"
+                 )
+
+summary(match_final_mo)
+plot(match_final_mo, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+match_final_mo_subs <- match.data(match_final_mo)
+
+match_final_ym <- matchit(group~nProduced, data = df_matched_o |>
+                            filter(group == "mdl" | group == "yng"),
+                  distance = "glm",
+                  method = "optimal"
+                 )
+
+summary(match_final_ym)
+plot(match_final_ym, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+match_final_ym_subs <- match.data(match_final_ym)
+
+df_final <- rbind(match_final_ym_subs, match_final_mo_subs[match_final_mo_subs$group == "old",])
+
+df_final %>% group_by(group) %>% summarize(m_nprod = mean(nProduced))
+
+summary(aov(nProduced ~ group, data = df_final))
+
 ```
 
 
@@ -315,7 +344,7 @@ plot(prop_scores) + ggtitle("Triangle plot",subtitle = "Shows propensity scores 
 prop_scores <- prop_scores|>
   mutate(subjectkey = all_subs$subjectkey)
 
-all_data.matched <- trimatch(prop_scores, method = NULL, caliper = 0.15) |>
+all_data.matched <- trimatch(prop_scores, method = NULL, caliper = 0.15,nmatch = Inf) |>
   pivot_longer(cols = c("Treat1", "Control","Treat2"),
                names_to = "treat",
                values_to = "id",
@@ -349,7 +378,7 @@ Setting lower calipers (in standardized units) makes the matching more strict. M
 
 ```{r}
 series <- map_dfr(.x = seq(0.05,0.5,0.05),function(x){
-  d_matched <- trimatch(prop_scores, method = NULL, caliper = x) |>
+  d_matched <- trimatch(prop_scores, method = NULL, caliper = x,nmatch = Inf) |>
     pivot_longer(cols = c("Treat1", "Control","Treat2"),
                names_to = "treat",
                values_to = "id",
@@ -379,6 +408,82 @@ series |>
             sd_produced = sd(nProduced)) |>
   as.data.frame()|>
   kable(col.names = c("caliper","group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+
+
+```{r}
+match_yo <- matchit(group ~ nProduced, data = all_subs |>
+                   filter(group == 'yng'|group =="old",
+                          nProduced <= 100) |> 
+                   mutate(group = factor(group,levels = c("old","yng"))),
+                 method = "optimal",
+                 distance = "glm")
+subs_yo_early <- match.data(match_yo)
+
+plot(match_yo, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+
+ggplot(subs_yo_early, aes(x = nProduced, color = group)) +
+  geom_density()
+
+
+match_yo_middle <- matchit(group ~ nProduced, data = all_subs |>
+                   filter(group == 'yng'|group =="old",
+                          nProduced > 100) |> 
+                     rbind(subs_yo_early |>
+                             select(-c("distance","subclass","weights"))) |>
+                   mutate(group = factor(group,levels = c("old","yng"))),
+                 method = "optimal",
+                 distance = "glm")
+plot(match_yo_middle, type = "density", interactive = TRUE,
+     which.xs = ~nProduced )
+
+subs_yo_middle <- match.data(match_yo_middle)
+
+ggplot(subs_yo_middle, aes(x = nProduced, color = group)) +
+  geom_density()
+
+subs_yo_middle %>% group_by(group) %>% summarize(mean_nprod = mean(nProduced),
+                                                 n = length(subjectkey))
+
+```
+
+
+```{r}
+glm_yo_early <- glm(nProduced ~ group, data = all_subs |>
+                filter(group == "old" | group == "yng",
+                       nProduced <= 100))
+ggplot(all_subs |>
+                filter(group == "old" | group == "yng",
+                       nProduced <= 100),
+       aes(x = nProduced, color = group))+
+  geom_density()
+
+subs_yo <- all_subs |>
+  filter(group == "yng" | group == "old",
+         nProduced <= 100) |>
+  cbind(data.frame(resid = glm_yo_early$residuals)) 
+
+prop_matching <- map_dfr(seq(0.1,1,0.1), function(x){
+  d <- subs_yo |>
+    filter(group == "yng") |>
+    group_by(group) |>
+    mutate(resid = abs(resid)) |>
+    slice_max(resid, prop = x) |> 
+    rbind(subs_yo |> filter(group == "old")) |>
+    mutate(prop = x)
+  return(d)
+})
+
+
+
+ggplot(prop_matching, aes(x = nProduced,color = group))+
+  geom_density()+
+  facet_wrap(~prop)
+
 
 ```
 
