@@ -112,15 +112,15 @@ all_subs |>
   
 ```
 
-Data were collected from NDAR and classified as minimally speaking using SET CRITERIA. Here, we split the data according to age of CDI administration and are attempting to match 2-4, 4-6, and 6-8 year age bins. Networks based on these data may reveal different learning mechanisms in minimally speaking children as observed through network structure. 
+Data were collected from NDAR and classified as minimally speaking or non-minimally speaking. Here, we split the data according to age of CDI administration and are attempting to match 2-4, 4-6, and 6-8 (minimally speaking) year age bins. Networks based on these data may reveal different learning mechanisms in minimally speaking children as observed through network structure. 
 
 Data used here has first been filtered in several ways: 
 
-1. The oldest group (also the minimally speaking group) was filtered to include children from 72 months to 126 months. If a child has more than one CDI administration, we kept the two administrations that were closest to a year apart (within a 9 - 15 month range; $n_{oldest}$ = 51).
+1. The oldest group (also the minimally speaking group) was filtered to include children from 72 months to 126 months. If a child has more than one CDI administration, we kept the two administrations that were closest to a year apart (within a 3 month range; $n_{oldest}$ = 51).
 2. The middle and youngest groups only include children from 24 - 47 and 48 - 71 months, respectively and does not include any children also in the oldest group ($n_{youngest}$ = 149,$n_{middle}$ = 55).
 3. The middle and youngest groups were then filtered to include appropriate entries given the standards set by the CDI (exclude WG forms where children were 19 months or older and produce more than 96 words & exclude WS forms where children were 30 months or older and produce more than 564 words) ($n_{youngest}$ = 126,$n_{middle}$ = 38 ).
 4. The youngest group was filtered to not include any children from the middle group (n = 117).
-5. Finally, the middle and youngest groups were filtered to only include children with multiple CDIs between 9 and 15 months apart, or single CDI administrations ($n_{youngest}$ = 108,$n_{middle}$ = 38). The table below shows the distribution of multiple CDIs across groups. 
+5. Finally, the middle and youngest groups were filtered to only include children with multiple CDIs between 9 and 15 months apart, or single CDI administrations ($n_{youngest}$ = 108,$n_{middle}$ = 38). The table below shows the distribution of multiple CDIs across groups, as well as average latencies between CDI administrations if there were more than one. The count is tallying unique children with one or two CDIs.
 
 
 
@@ -135,27 +135,205 @@ Data used here has first been filtered in several ways:
 
 
 
-
+# Three group analysis - youngest (24 - 47 months), middle (48 - 71 months), and oldest (72 - 126 months).
+While it would be nice to inspect this data within three age bins, I don't think we retain enough longitudinal CDI data to preserve strong power. This is especially true considering the fact that several of the children in the young and middle groups show no growth (or sometimes regression) between admin 1 and 2. Instead, it may be worthwhile to look into having two groups, a minimally speaking group (72 - 126 months) and a non-minimally speaking group allowing age of first admininstration to range anywhere between 24 and 71 months. This will help retain some more longitudial data as we will not lose administrations that fall between the "young" and "middle" groups.
 
 ```{r}
 ggplot(all_subs,aes(x = nProduced,color = group))+
   geom_density()+
-  theme_bw()
+  theme_bw() +
+  labs(title = "Productive Vocabulary Density Plot")
 
 ggplot(all_subs, aes(x = interview_age,y=nProduced))+
   geom_point()+
   facet_grid(group~form,axes = "all_y")+
-  theme_bw()
+  theme_bw()+
+  labs(title = "Vocabulary Size by Interview Age",
+       caption = "Note: Broken down by form and age group")
+
   
 ggplot(all_subs, aes(x = interview_age, y = nProduced, color = form, group = subjectkey))+
   geom_point() +
   geom_line()+
   facet_grid(~group,scales = "free")+
-  theme_bw()
+  theme_bw()+
+  labs(title = "Distribution of Single and Multiple CDIs by Group")
 
+ggplot(all_subs |>
+         filter(n_entry > 1), aes(x = interview_age, y = nProduced, color = form, group = subjectkey))+
+  geom_point() +
+  geom_line()+
+  facet_grid(~group,scales = "free")+
+  theme_bw()+
+  labs(title = "Distribution of Multiple CDIs by Group")
+
+all_subs |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+# Two-group analysis:
+Here, we follow the same processing steps for the oldest group as before. Instead of binning the remaining data into youngest and middle groups and not allowing individuals to span groups, we combined the two groups and retained second administrations between 9 & 15 months apart regardless of which group they would have previously fallen in. This results in a minimally speaking group with 18 children with two administrations 9 - 15 months apart ($M_{CDI-Latency} = 12.5, M_{age} = 83.11, M_{nProduced} = 151.39$), and a non-minimally speaking group with 20 children with two administrations 9 - 15 months apart ($M_{CDI-Latency} = 12.3, M_{age} = 39.4, M_{nProduced} = 172.3$). Initially, these two groups are not well-matched when matching to the first administration, $t(35.26) = 0.40, p = 0.69$.
+
+```{r,echo=FALSE}
+d_twog <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "min_speak") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  mutate(CDI_dist = interview_age-lag(interview_age)) |>
+  filter(CDI_dist >= 9 & CDI_dist <=15 | is.na(CDI_dist)) |>
+  mutate(year_dist = abs(CDI_dist - 12)) |>
+  filter(!c(subjectkey == "NDARFZ559LLV" & interview_age == 107),
+         !c(subjectkey == "NDARWB281CXV" & interview_age == 110)) |>
+  mutate(n_entry = length(interview_age)) 
+
+
+load("data/ASD_all_GM.Rdata")
+ASD_all_filt_twog <- ASD_all |>
+  filter(!subjectkey %in% d_twog$subjectkey & interview_age <= 72 & interview_age >= 24) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = "n_min_speak")
+
+ASD_all_filt_twog <- ASD_all_filt_twog |>
+  anti_join(ASD_all |>filter(form == "WG" , interview_age >= 19 , nProduced > 96)) |>
+  anti_join(ASD_all |>filter(form == "WS" , interview_age >= 31 , nProduced > 564))
+
+
+ASD_all_filt_twog_filt <- ASD_all_filt_twog  |>
+  group_by(subjectkey) |>
+  arrange(subjectkey,interview_age) |>
+  filter(!c(subjectkey == "NDARAL526AA4" & interview_age == 35),
+       !c(subjectkey == "NDARAL526AA4" & interview_age == 45),
+       !c(subjectkey == "NDARAB989DG5" & interview_age == 38),
+       !c(subjectkey == "NDARMM948DXV" & interview_age == 60),
+       !c(subjectkey == "NDARBN729RG0" & interview_age == 32),
+       !c(subjectkey == "NDARBN729RG0" & interview_age == 41),
+       !c(subjectkey == "NDARBN729RG0" & interview_age == 49),
+       !c(subjectkey == "NDARXX726URT" & interview_age == 38),
+       !c(subjectkey == "NDAR_INVRQ784SKC" & interview_age == 47)) |>
+  mutate(CDI_dist = interview_age - lag(interview_age)) |>
+  filter(CDI_dist >= 9 & CDI_dist <=15 | is.na(CDI_dist)) |>
+  mutate(n_entry = length(interview_age))
+
+
+all_subs_twog <- rbind(d_twog,ASD_all_filt_twog_filt) |>
+  mutate(group = factor(group, levels = c("n_min_speak","min_speak")))
+
+all_subs_twog |>
+  filter(!c(n_entry == 2 & is.na(CDI_dist)))|>
+  select(subjectkey,n_entry, group,CDI_dist) |>
+  unique() |>
+  group_by(group,n_entry) |>
+  summarize(count = length(n_entry),
+            mean_CDI_dist = mean(CDI_dist,na.rm = T)) |>
+  as.data.frame() |>
+  kable()
+
+
+ggplot(all_subs_twog |>
+         filter(n_entry > 1), aes(x = interview_age, y = nProduced, color = form, group = subjectkey))+
+  geom_point() +
+  geom_line()+
+  facet_grid(~group,scales = "free")+
+  theme_bw()+
+  labs(title = "Distribution of Multiple CDIs by Group")
+
+
+t.test(nProduced ~ group, data = all_subs_twog |>
+         filter(n_entry > 1)|>
+         slice_min(interview_age))
 
 ```
 
 
 
+Upon further inspection, it appears that the early and late vocabulary sizes are not well matched, with an over-representation of small vocabularies in the minimally speaking group, an over-representation of larger vocabularies in the non-minimally-speaking group, and more vocabularies in the 200 - 300 range for the minimally speaking group.  
+
+
+
+```{r,echo=FALSE}
+match_d <- all_subs_twog |>
+  filter(n_entry > 1) |>
+  group_by(subjectkey) |>
+  slice_min(interview_age)
+
+match_d |>
+  group_by(group) |>
+  summarize(mean_nProduced = mean(nProduced),
+            mean_age = mean(interview_age)) |>
+  as.data.frame()|>
+  kable()
+
+ggplot(match_d)+
+  geom_density(aes(x = nProduced, color = group))+
+  annotate("rect", xmin = 0, xmax = 100, ymin = 0, ymax = 0.003,
+            alpha = 0.4,fill = "grey")+
+  annotate("rect", xmin = 350, xmax = 500, ymin = 0, ymax = 0.003,
+            alpha = 0.4,fill = "grey")+
+  annotate("rect", xmin = 200, xmax = 325, ymin = 0, ymax = 0.003,
+            alpha = 0.4,fill = "grey")+
+  theme_bw()+
+  labs(title = "Distribution of nProduced for First CDI Admin",
+       caption = "Note: Hilighted areas indicating areas of concern")
+  
+
+
+
+```
+To remedy this, I cut one of the vocabularies at 290 and one at 70 for the minimally speaking group, as well as two of the largest vocabularies ($nProduced = 473$) and one small vocabulary ($nProduced = 1$) in the non-minimally speaking. This results in 17 non-minimally speaking children and 16 minimally speaking children with near-perfect matching, $t(30.95) = -0.015, p = 0.99$
+
+
+```{r,echo=FALSE}
+x <- match_d[match_d$group == "min_speak",] |>
+  ungroup() |>
+  filter(!subjectkey == "NDARAW094GEC",
+         !subjectkey == "NDARYR033PZV")
+y <- match_d[match_d$group == "n_min_speak",] |>
+  ungroup() |>
+  slice_min(nProduced, n = 18) |>
+  filter(!subjectkey == "NDARMM948DXV")
+
+new_match <- rbind(x,y)
+
+new_match |>
+  group_by(group) |>
+  summarize(n = length(subjectkey),
+            mean_nProduced = mean(nProduced),
+            sd_nProduced = sd(nProduced),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age)
+            ) |>
+  as.data.frame() |>
+  kable()
+
+
+t.test(nProduced~group, data = new_match)
+
+ggplot(new_match, aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()
+
+
+ggplot(all_subs_twog |>
+         filter(n_entry > 1,
+                subjectkey %in% new_match$subjectkey), aes(x = interview_age, y = nProduced, color = form, group = subjectkey))+
+  geom_point() +
+  geom_line()+
+  facet_grid(~group,scales = "free")+
+  theme_bw()+
+  labs(title = "Distribution of Multiple CDIs by Group Matched")
+
+```
 
