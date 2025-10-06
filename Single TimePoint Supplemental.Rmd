@@ -1,0 +1,126 @@
+---
+title: "Single TimePoint Supplemental Data"
+author: "Stan West"
+date: "2025-10-06"
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(WeightIt)
+library(cobalt)
+library(MatchIt)
+library(kableExtra)
+library(jtools)
+library(TriMatch)
+library(tidyverse)
+library(purrr)
+library(stringr)
+
+keep_minmax <- function(x){
+  r <- x |>
+    group_by(subjectkey) |>
+    reframe(interview_age = range(interview_age))
+  x <- semi_join(x,r, by = c("subjectkey", "interview_age"))
+  return(x)
+}
+
+
+
+d <- read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  slice_min(interview_age)
+
+read_xlsx("data/MinmallySpeaking_SHW.xlsx") |>
+  select(subjectkey,interview_age, nProduced, form) |>
+  na.omit() |>
+  filter(interview_age <=126 & interview_age > 72) |>
+  mutate(group = "old") |>
+  arrange(subjectkey,interview_age) |>
+  group_by(subjectkey) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,n_entry) |>
+  unique() |>
+  group_by(n_entry) |>
+  summarize(n = length(n_entry))
+
+load("data/ASD_all_GM.Rdata")
+ASD_all_filt <- ASD_all |>
+  filter(!subjectkey %in% d$subjectkey & interview_age < 72 & interview_age >= 24) |>
+  select(subjectkey, interview_age, nProduced, form) |>
+  unique() |>
+  mutate(group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl"))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+ASD_all_filt <- ASD_all_filt |>
+  anti_join(ASD_all |>filter(form == "WG" , interview_age >= 19 , nProduced > 96)) |>
+  anti_join(ASD_all |>filter(form == "WS" , interview_age >= 31 , nProduced > 564))
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = length(subjectkey))
+
+ASD_all_filt |>
+  group_by(subjectkey,group) |>
+  mutate(n_entry = length(interview_age)) |>
+  select(subjectkey,group,n_entry) |>
+  unique() |>
+  group_by(group,n_entry) |>
+  summarize(n = length(n_entry)) 
+  
+
+yng_subs <- ASD_all_filt[ASD_all_filt$group == "yng",] |>
+  filter(!subjectkey %in% ASD_all_filt$subjectkey[ASD_all_filt$group == "mdl"]) 
+
+ASD_all_filt <- ASD_all_filt |>
+  filter(!group == "yng") |>
+  rbind(yng_subs) |>
+  group_by(subjectkey) |>
+  slice_min(interview_age)
+
+ASD_all_filt |>
+  group_by(group) |>
+  summarize(n = n())
+
+all_subs <- rbind(d,ASD_all_filt) |>
+  mutate(group = factor(group, levels = c("yng","mdl","old")),
+         data_type = "d1")
+  
+new_data <- read.csv("data/Counts_CDI_Naigles.csv") %>%
+  mutate(group = "yng")
+
+
+d1d2 <- rbind(all_subs,new_data)
+
+# new_data <- read_xlsx("data/Counts_CDI_Naigles.xlsx")[-10,] %>%
+#   mutate(form = ifelse(CDI == "Words and Gestures", "WG","WS")) %>%
+#   rename(nProduced = Number,
+#          interview_age = `Age (months)`) %>%
+#   mutate(interview_age = sub(x = interview_age, pattern = "-[0-9][0-9]",replacement = ""),
+#          data_type = "d2") %>%
+#   select(-Time,-Cohort,-CDI,-...6,-...7) 
+# 
+# for (i in 1:nrow(new_data)){
+#   new_data$subjectkey[i] <- paste0("NDAR_",str_c(sample(c("G","H","L","A","T","C",1:9),size = 7),collapse = "") )
+# }
+# 
+# write.csv(new_data,file = "data/Counts_CDI_Naigles.csv")
+
+```
+
+
+
+
