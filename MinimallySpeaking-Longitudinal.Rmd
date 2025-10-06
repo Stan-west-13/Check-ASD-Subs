@@ -138,7 +138,7 @@ Data used here has first been filtered in several ways:
 
 
 # Three group analysis - youngest (24 - 47 months), middle (48 - 71 months), and oldest (72 - 126 months).
-While it would be nice to inspect this data within three age bins, I don't think we retain enough longitudinal CDI data to preserve strong power. This is especially true considering the fact that several of the children in the young and middle groups show no growth (or sometimes regression) between admin 1 and 2. Instead, it may be worthwhile to look into having two groups, a minimally speaking group (72 - 126 months) and a non-minimally speaking group allowing age of first admininstration to range anywhere between 24 and 71 months. This will help retain some more longitudial data as we will not lose administrations that fall between the "young" and "middle" groups.
+While it would be nice to inspect this data within three age bins, I don't think we retain enough longitudinal CDI data to preserve strong power.  Instead, it may be worthwhile to look into having two groups, a minimally speaking group (72 - 126 months) and a non-minimally speaking group allowing age of first administration to range anywhere between 24 and 71 months. This will help retain some more longitudinal data and accomplish equal $$n$$ between the groups.
 
 ```{r}
 ggplot(all_subs,aes(x = nProduced,color = group))+
@@ -313,14 +313,15 @@ ggplot(match_d)+
 
 
 ```
-To remedy this, I cut two of the vocabularies at 264 and 268 for the minimally speaking group, as well as three of the largest vocabularies ($M_{nProduced} = 467.33$) and nine small vocabulary ($M_{nProduced} = 6.44$) in the non-minimally speaking. This results in 16 non-minimally speaking children and 16 minimally speaking children with near-perfect matching, $t(29.91) = 0.068, p = 0.95$.
+To remedy this, I cut two of the vocabularies at 264 and 268 for the minimally speaking group, as well as three of the largest vocabularies ($M_{nProduced} = 467.33$) and nine small vocabulary ($M_{nProduced} = 6.44$) in the non-minimally speaking. This results in 15 non-minimally speaking children and 15 minimally speaking children with near-perfect matching, $t(29.91) = 0.068, p = 0.95$. I removed the minimally speaking kiddo who had a WG productive vocabulary near ceiling, and a vocabulary matched child from the non-minimally speaking group.
 
 
 ```{r,echo=FALSE}
 x <- match_d[match_d$group == "min_speak",] |>
   ungroup() |>
   filter(!subjectkey == "NDARED843XK0",
-         !subjectkey == "NDARFZ559LLV")
+         !subjectkey == "NDARFZ559LLV",
+         !subjectkey == "NDARHX114VE2")
 y <- match_d[match_d$group == "n_min_speak",] |>
   ungroup() |>
   filter(!subjectkey == "NDARTE318BNJ",
@@ -334,7 +335,8 @@ y <- match_d[match_d$group == "n_min_speak",] |>
          !subjectkey == "NDARJT735HRN",
          !subjectkey == "NDARMD303YE0",
          !subjectkey == "NDARMM948DXV",
-         !subjectkey == "NDARXX726URT")
+         !subjectkey == "NDARXX726URT",
+         !subjectkey == "NDARPR371BH1")
 
 new_match <- rbind(x,y)
 
@@ -369,7 +371,7 @@ ggplot(new_match_full, aes(x = interview_age, y = nProduced, color = form, group
 ```
 
 # Regressions
-Some of the children do not exhibit growth from time 1 to time 2. These are plotted below. The regression was 35.5 ($n = 2$) words for the non-minimally speaking group and 26.17 ($n = 6 $) for the minimally speaking group.
+Some of the children do not exhibit growth from time 1 to time 2. These are plotted below. The regression was 35.5 ($n = 2$) words for the non-minimally speaking group and 26.17 ($n = 6$) for the minimally speaking group. The table shows the percentages of overlapping and new words at time two for the children who show regressions. By and large, reporting seems to be consistent across successive time points, with the exception of NDARAZ926NXF, NDARJL403NHA, and NDARJW372VCW.
 
 ```{r,echo=FALSE}
 new_match_full <- new_match_full|>
@@ -390,6 +392,27 @@ new_match_full |>
   filter(diff < 0) |>
   group_by(group) |>
   summarize(mean_regression = mean(abs(diff)))
+
+
+regression_item_lvl <- new_match_full |>
+  filter(subjectkey %in% new_match_full$subjectkey[new_match_full$no_grow == TRUE]) |>
+  left_join(select(ASD_all, subjectkey, interview_age, num_item_id, CDI_Metadata_compatible,Produces), by =c("subjectkey","interview_age")) |>
+  group_by(subjectkey) |>
+  mutate(time = ifelse(interview_age == max(interview_age), 2,1),
+         subjectkey = as.factor(subjectkey)) |>
+  filter(Produces == TRUE)
+
+map_dfr( split(regression_item_lvl,regression_item_lvl$subjectkey),function(x){
+  x |>
+    mutate(prop_old = sum(x$num_item_id[x$time == 1] %in% x$num_item_id[x$time ==2])/unique(x$nProduced[x$time == 2]),
+           prop_new = sum(!x$num_item_id[x$time == 2] %in% x$num_item_id[x$time == 1])/unique(x$nProduced[x$time == 2])) 
+})|>
+    select(subjectkey,group,interview_age,time,nProduced,prop_old,prop_new) |>
+    unique() |>
+    arrange(desc(prop_new),subjectkey,interview_age) |>
+    kable()
+
+
 
 ```
 
