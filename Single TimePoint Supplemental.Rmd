@@ -5,6 +5,8 @@ date: "2025-10-06"
 output: pdf_document
 ---
 
+This report is looking at the possible contribution of the Naigles data to supplement some of the kids in the NDAR database.
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -97,14 +99,15 @@ ASD_all_filt |>
 
 all_subs <- rbind(d,ASD_all_filt) |>
   mutate(group = factor(group, levels = c("yng","mdl","old")),
-         data_type = "d1")
+         data_type = "NDAR")
   
 new_data <- read.csv("data/Counts_CDI_Naigles.csv") %>%
-  mutate(group = "yng")
+  mutate(group = "yng",
+         data_type = "Niagles")
 
 
-d1d2 <- rbind(all_subs,new_data)
-
+d1d2 <- rbind(all_subs,new_data) %>%
+  mutate(group = factor(group, levels = c("yng","mdl","old")))
 # new_data <- read_xlsx("data/Counts_CDI_Naigles.xlsx")[-10,] %>%
 #   mutate(form = ifelse(CDI == "Words and Gestures", "WG","WS")) %>%
 #   rename(nProduced = Number,
@@ -122,5 +125,23 @@ d1d2 <- rbind(all_subs,new_data)
 ```
 
 
+## Looking at the Naigles data
+
+```{r}
+d1d2 %>%
+  filter(data_type == "Niagles") %>%
+  group_by(form) %>%
+  summarize(m_age = mean(interview_age),
+            m_nProduced = mean(nProduced),
+            sd_age = sd(interview_age),
+            sd_nProduced = sd(nProduced))
+ggplot(d1d2 %>%
+         filter(data_type == "Niagles"), aes(x = interview_age, y = nProduced, color = form))+
+  geom_point()
+
+ggplot(d1d2 %>%
+         filter(group == "yng",nProduced < 20), aes(x = interview_age, y = nProduced, color = form, shape = data_type))+
+  geom_point(size = 3, alpha = 0.7)
+```
 
 
