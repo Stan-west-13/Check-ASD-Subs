@@ -12,12 +12,40 @@ library(purrr)
 library(readxl)
 
 letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1) %>%
-  pivot_longer(cols = c(ends_with("age")),
-               values_to = "age",
-               names_prefix = "V" ) %>%
-   pivot_longer(cols = ends_with("produced"),
-               values_to = "nProduced") 
+  pivot_longer(cols = ends_with(c("age","produced")),
+               values_to = "value",
+               names_to = c("visit","var"),
+               names_sep = "_") %>%
+  pivot_wider(names_from = "var",
+              values_from = "value") %>%
+  rename(nProduced = produced) %>%
+  group_by(ID) %>%
+  mutate(visit_latency = age -lag(age,n = 2))
 
+```
+
+
+## Plot language trajectories
+There are 4 kiddos with no growth throughout the three visits. There are no recordings that meet our previous 9 - 15 month latency time window. The furthest latencies (from Visit 1 to Visit 3 range from 7 - 9 months apart).
+
+```{r}
+
+ggplot(letty_data,aes(x = age, y = nProduced, color = ID))+
+  geom_point()+
+  geom_line(aes(group = ID))
+
+## taking out low producers over all visits - 4 had recorded no language throughout visits.
+
+ggplot(letty_data %>%
+         group_by(ID) %>%
+         filter(!all(nProduced == 0)),aes(x = age, y = nProduced, color = ID))+
+  geom_point()+
+  geom_line(aes(group = ID))+
+  theme(legend.position = "none")
+
+summary(letty_data)
+
+hist(letty_data$visit_latency)
 
 ```
 
