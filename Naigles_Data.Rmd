@@ -18,29 +18,36 @@ letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1) %>%
                names_sep = "_") %>%
   pivot_wider(names_from = "var",
               values_from = "value") %>%
-  rename(nProduced = produced) %>%
-  group_by(ID) %>%
-  mutate(visit_latency = age -lag(age,n = 2))
+  rename(nProduced = produced,
+         subjectkey = ID,
+         interview_age = age) %>%
+  group_by(subjectkey) %>%
+  mutate(visit_latency = interview_age -lag(interview_age,n = 2),
+         source = "niagles",
+         form = NA,
+         group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl")) %>%
+  select(-visit)
 
 ```
 
 
 ## Plot language trajectories
-There are 4 kiddos with no growth throughout the three visits. There are no recordings that meet our previous 9 - 15 month latency time window. The furthest latencies (from Visit 1 to Visit 3 range from 7 - 9 months apart).
+There are 4 kiddos with no growth throughout the three visits. There are no recordings that meet our previous 9 - 15 month latency time window. The furthest latencies (from Visit 1 to Visit 3 range from 7 - 9 months apart). None of the Niagles kids meet age criteria for being in the "old" group.
 
 ```{r}
 
-ggplot(letty_data,aes(x = age, y = nProduced, color = ID))+
+ggplot(letty_data,aes(x = age, y = nProduced, color = subjectkey))+
   geom_point()+
-  geom_line(aes(group = ID))
+  geom_line(aes(group = subjectkey))+
+  theme(legend.position = "none")
 
 ## taking out low producers over all visits - 4 had recorded no language throughout visits.
 
 ggplot(letty_data %>%
-         group_by(ID) %>%
-         filter(!all(nProduced == 0)),aes(x = age, y = nProduced, color = ID))+
+         group_by(subjectkey) %>%
+         filter(!all(nProduced == 0)),aes(x = age, y = nProduced, color = subjectkey))+
   geom_point()+
-  geom_line(aes(group = ID))+
+  geom_line(aes(group = subjectkey))+
   theme(legend.position = "none")
 
 summary(letty_data)
@@ -48,4 +55,55 @@ summary(letty_data)
 hist(letty_data$visit_latency)
 
 ```
+
+## If we want to use this data in the context of a non-longitudinal analysis.
+
+
+```{r,echo=FALSE}
+ASD_cdi <- read.csv("data/ASD_CDI_subs.csv") %>%
+  mutate(source = "CDI") 
+
+merged_data <- rbind(ASD_cdi, letty_data %>%
+                       select(-visit_latency) %>%
+                       filter(!is.na(interview_age)))%>%
+  mutate(group = factor(group, levels = c("yng", "mdl", "old"), labels =c("yng", "mdl", "old") ))
+
+```
+
+
+## Looking at unmatched distributions
+
+```{r}
+ggplot(merged_data, aes(x = nProduced))+
+  geom_histogram(stat = "density")+
+  facet_grid(group~form)+
+  theme_bw()
+
+
+ggplot(merged_data, aes(x = interview_age,y=nProduced))+
+  geom_point()+
+  facet_grid(group~form,axes = "all_y")+
+  theme_bw()
+
+ggplot(merged_data, aes(x =nProduced,color = group))+
+  geom_density()+
+  theme_bw()
+
+ggplot(merged_data, aes(x =nProduced,color = group))+
+  geom_density()+
+  theme_bw()+
+  facet_grid(~source)
+
+
+merged_data |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_production = mean(nProduced),
+            mean_age = mean(interview_age)) |>
+  kable(caption = "Descriptive Stats for Unmatched Sample")
+```
+
+
+
+
 

@@ -16,7 +16,7 @@ all <- rbind(d_ASD,d_NA)
 
 all %>%
   group_by(group,interview_age,num_item_id) %>%
-  mutate(p_overlap = sum(Produces)/length(unique(subjectkey))) %>%
+  mutate(p_overlap = sum(Produces)/n()) %>%
   select(group,interview_age,p_overlap) %>%
   unique() %>%
   ggplot(.,aes(x = interview_age, y = p_overlap))+
