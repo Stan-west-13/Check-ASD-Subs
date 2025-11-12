@@ -336,7 +336,9 @@ y <- match_d[match_d$group == "n_min_speak",] |>
          !subjectkey == "NDARMD303YE0",
          !subjectkey == "NDARMM948DXV",
          !subjectkey == "NDARXX726URT",
-         !subjectkey == "NDARPR371BH1")
+         !subjectkey == "NDARPR371BH1",
+         !subjectkey == "NDARJW372VCW",
+         !subjectkey == "NDARRZ026YG3")
 
 new_match <- rbind(x,y)
 

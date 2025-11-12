@@ -10,6 +10,9 @@ library(tidyverse)
 library(ggplot2)
 library(purrr)
 library(readxl)
+library(TriMatch)
+library(kableExtra)
+library(MatchIt)
 
 letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1) %>%
   pivot_longer(cols = ends_with(c("age","produced")),
@@ -36,7 +39,7 @@ There are 4 kiddos with no growth throughout the three visits. There are no reco
 
 ```{r}
 
-ggplot(letty_data,aes(x = age, y = nProduced, color = subjectkey))+
+ggplot(letty_data,aes(x = interview_age, y = nProduced, color = subjectkey))+
   geom_point()+
   geom_line(aes(group = subjectkey))+
   theme(legend.position = "none")
@@ -45,7 +48,7 @@ ggplot(letty_data,aes(x = age, y = nProduced, color = subjectkey))+
 
 ggplot(letty_data %>%
          group_by(subjectkey) %>%
-         filter(!all(nProduced == 0)),aes(x = age, y = nProduced, color = subjectkey))+
+         filter(!all(nProduced == 0)),aes(x = interview_age, y = nProduced, color = subjectkey))+
   geom_point()+
   geom_line(aes(group = subjectkey))+
   theme(legend.position = "none")
@@ -104,6 +107,109 @@ merged_data |>
 ```
 
 
+## Matching with new data
+
+# TriMatch
+
+```{r eval=FALSE, include=FALSE}
+## Setting matching formula
+formula <- ~ nProduced
+merged_data$treats <- ifelse(merged_data$group == "mdl", "Control",
+                          ifelse(merged_data$group == "old", "Treat1","Treat2"))
+prop_scores <- trips(merged_data, merged_data$treats, formula) 
+
+plot(prop_scores) + ggtitle("Triangle plot",subtitle = "Shows propensity scores from the three models. Each subject has two scores,\n connected by  a line.")
+
+```
+## Distribution and Descriptives with a 0.15 SD caliper cutoff. 
+
+```{r eval=FALSE, include=FALSE}
+
+prop_scores <- prop_scores|>
+  mutate(subjectkey = merged_data$subjectkey)
+
+all_data.matched <- trimatch(prop_scores, method = NULL, caliper = 0.15,nmatch = Inf) |>
+  pivot_longer(cols = c("Treat1", "Control","Treat2"),
+               names_to = "treat",
+               values_to = "id",
+               values_transform = as.integer) |>
+  left_join(select(prop_scores,subjectkey,id), by = "id")
+
+trimatched_subs <- merged_data |>
+  filter(subjectkey %in% all_data.matched$subjectkey)
 
 
+ggplot(trimatched_subs, aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()
+
+trimatched_subs |>
+  group_by(group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+## Series of calipers
+Setting lower calipers (in standardized units) makes the matching more strict. More liberal calipers keeps larger distance propensity triplets. As you approach 0.5, you retain more and more data until you are left with the full unmatched sample at 0.5. Differences in distributions across caliper cutoffs seem to dissappear at around 0.25.
+
+
+```{r eval=FALSE, include=FALSE}
+series <- map_dfr(.x = seq(0.05,0.5,0.05),function(x){
+  d_matched <- trimatch(prop_scores, method = NULL, caliper = x,nmatch = Inf) |>
+    pivot_longer(cols = c("Treat1", "Control","Treat2"),
+               names_to = "treat",
+               values_to = "id",
+               values_transform = as.integer) |>
+  left_join(select(prop_scores,subjectkey,id), by = "id")
+  
+  trimatched_subs <- merged_data |>
+    filter(subjectkey %in% d_matched$subjectkey) |>
+    mutate(caliper = x)
+  return(trimatched_subs)
+})
+
+ggplot(series , aes(x = nProduced, color = group))+
+  geom_density()+
+  theme_bw()+
+  facet_wrap(~caliper) +
+  labs(title = "Matching nProduced distributions w/ different caliper cutoffs")
+
+
+
+series |>
+  group_by(caliper,group) |>
+  summarize(n = n(),
+            mean_age = mean(interview_age),
+            sd_age = sd(interview_age),
+            mean_produced = mean(nProduced),
+            sd_produced = sd(nProduced)) |>
+  as.data.frame()|>
+  kable(col.names = c("caliper","group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+
+```
+
+
+## Hand matching
+Step-wise distributions in vocabulary, as expected. Young have high proportion of low vocabularies and low distribution of high. Middle have second highest proportion of low vocabs and a bump at intermediate vocab, and old have lowest proportion of small vocab and largest proportion of high vocabs.
+
+```{r eval=FALSE, include=FALSE}
+
+map(seq.int(0,10), function(x){
+  yng_z <- merged_data %>%
+    filter(group == "yng",nProduced <= 50) %>%
+    sample(.,x,replace = FALSE)
+  d <- merged_data[yng_z]
+  return(d)
+})
+
+
+
+```
 
