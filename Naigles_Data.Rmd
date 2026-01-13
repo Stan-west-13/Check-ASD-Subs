@@ -5,7 +5,7 @@ date: "2025-11-11"
 output: pdf_document
 ---
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(purrr)
@@ -13,8 +13,16 @@ library(readxl)
 library(TriMatch)
 library(kableExtra)
 library(MatchIt)
-
-letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1) %>%
+library(emmeans)
+library(rstatix)
+letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1)[-c(33:44),] %>%
+  select(-V2_W_G_says) %>%
+  rename(V1_age = V1_Age,
+         V1_produced = V1_W_G_says,
+         V2_age = V2_age,
+         V2_produced = V2CDITotalwords_W_P,
+         V3_age = V3Age,
+         V3_produced = V3CDITotalwords_WP ) %>%
   pivot_longer(cols = ends_with(c("age","produced")),
                values_to = "value",
                names_to = c("visit","var"),
@@ -26,7 +34,7 @@ letty_data <- read_xlsx("data/CDI_asd.xlsx",skip = 1) %>%
          interview_age = age) %>%
   group_by(subjectkey) %>%
   mutate(visit_latency = interview_age -lag(interview_age,n = 2),
-         source = "niagles",
+         source = "naigles",
          form = NA,
          group = ifelse(interview_age >= 24 & interview_age < 48, "yng", "mdl")) %>%
   select(-visit)
@@ -57,6 +65,7 @@ summary(letty_data)
 
 hist(letty_data$visit_latency)
 
+
 ```
 
 ## If we want to use this data in the context of a non-longitudinal analysis.
@@ -75,27 +84,21 @@ merged_data <- rbind(ASD_cdi, letty_data %>%
 
 
 ## Looking at unmatched distributions
+New data only fits into the young and middle groups. 
 
 ```{r}
-ggplot(merged_data, aes(x = nProduced))+
-  geom_histogram(stat = "density")+
-  facet_grid(group~form)+
-  theme_bw()
 
-
-ggplot(merged_data, aes(x = interview_age,y=nProduced))+
-  geom_point()+
-  facet_grid(group~form,axes = "all_y")+
-  theme_bw()
-
-ggplot(merged_data, aes(x =nProduced,color = group))+
-  geom_density()+
-  theme_bw()
 
 ggplot(merged_data, aes(x =nProduced,color = group))+
   geom_density()+
   theme_bw()+
-  facet_grid(~source)
+  ggtitle("Combined Data Distributions")
+
+ggplot(merged_data, aes(x =nProduced,color = group))+
+  geom_density()+
+  theme_bw()+
+  facet_grid(~source)+
+  ggtitle("Separate Data Spreads by Source")
 
 
 merged_data |>
@@ -107,109 +110,142 @@ merged_data |>
 ```
 
 
-## Matching with new data
+## Matching single time points. Two groups (non-minimally speaking and minimally speaking) w/ added Naigles data
 
-# TriMatch
+```{r}
+twog <- merged_data %>%
+  mutate(min_speak = ifelse(group == "old", TRUE,FALSE))
 
-```{r eval=FALSE, include=FALSE}
-## Setting matching formula
-formula <- ~ nProduced
-merged_data$treats <- ifelse(merged_data$group == "mdl", "Control",
-                          ifelse(merged_data$group == "old", "Treat1","Treat2"))
-prop_scores <- trips(merged_data, merged_data$treats, formula) 
 
-plot(prop_scores) + ggtitle("Triangle plot",subtitle = "Shows propensity scores from the three models. Each subject has two scores,\n connected by  a line.")
+match_m_twog <- matchit(min_speak ~ nProduced,
+                        data = twog,
+                        method = "optimal",
+                        distance = "glm")
+summary(match_m_twog)
+
+plot(match_m_twog,type = "density")
+
+match_twog <- merged_data %>%
+  right_join(match.data(match_m_twog), by = c("subjectkey","interview_age","nProduced","group","source","form"))
+
+t.test(match_twog$nProduced[match_twog$min_speak == TRUE],match_twog$nProduced[match_twog$min_speak == FALSE] )
+
+
+ggplot(match_twog, aes(x = nProduced, color = min_speak))+
+  geom_density()
+
+
+ggplot(match_twog, aes(x = interview_age,y = nProduced, color = source,shape=min_speak))+
+  geom_point()
+
 
 ```
-## Distribution and Descriptives with a 0.15 SD caliper cutoff. 
 
-```{r eval=FALSE, include=FALSE}
-
-prop_scores <- prop_scores|>
-  mutate(subjectkey = merged_data$subjectkey)
-
-all_data.matched <- trimatch(prop_scores, method = NULL, caliper = 0.15,nmatch = Inf) |>
-  pivot_longer(cols = c("Treat1", "Control","Treat2"),
-               names_to = "treat",
-               values_to = "id",
-               values_transform = as.integer) |>
-  left_join(select(prop_scores,subjectkey,id), by = "id")
-
-trimatched_subs <- merged_data |>
-  filter(subjectkey %in% all_data.matched$subjectkey)
+## Matching single time points. Two groups (non-minimally speaking and minimally speaking) w/o added Naigles data
+We get a slightly better match not using the Naigles data in a two-group solution. $p = 0.968$ vs. $p = 0.957$
+```{r}
+twog <- merged_data %>%
+  mutate(min_speak = ifelse(group == "old", TRUE,FALSE)) %>%
+  filter(!source == "naigles")
 
 
-ggplot(trimatched_subs, aes(x = nProduced, color = group))+
+match_m_twog <- matchit(min_speak ~ nProduced,
+                        data = twog,
+                        method = "optimal",
+                        distance = "glm")
+summary(match_m_twog)
+
+plot(match_m_twog,type = "density")
+
+match_twog <- merged_data %>%
+  right_join(match.data(match_m_twog), by = c("subjectkey","interview_age","nProduced","group","source","form"))
+
+t.test(match_twog$nProduced[match_twog$min_speak == TRUE],match_twog$nProduced[match_twog$min_speak == FALSE] )
+
+
+ggplot(match_twog, aes(x = nProduced, color = min_speak))+
+  geom_density()
+
+
+ggplot(match_twog, aes(x = interview_age,y = nProduced, shape = min_speak))+
+  geom_point()
+
+
+```
+
+
+## Three time points -
+Hand matching and batch-matching. Took the 30 smallest vocabularies out of the youngest group and the top 5 vocabularies from the middle group. The rest of the matching was done by iterativly removing specific vocabularies from the data to better match across the whole range of vocabularies. One-way ANOVA reveals no significant group differences in number of words produced $p = 0.773$
+
+```{r}
+yng_bump <- merged_data %>%
+  filter(nProduced >= 3) %>%
+  filter(group == "yng") %>%
+  slice_min(nProduced, n =30)
+yng_repeats <- merged_data %>%
+  filter(nProduced >= 3) %>%
+  filter(source == "naigles") %>%
+  group_by(subjectkey) %>%
+  slice_max(nProduced,n=1)
+mdl_bump <-merged_data %>%
+  filter(nProduced >= 3) %>%
+  filter(group == "mdl") %>%
+  slice_max(nProduced, n =5) 
+
+new_match <- merged_data %>%
+  filter(nProduced >=3) %>%
+  filter(!subjectkey %in% yng_bump$subjectkey,
+         !subjectkey %in% mdl_bump$subjectkey,
+         !subjectkey %in% yng_repeats$subjectkey,
+         !subjectkey == "NDARPR371BH1",
+         !subjectkey == "NDAR_INVJV336XCL",
+         !subjectkey == "NDARFH331TLN",
+         !subjectkey == "NDAR_INVAC323FPZ",
+         !subjectkey == "NDARAB989DG5",
+         !subjectkey =="NDAR_INVCC993TBL",
+         !subjectkey == "NDARVL893WB0",
+         !subjectkey == "NDARHX114VE2",
+         !subjectkey == "NDARVV356TKH",
+         !subjectkey == "NDARVG708MPB",
+         !subjectkey == "ASD_3_o",
+         !subjectkey == "NDARAW094GEC",
+         !subjectkey == "ASD_3_l",
+         !subjectkey == "ASD_2_e",
+         !subjectkey == "NDAR_INVEC869JNQ",
+         !subjectkey == "NDARAZ926NXF",
+         !subjectkey == "ASD_2_i",
+         !subjectkey == "NDARVZ466UF3") %>%
+  group_by(subjectkey) %>%
+  mutate(n_entry = length(subjectkey)) %>%
+  rbind(yng_repeats)
+
+
+
+ggplot(new_match, aes(x =nProduced,color = group))+
   geom_density()+
   theme_bw()
+summary(new_match)
+summary(aov(nProduced ~ group, data = new_match))
 
-trimatched_subs |>
-  group_by(group) |>
-  summarize(n = n(),
-            mean_age = mean(interview_age),
-            sd_age = sd(interview_age),
-            mean_produced = mean(nProduced),
-            sd_produced = sd(nProduced)) |>
-  as.data.frame()|>
-  kable(col.names = c("group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
+new_match %>%
+  group_by(group) %>%
+  summarize(n())
 
-```
+new_match %>%
+  group_by(group,subjectkey) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
 
-
-## Series of calipers
-Setting lower calipers (in standardized units) makes the matching more strict. More liberal calipers keeps larger distance propensity triplets. As you approach 0.5, you retain more and more data until you are left with the full unmatched sample at 0.5. Differences in distributions across caliper cutoffs seem to dissappear at around 0.25.
-
-
-```{r eval=FALSE, include=FALSE}
-series <- map_dfr(.x = seq(0.05,0.5,0.05),function(x){
-  d_matched <- trimatch(prop_scores, method = NULL, caliper = x,nmatch = Inf) |>
-    pivot_longer(cols = c("Treat1", "Control","Treat2"),
-               names_to = "treat",
-               values_to = "id",
-               values_transform = as.integer) |>
-  left_join(select(prop_scores,subjectkey,id), by = "id")
-  
-  trimatched_subs <- merged_data |>
-    filter(subjectkey %in% d_matched$subjectkey) |>
-    mutate(caliper = x)
-  return(trimatched_subs)
-})
-
-ggplot(series , aes(x = nProduced, color = group))+
-  geom_density()+
-  theme_bw()+
-  facet_wrap(~caliper) +
-  labs(title = "Matching nProduced distributions w/ different caliper cutoffs")
-
-
-
-series |>
-  group_by(caliper,group) |>
-  summarize(n = n(),
-            mean_age = mean(interview_age),
-            sd_age = sd(interview_age),
-            mean_produced = mean(nProduced),
-            sd_produced = sd(nProduced)) |>
-  as.data.frame()|>
-  kable(col.names = c("caliper","group","n", "M(age)", "SD(age)", "M(produced)", "SD(produced)"))
-
-```
-
-
-## Hand matching
-Step-wise distributions in vocabulary, as expected. Young have high proportion of low vocabularies and low distribution of high. Middle have second highest proportion of low vocabs and a bump at intermediate vocab, and old have lowest proportion of small vocab and largest proportion of high vocabs.
-
-```{r eval=FALSE, include=FALSE}
-
-map(seq.int(0,10), function(x){
-  yng_z <- merged_data %>%
-    filter(group == "yng",nProduced <= 50) %>%
-    sample(.,x,replace = FALSE)
-  d <- merged_data[yng_z]
-  return(d)
-})
-
+emmeans_test(nProduced ~ group, 
+             data = new_match %>% ungroup(),
+             p.adjust.method = "bonferroni",
+             detailed = FALSE)
 
 
 ```
+
+
+
+
+
 

@@ -97,7 +97,7 @@ ASD_all_filt |>
 all_subs <- rbind(d,ASD_all_filt) |>
   mutate(group = factor(group, levels = c("yng","mdl","old")))
   
-
+write.csv(all_subs, "data/ASD_CDI_subs.csv")
 ```
 
 
